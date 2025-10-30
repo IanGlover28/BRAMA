@@ -86,14 +86,14 @@ export default function FloatingCartModal() {
               <div className="border-t p-4">
                 <div className="flex justify-between items-center mb-4">
                   <span className="font-semibold">Total</span>
-                  <span className="text-2xl font-extrabold text-green-600">
+                  <span className="text-2xl font-extrabold text-pink-600">
                     ₵{cartTotal.toFixed(2)}
                   </span>
                 </div>
 
                 <button
                   onClick={() => setCheckoutOpen(true)}
-                  className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2"
+                  className="w-full bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 transition flex items-center justify-center gap-2"
                 >
                   <Lock size={18} /> Checkout
                 </button>

@@ -28,13 +28,13 @@ export default async function ArticlePage({
         className="w-full h-64 object-cover rounded-xl mb-8"
       />
 
-      <h1 className="text-3xl font-bold text-green-800 mb-3">
+      <h1 className="text-3xl font-bold text-pink-800 mb-3">
         {article.title}
       </h1>
       <p className="text-sm text-gray-500 mb-8">{article.category}</p>
 
       <div
-        className="prose prose-green max-w-none"
+        className="prose prose-pink max-w-none"
         dangerouslySetInnerHTML={{ __html: article.content }}
       />
     </article>

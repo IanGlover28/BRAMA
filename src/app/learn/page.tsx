@@ -9,8 +9,8 @@ export default function LearnPage() {
 
   return (
     <main className="bg-white text-gray-800">
-      <section className="py-20 text-center bg-green-50">
-        <h1 className="text-4xl font-bold text-green-800">Learn with HighHub</h1>
+      <section className="py-20 text-center bg-pink-50">
+        <h1 className="text-4xl font-bold text-pink-800">Learn with HighHub</h1>
         <p className="mt-4 text-gray-600">
           Your trusted guide to cannabis education, how-tos, and insights.
         </p>
@@ -25,7 +25,7 @@ export default function LearnPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-xl font-semibold text-green-800 mb-3">
+            <h2 className="text-xl font-semibold text-pink-800 mb-3">
               {category}
             </h2>
 
@@ -36,7 +36,7 @@ export default function LearnPage() {
                   <li key={article.slug}>
                     <Link
                       href={`/learn/${article.slug}`}
-                      className="text-green-700 hover:underline"
+                      className="text-pink-700 hover:underline"
                     >
                       {article.title}
                     </Link>

@@ -47,7 +47,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             <h1 className="text-4xl font-extrabold text-gray-900">{product.name}</h1>
 
             <div className="flex items-baseline gap-4">
-              <p className="text-5xl font-bold text-green-600">${product.price.toFixed(2)}</p>
+              <p className="text-5xl font-bold text-pink-600">${product.price.toFixed(2)}</p>
               <span className="text-lg text-gray-500 line-through">
                 ${(product.price * 1.2).toFixed(2)}
               </span>

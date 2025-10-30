@@ -36,7 +36,7 @@ export default function FeaturedProducts() {
 
   if (loading) {
     return (
-      <section className="py-20 bg-green-50">
+      <section className="py-20 bg-pink-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
             Featured Products
@@ -66,7 +66,7 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="py-20 bg-green-50">
+    <section className="py-20 bg-pink-50">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
           Featured Products

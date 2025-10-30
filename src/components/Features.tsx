@@ -5,19 +5,19 @@ import { ShieldCheck, Truck, ShoppingBag } from "lucide-react";
 
 const features = [
   {
-    icon: <ShoppingBag className="w-10 h-10 text-green-600" />,
+    icon: <ShoppingBag className="w-10 h-10 text-pink-600" />,
     title: "Premium Quality",
     description:
       "All our edibles and smoking tools are curated for safety and satisfaction.",
   },
   {
-    icon: <Truck className="w-10 h-10 text-green-600" />,
+    icon: <Truck className="w-10 h-10 text-pink-600" />,
     title: "Fast and Secure Delivery",
     description:
       "Get your order delivered discreetly and quickly to your doorstep.",
   },
   {
-    icon: <ShieldCheck className="w-10 h-10 text-green-600" />,
+    icon: <ShieldCheck className="w-10 h-10 text-pink-600" />,
     title: "Secure Checkout",
     description: "Your privacy and payments are always protected.",
   },

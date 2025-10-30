@@ -28,7 +28,7 @@ export default function CartPage() {
           </div>
           <button
             onClick={() => router.push("/checkout")}
-            className="bg-green-600 text-white w-full mt-4 py-2 rounded"
+            className="bg-pink-600 text-white w-full mt-4 py-2 rounded"
           >
             Proceed to Checkout
           </button>

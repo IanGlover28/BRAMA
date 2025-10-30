@@ -5,19 +5,19 @@ import Image from "next/image";
 
 const categories = [
   {
-    title: "Premium Edibles",
-    image: "/categories/edibles.jpg",
-    description: "Taste the finest infused treats, made with love and care.",
+    title: "LipCare",
+    image: "/categories/lipcare.jpg",
+    description: "Discover our premium selection of lip care products.",
   },
   {
-    title: "Accessories & Tools",
-    image: "/categories/tools.png",
-    description: "Explore our high-end bongs, vapes, and rolling accessories.",
+    title: "Skincare & Wellness",
+    image: "/categories/skin.jpg",
+    description: "Explore our high-end skincare and wellness products.",
   },
   {
-    title: "Snacks & Beverages",
-    image: "/categories/snacks.png",
-    description: "Everything you need to elevate your experience.",
+    title: "Makeup & Accessories",
+    image: "/categories/makeup.jpg",
+    description: "Everything you need to elevate your makeup game.",
   },
 ];
 

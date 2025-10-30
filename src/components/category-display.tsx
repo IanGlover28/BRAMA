@@ -54,7 +54,7 @@ export default function CategoryDisplay({ title, products }: CategoryDisplayProp
     <section className="mb-16 group">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 border-l-4 border-green-600 pl-4">
+        <h2 className="text-3xl font-bold text-gray-900 border-l-4 border-pink-600 pl-4">
           {title}
         </h2>
         <div className="flex gap-2">
@@ -63,7 +63,7 @@ export default function CategoryDisplay({ title, products }: CategoryDisplayProp
             disabled={!canScrollLeft}
             className={`p-2 rounded-full transition-all ${
               canScrollLeft
-                ? 'bg-green-600 text-white hover:bg-green-700 hover:scale-110 shadow-lg'
+                ? 'bg-pink-600 text-white hover:bg-pink-700 hover:scale-110 shadow-lg'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >
@@ -74,7 +74,7 @@ export default function CategoryDisplay({ title, products }: CategoryDisplayProp
             disabled={!canScrollRight}
             className={`p-2 rounded-full transition-all ${
               canScrollRight
-                ? 'bg-green-600 text-white hover:bg-green-700 hover:scale-110 shadow-lg'
+                ? 'bg-pink-600 text-white hover:bg-pink-700 hover:scale-110 shadow-lg'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

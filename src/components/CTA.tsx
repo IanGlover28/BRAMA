@@ -7,7 +7,7 @@ export default function CTA() {
   const router = useRouter();
 
   return (
-    <section className="py-20 bg-gradient-to-r from-green-600 to-green-800 text-white text-center">
+    <section className="py-20 bg-gradient-to-r from-pink-600 to-pink-800 text-white text-center">
       <motion.h2
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -30,7 +30,7 @@ export default function CTA() {
       <motion.button
         whileHover={{ scale: 1.05 }}
         onClick={() => router.push("/products")}
-        className="bg-white text-green-700 font-semibold px-10 py-4 rounded-full hover:bg-gray-100 transition"
+        className="bg-white text-pink-700 font-semibold px-10 py-4 rounded-full hover:bg-gray-100 transition"
       >
         Explore Products
       </motion.button>

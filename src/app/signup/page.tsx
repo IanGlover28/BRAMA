@@ -61,14 +61,14 @@ export default function AuthPage() {
       <Navbar />
 
       {/* Promo Banner */}
-      <div className="bg-green-600 text-white text-center py-2 text-sm">
+      <div className="bg-pink-600 text-white text-center py-2 text-sm">
         🎉 {isLoginMode ? "Welcome back to Exortica!" : "Sign up and get 10% off your first order!"}
       </div>
 
       {/* Auth Form */}
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md space-y-5">
-          <h1 className="text-3xl font-bold text-center text-green-600">
+          <h1 className="text-3xl font-bold text-center text-pink-600">
             {isLoginMode ? "Welcome Back!" : "Create Your Exortica Account"}
           </h1>
 
@@ -77,7 +77,7 @@ export default function AuthPage() {
               <input
                 type="text"
                 placeholder="Full Name"
-                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-600"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
@@ -86,7 +86,7 @@ export default function AuthPage() {
             <input
               type="email"
               placeholder="Email"
-              className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-600"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
@@ -94,7 +94,7 @@ export default function AuthPage() {
             <input
               type="password"
               placeholder="Password"
-              className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-pink-600"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               required
@@ -103,7 +103,7 @@ export default function AuthPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+              className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition"
             >
               {loading
                 ? isLoginMode
@@ -128,7 +128,7 @@ export default function AuthPage() {
                 setMessage("");
                 setForm({ name: "", email: "", password: "" });
               }}
-              className="text-green-600 font-medium hover:underline"
+              className="text-pink-600 font-medium hover:underline"
             >
               {isLoginMode ? "Sign up here" : "Log in here"}
             </button>

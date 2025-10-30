@@ -37,12 +37,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-pink-50 px-4">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm space-y-4"
       >
-        <h1 className="text-2xl font-bold text-center text-green-600">Login</h1>
+        <h1 className="text-2xl font-bold text-center text-pink-600">Login</h1>
 
         <input
           type="email"
@@ -64,7 +64,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 text-white py-3 rounded font-semibold hover:bg-green-700"
+          className="w-full bg-pink-600 text-white py-3 rounded font-semibold hover:bg-pink-700"
         >
           {loading ? "Logging in..." : "Login"}
         </button>

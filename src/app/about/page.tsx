@@ -83,11 +83,11 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 text-white pt-32 pb-24 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-pink-600 via-pink-700 to-pink-800 text-white pt-32 pb-24 overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-72 h-72 bg-white rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-green-300 rounded-full blur-3xl animate-pulse delay-700" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-pink-300 rounded-full blur-3xl animate-pulse delay-700" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -98,11 +98,12 @@ export default function AboutPage() {
             className="text-center"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Welcome to <span className="text-green-200">HighHub</span>
+              Welcome to <span className="text-pink-200">BRAMA</span>. Cosmetics
             </h1>
-            <p className="text-xl md:text-2xl text-green-50 max-w-3xl mx-auto leading-relaxed">
-              Your trusted partner in premium cannabis products. We&apos;re redefining the cannabis experience 
-              through quality, education and community.
+            <p className="text-xl md:text-2xl text-pink-50 max-w-3xl mx-auto leading-relaxed">
+              At BRAMA Cosmetics, we believe in the power of natural beauty. Our mission is to provide
+              premium skincare and beauty products that enhance your unique glow while embracing
+              sustainability and wellness.
             </p>
           </motion.div>
         </div>
@@ -121,7 +122,7 @@ export default function AboutPage() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-4xl md:text-5xl font-bold text-green-600 mb-2">
+                <div className="text-4xl md:text-5xl font-bold text-pink-600 mb-2">
                   {stat.number}
                 </div>
                 <div className="text-gray-600 font-medium">{stat.label}</div>
@@ -159,7 +160,7 @@ export default function AboutPage() {
                   But our mission goes beyond products—we&apos;re dedicated to education, advocacy, 
                   and breaking down stigmas surrounding cannabis use.
                 </p>
-                <p className="font-semibold text-green-600">
+                <p className="font-semibold text-pink-600">
                   We&apos;re not just selling cannabis. We&apos;re elevating experiences and empowering lives.
                 </p>
               </div>
@@ -185,7 +186,7 @@ export default function AboutPage() {
                 />
               </div>
               {/* Floating accent */}
-              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-green-100 rounded-full blur-3xl opacity-50" />
+              <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-pink-100 rounded-full blur-3xl opacity-50" />
             </motion.div>
           </div>
         </div>
@@ -218,8 +219,8 @@ export default function AboutPage() {
                   transition={{ delay: index * 0.1 }}
                   className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
                 >
-                  <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                    <Icon className="w-8 h-8 text-green-600" />
+                  <div className="w-16 h-16 bg-pink-100 rounded-xl flex items-center justify-center mb-6">
+                    <Icon className="w-8 h-8 text-pink-600" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{value.description}</p>
@@ -245,7 +246,7 @@ export default function AboutPage() {
 
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-green-200" />
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-pink-200" />
 
             {timeline.map((item, index) => (
               <motion.div
@@ -259,14 +260,14 @@ export default function AboutPage() {
                 }`}
               >
                 <div className={`w-1/2 ${index % 2 === 0 ? 'pr-12 text-right' : 'pl-12'}`}>
-                  <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-green-100">
-                    <div className="text-3xl font-bold text-green-600 mb-2">{item.year}</div>
+                  <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-pink-100">
+                    <div className="text-3xl font-bold text-pink-600 mb-2">{item.year}</div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
                     <p className="text-gray-600">{item.description}</p>
                   </div>
                 </div>
                 {/* Dot */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-green-600 rounded-full border-4 border-white shadow-lg" />
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-pink-600 rounded-full border-4 border-white shadow-lg" />
               </motion.div>
             ))}
           </div>
@@ -298,7 +299,7 @@ export default function AboutPage() {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
               >
-                <div className="relative h-80 bg-gradient-to-br from-green-100 to-green-200">
+                <div className="relative h-80 bg-gradient-to-br from-pink-100 to-pink-200">
                   <Image
                     src={member.image}
                     alt={member.name}
@@ -312,7 +313,7 @@ export default function AboutPage() {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-green-600 font-semibold mb-3">{member.role}</p>
+                  <p className="text-pink-600 font-semibold mb-3">{member.role}</p>
                   <p className="text-gray-600 text-sm">{member.bio}</p>
                 </div>
               </motion.div>
@@ -353,9 +354,9 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  className="flex items-center gap-4 bg-gray-50 p-6 rounded-xl hover:bg-green-50 transition-colors"
+                  className="flex items-center gap-4 bg-gray-50 p-6 rounded-xl hover:bg-pink-50 transition-colors"
                 >
-                  <Icon className="w-6 h-6 text-green-600 flex-shrink-0" />
+                  <Icon className="w-6 h-6 text-pink-600 flex-shrink-0" />
                   <span className="text-gray-700 font-medium">{item.text}</span>
                 </motion.div>
               );
@@ -365,7 +366,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-600 to-emerald-700 text-white">
+      <section className="py-20 bg-gradient-to-r from-pink-600 to-purple-700 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -373,19 +374,19 @@ export default function AboutPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl font-bold mb-6">Ready to Elevate Your Experience?</h2>
-            <p className="text-green-50 text-lg mb-8">
+            <p className="text-pink-50 text-lg mb-8">
               Join thousands of satisfied customers and discover the HighHub difference today
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/products"
-                className="bg-white text-green-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all hover:scale-105 shadow-xl"
+                className="bg-white text-pink-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all hover:scale-105 shadow-xl"
               >
                 Shop Now
               </Link>
               <a
                 href="/contact"
-                className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-green-600 transition-all"
+                className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-pink-600 transition-all"
               >
                 Contact Us
               </a>

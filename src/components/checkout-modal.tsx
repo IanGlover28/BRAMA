@@ -94,7 +94,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
             {/* Header */}
             <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <Lock className="text-green-600" /> Confirm Your Order
+              <Lock className="text-pink-600" /> Confirm Your Order
             </h2>
 
             {/* Order Summary */}
@@ -116,7 +116,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 <span>Delivery Fee</span> <span>₵{deliveryFee.toFixed(2)}</span>
               </p>
               {discount > 0 && (
-                <p className="flex justify-between text-sm text-green-600">
+                <p className="flex justify-between text-sm text-pink-600">
                   <span>Promo Discount</span> <span>-₵{discount.toFixed(2)}</span>
                 </p>
               )}
@@ -135,7 +135,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 value={promo}
                 onChange={(e) => setPromo(e.target.value)}
                 placeholder="Enter promo code"
-                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-pink-200"
               />
             </div>
 
@@ -149,7 +149,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 value={delivery}
                 onChange={(e) => setDelivery(e.target.value)}
                 placeholder="Confirm or edit your location"
-                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-pink-200"
               />
               {!location && (
                 <p className="text-xs text-red-500 mt-1">
@@ -165,7 +165,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add delivery notes or preferences..."
-                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-green-200"
+                className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-pink-200"
                 rows={3}
               />
             </div>
@@ -173,7 +173,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             {/* Modify Cart */}
             <button
               onClick={onClose}
-              className="text-green-600 text-sm underline mb-4"
+              className="text-pink-600 text-sm underline mb-4"
             >
               Modify Cart
             </button>
@@ -182,7 +182,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             <button
               onClick={handleCheckout}
               disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:bg-green-400 flex items-center justify-center gap-2"
+              className="w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition disabled:bg-pink-400 flex items-center justify-center gap-2"
             >
               {loading ? 'Processing...' : (<><Lock size={18}/> Confirm Order</>)}
             </button>

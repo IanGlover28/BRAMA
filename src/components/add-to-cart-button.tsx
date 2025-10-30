@@ -31,7 +31,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     <button
       onClick={handleAddToCart}
       disabled={loading}
-      className="w-full sm:w-auto bg-green-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-green-700 transition duration-300 flex items-center justify-center gap-2 disabled:bg-green-400"
+      className="w-full sm:w-auto bg-pink-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-pink-700 transition duration-300 flex items-center justify-center gap-2 disabled:bg-pink-400"
     >
       {loading ? (
         'Adding...'

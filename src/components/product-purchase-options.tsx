@@ -43,7 +43,7 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
               key={t}
               onClick={() => setType(t as 'Bud' | 'Pre-Rolled')}
               className={`px-4 py-2 rounded-full border ${
-                type === t ? 'bg-green-600 text-white border-green-600' : 'border-gray-300 hover:border-green-600'
+                type === t ? 'bg-pink-600 text-white border-pink-600' : 'border-gray-300 hover:border-pink-600'
               }`}
             >
               {t}
@@ -61,7 +61,7 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
               key={u}
               onClick={() => setUnit(u as 'Gram' | 'Ounce')}
               className={`px-4 py-2 rounded-full border ${
-                unit === u ? 'bg-green-600 text-white border-green-600' : 'border-gray-300 hover:border-green-600'
+                unit === u ? 'bg-pink-600 text-white border-pink-600' : 'border-gray-300 hover:border-pink-600'
               }`}
             >
               {u}
@@ -83,13 +83,13 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
       {/* Total and Buy */}
       <div className="pt-6">
         <p className="text-xl font-bold mb-3">
-          Total: <span className="text-green-600">${totalPrice.toFixed(2)}</span>
+          Total: <span className="text-pink-600">${totalPrice.toFixed(2)}</span>
         </p>
 
         <button
           onClick={handleBuyNow}
           disabled={loading}
-          className="w-full bg-green-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-green-700 transition disabled:opacity-70"
+          className="w-full bg-pink-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-pink-700 transition disabled:opacity-70"
         >
           {loading ? 'Adding...' : 'Buy Now'}
         </button>

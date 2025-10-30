@@ -66,11 +66,11 @@ const handleSaveLocation = (loc: string) => {
     <>
       {/* ✅ Display location banner */}
       {location && (
-        <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-2 flex justify-center items-center gap-2">
+        <div className="bg-pink-50 border border-pink-200 text-pink-700 text-sm px-4 py-2 flex justify-center items-center gap-2 mt-16">
           <span>📍 {location}</span>
           <button
             onClick={() => setShowModal(true)}
-            className="text-green-600 underline text-xs hover:text-green-800"
+            className="text-pink-600 underline text-xs hover:text-pink-800"
           >
             Change
           </button>
@@ -106,7 +106,7 @@ const handleSaveLocation = (loc: string) => {
               <div className="flex flex-col gap-3">
                 <button
                   onClick={detectLocation}
-                  className="bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                  className="bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition"
                 >
                   Detect My Location 🌍
                 </button>
@@ -116,7 +116,7 @@ const handleSaveLocation = (loc: string) => {
                   value={manualInput}
                   onChange={(e) => setManualInput(e.target.value)}
                   placeholder="Enter your city or region"
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
 
                 <button
