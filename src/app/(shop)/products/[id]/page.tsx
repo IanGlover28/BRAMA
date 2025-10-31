@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/authOptions";
-import Image from "next/image";
+import ProductImage from "@/components/product-image";
 import ProductPurchaseOptions from "@/components/product-purchase-options";
 
 export default async function ProductDetailsPage(props: { params: Promise<{ id: string }> }) {
@@ -32,14 +32,10 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Product Image */}
           <div className="relative w-full h-[500px] rounded-xl overflow-hidden shadow-lg bg-gray-50">
-            <Image
-              src={imageSrc || "/placeholder.png"}
-              alt={product.name}
-              fill
-              className="object-contain"
-              priority={false}
-              unoptimized
-            />
+            <ProductImage 
+    src={imageSrc} 
+    alt={product.name} 
+  />
           </div>
 
           {/* Product Details */}
@@ -57,7 +53,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
               <h3 className="text-lg font-semibold text-gray-800 mb-2">Description</h3>
               <p className="text-gray-600 leading-relaxed">
                 {product.description ||
-                  "Premium Exortica product with top-tier quality and satisfaction guaranteed."}
+                  "Premium .BRAMA product with top-tier quality and satisfaction guaranteed."}
               </p>
             </div>
 

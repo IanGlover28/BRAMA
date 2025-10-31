@@ -2,81 +2,48 @@
 
 import { useState } from 'react';
 import { useCart } from '@/context/cart-context';
-import {Product} from '@/types/product';
+import { Product } from '@/types/product';
 
 export default function ProductPurchaseOptions({ product }: { product: Product }) {
   const { addToCart, toggleCart } = useCart();
-
-  const [type, setType] = useState<'Bud' | 'Pre-Rolled'>('Bud');
-  const [unit, setUnit] = useState<'Gram' | 'Ounce'>('Gram');
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const makeVariantId = () => `${product.id}::${type.toLowerCase()}::${unit.toLowerCase()}`;
-
-  const unitMultiplier = unit === 'Ounce' ? 28 : 1;
-  const unitPrice = product.price * unitMultiplier;
-  const totalPrice = parseFloat((unitPrice * quantity).toFixed(2));
+  const totalPrice = parseFloat((product.price * quantity).toFixed(2));
 
   const handleBuyNow = async () => {
     setLoading(true);
 
     const item = {
-      id: makeVariantId(),
-      name: `${product.name} — ${type} (${quantity} x ${unit})`,
+      id: `${product.id}::${quantity}`,
+      name: `${product.name} (${quantity})`,
       price: totalPrice,
     };
 
-    addToCart(item);    
-    toggleCart();     
+    addToCart(item);
+    toggleCart();
     setLoading(false);
   };
 
   return (
     <div className="space-y-4 border-t pt-6">
-      {/* Type Selector */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Type</label>
-        <div className="flex gap-4">
-          {['Bud', 'Pre-Rolled'].map((t) => (
-            <button
-              key={t}
-              onClick={() => setType(t as 'Bud' | 'Pre-Rolled')}
-              className={`px-4 py-2 rounded-full border ${
-                type === t ? 'bg-pink-600 text-white border-pink-600' : 'border-gray-300 hover:border-pink-600'
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Unit */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Unit</label>
-        <div className="flex gap-4">
-          {['Gram', 'Ounce'].map((u) => (
-            <button
-              key={u}
-              onClick={() => setUnit(u as 'Gram' | 'Ounce')}
-              className={`px-4 py-2 rounded-full border ${
-                unit === u ? 'bg-pink-600 text-white border-pink-600' : 'border-gray-300 hover:border-pink-600'
-              }`}
-            >
-              {u}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Quantity */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
         <div className="flex items-center gap-4">
-          <button onClick={() => setQuantity(q => Math.max(1, q - 1))} className="px-4 py-2 border rounded-lg">–</button>
+          <button
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            className="px-4 py-2 border rounded-lg"
+          >
+            –
+          </button>
           <span className="text-lg font-semibold">{quantity}</span>
-          <button onClick={() => setQuantity(q => q + 1)} className="px-4 py-2 border rounded-lg">+</button>
+          <button
+            onClick={() => setQuantity((q) => q + 1)}
+            className="px-4 py-2 border rounded-lg"
+          >
+            +
+          </button>
         </div>
       </div>
 

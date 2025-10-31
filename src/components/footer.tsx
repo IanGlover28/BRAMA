@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Logo & Info */}
           <div>
             <h3 className="text-2xl font-bold mb-4">
-              <span className="text-pink-500">BRAMA</span>.
+              .<span className="text-pink-500 font-serif">BRAMA</span>
             </h3>
             <p className="text-gray-400 text-sm">Quality products for a better life. Shop secure, shop smart.</p>
           </div>
@@ -19,8 +19,8 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="space-y-3">
             <h4 className="font-semibold text-pink-500 mb-2">Shop</h4>
-            <Link href="/products?category=flower" className="block text-sm text-gray-300 hover:text-pink-400 transition">LipCare</Link>
-            <Link href="/products?category=edibles" className="block text-sm text-gray-300 hover:text-pink-400 transition">SkinCare</Link>
+            <Link href="/products?category=LipCare" className="block text-sm text-gray-300 hover:text-pink-400 transition">LipCare</Link>
+            <Link href="/products?category=SkinCare" className="block text-sm text-gray-300 hover:text-pink-400 transition">SkinCare</Link>
             <Link href="/products?filter=bestsellers" className="block text-sm text-gray-300 hover:text-pink-400 transition">Best Sellers</Link>
           </div>
           

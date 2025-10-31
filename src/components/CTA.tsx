@@ -15,7 +15,7 @@ export default function CTA() {
         transition={{ duration: 0.8 }}
         className="text-4xl md:text-5xl font-bold mb-6"
       >
-        Ready to Elevate Your Experience?
+        Ready to Elevate Your look?
       </motion.h2>
       <motion.p
         initial={{ opacity: 0, y: 20 }}
@@ -24,8 +24,8 @@ export default function CTA() {
         transition={{ delay: 0.3 }}
         className="text-lg mb-10 max-w-2xl mx-auto"
       >
-        Discover the finest edibles and smoking essentials made for the modern
-        enthusiast.
+        Discover the finest products and girly essentials made for the modern
+        aesthetism.
       </motion.p>
       <motion.button
         whileHover={{ scale: 1.05 }}

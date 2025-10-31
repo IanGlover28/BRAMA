@@ -9,7 +9,7 @@ import Features from "@/components/Features";
 import CTA from "@/components/CTA";
 
 
-export default function ExorticaLanding() {
+export default function BramaLanding() {
 
 
   

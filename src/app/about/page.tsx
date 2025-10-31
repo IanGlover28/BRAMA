@@ -10,73 +10,81 @@ export default function AboutPage() {
     {
       icon: Shield,
       title: 'Quality First',
-      description: 'Every product undergoes rigorous testing to ensure purity, potency, and safety.',
+      description:
+        'Every BRAMA product is crafted with the finest ingredients and tested for safety, purity, and effectiveness.',
     },
     {
       icon: Leaf,
-      title: 'Sustainable Practices',
-      description: 'We partner with eco-conscious cultivators who prioritize organic growing methods.',
+      title: 'Sustainability',
+      description:
+        'We use eco-conscious packaging and partner with ethical suppliers to protect our planet while enhancing your beauty.',
     },
     {
       icon: Heart,
-      title: 'Community Focused',
-      description: 'Building a supportive community through education, advocacy, and responsible use.',
+      title: 'Empowering Beauty',
+      description:
+        'We believe in self-love and confidence — inspiring everyone to feel beautiful in their natural skin.',
     },
     {
       icon: Award,
-      title: 'Premium Selection',
-      description: 'Curated products from trusted brands and local artisans you can rely on.',
+      title: 'Excellence in Every Drop',
+      description:
+        'From formulation to packaging, BRAMA stands for elegance, luxury, and authenticity you can trust.',
     },
   ];
 
   const stats = [
-    { number: '10,000+', label: 'Happy Customers' },
-    { number: '500+', label: 'Premium Products' },
-    { number: '50+', label: 'Trusted Brands' },
-    { number: '4.9★', label: 'Average Rating' },
+    { number: '5,000+', label: 'Satisfied Customers' },
+    { number: '200+', label: 'Beauty Products' },
+    { number: '30+', label: 'Trusted Retail Partners' },
+    { number: '4.9★', label: 'Customer Rating' },
   ];
 
   const timeline = [
     {
-      year: '2020',
-      title: 'The Beginning',
-      description: 'Founded with a vision to make quality cannabis accessible to everyone.',
-    },
-    {
       year: '2021',
-      title: 'Rapid Growth',
-      description: 'Expanded our product line and partnered with leading cultivators.',
+      title: 'The Vision',
+      description:
+        'BRAMA Cosmetics was founded with a vision to create inclusive, natural, and luxurious beauty products for all skin types.',
     },
     {
       year: '2022',
-      title: 'Community Impact',
-      description: 'Launched educational programs and wellness initiatives.',
+      title: 'Growth & Innovation',
+      description:
+        'We expanded our line with skincare and haircare collections formulated using nature’s finest botanicals.',
     },
     {
-      year: '2024',
-      title: 'Industry Leader',
-      description: 'Recognized as a top destination for premium cannabis products.',
+      year: '2023',
+      title: 'Community & Care',
+      description:
+        'Launched our “Glow with Purpose” campaign, empowering women and promoting sustainable beauty education.',
+    },
+    {
+      year: '2025',
+      title: 'Global Reach',
+      description:
+        'BRAMA Cosmetics became a household name in Ghana and beyond, known for redefining clean beauty.',
     },
   ];
 
   const team = [
     {
-      name: 'Sarah Mitchell',
+      name: 'Brama Osei',
       role: 'Founder & CEO',
-      image: '/team/sarah.jpg',
-      bio: '15+ years in cannabis industry advocacy',
+      image: '/team/founder.jpg',
+      bio: 'Driven by a passion for natural skincare and luxury beauty innovation.',
     },
     {
-      name: 'Marcus Chen',
-      role: 'Head of Product',
-      image: '/team/marcus.jpg',
-      bio: 'Expert in cannabis cultivation and extraction',
+      name: 'Kofi Mensah',
+      role: 'Head of Product Development',
+      image: '/team/kofi.jpg',
+      bio: 'Expert in botanical formulation and product testing for diverse skin tones.',
     },
     {
-      name: 'Elena Rodriguez',
-      role: 'Customer Experience Director',
-      image: '/team/elena.jpg',
-      bio: 'Passionate about education and wellness',
+      name: 'Ama Boateng',
+      role: 'Marketing & Brand Director',
+      image: '/team/ama.jpg',
+      bio: 'Focused on building meaningful connections and customer satisfaction.',
     },
   ];
 
@@ -98,12 +106,12 @@ export default function AboutPage() {
             className="text-center"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Welcome to <span className="text-pink-200">BRAMA</span>. Cosmetics
+              Welcome to .<span className="text-pink-200">BRAMA</span> Cosmetics
             </h1>
             <p className="text-xl md:text-2xl text-pink-50 max-w-3xl mx-auto leading-relaxed">
-              At BRAMA Cosmetics, we believe in the power of natural beauty. Our mission is to provide
-              premium skincare and beauty products that enhance your unique glow while embracing
-              sustainability and wellness.
+              At BRAMA Cosmetics, we believe beauty is confidence made visible. Our mission is to
+              create safe, luxurious and eco-friendly beauty products that celebrate every shade,
+              style and story.
             </p>
           </motion.div>
         </div>
@@ -122,9 +130,7 @@ export default function AboutPage() {
                 transition={{ delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-4xl md:text-5xl font-bold text-pink-600 mb-2">
-                  {stat.number}
-                </div>
+                <div className="text-4xl md:text-5xl font-bold text-pink-600 mb-2">{stat.number}</div>
                 <div className="text-gray-600 font-medium">{stat.label}</div>
               </motion.div>
             ))}
@@ -145,23 +151,21 @@ export default function AboutPage() {
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-700 leading-relaxed">
                 <p>
-                  HighHub was born from a simple belief: everyone deserves access to premium, 
-                  safe, and responsibly sourced cannabis products. Founded in 2020, we set out 
-                  to create more than just a marketplace—we built a community.
+                  BRAMA Cosmetics began with a simple idea: to redefine beauty through nature. Founded
+                  in 2021, our brand emerged from a passion for clean ingredients, ethical practices
+                  and radiant self-expression.
                 </p>
                 <p>
-                  What started as a small operation has grown into one of the most trusted names 
-                  in the industry. We&apos;ve partnered with expert cultivators, award-winning brands, 
-                  and passionate artisans who share our commitment to excellence.
+                  What started as a small skincare line in Ghana has grown into a trusted name in the
+                  beauty industry, offering everything from facial care and body creams to fragrances
+                  and makeup.
                 </p>
                 <p>
-                  Today, HighHub serves thousands of customers across Ghana, offering everything 
-                  from premium flower and edibles to cutting-edge vaporizers and wellness products. 
-                  But our mission goes beyond products—we&apos;re dedicated to education, advocacy, 
-                  and breaking down stigmas surrounding cannabis use.
+                  At BRAMA, we believe beauty should never come at the cost of health or the planet.
+                  Our formulas are cruelty-free, dermatologically tested and sustainably packaged.
                 </p>
                 <p className="font-semibold text-pink-600">
-                  We&apos;re not just selling cannabis. We&apos;re elevating experiences and empowering lives.
+                  We’re not just enhancing beauty... we’re empowering confidence, naturally.
                 </p>
               </div>
             </motion.div>
@@ -173,9 +177,9 @@ export default function AboutPage() {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative h-[500px] bg-pink-300 rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/about/story.jpg"
+                  src="/brama-logo.png"
                   alt="Our Story"
                   fill
                   className="object-cover"
@@ -185,7 +189,6 @@ export default function AboutPage() {
                   }}
                 />
               </div>
-              {/* Floating accent */}
               <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-pink-100 rounded-full blur-3xl opacity-50" />
             </motion.div>
           </div>
@@ -203,7 +206,7 @@ export default function AboutPage() {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              These core principles guide everything we do at HighHub
+              These values are the foundation of BRAMA Cosmetics and guide everything we do.
             </p>
           </motion.div>
 
@@ -241,13 +244,11 @@ export default function AboutPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Journey</h2>
-            <p className="text-gray-600 text-lg">Milestones that shaped HighHub</p>
+            <p className="text-gray-600 text-lg">Milestones that shaped BRAMA Cosmetics</p>
           </motion.div>
 
           <div className="relative">
-            {/* Timeline line */}
             <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-pink-200" />
-
             {timeline.map((item, index) => (
               <motion.div
                 key={index}
@@ -266,7 +267,6 @@ export default function AboutPage() {
                     <p className="text-gray-600">{item.description}</p>
                   </div>
                 </div>
-                {/* Dot */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-pink-600 rounded-full border-4 border-white shadow-lg" />
               </motion.div>
             ))}
@@ -285,7 +285,7 @@ export default function AboutPage() {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Passionate experts dedicated to your cannabis experience
+              The creative minds behind BRAMA’s innovation, beauty and success.
             </p>
           </motion.div>
 
@@ -331,20 +331,20 @@ export default function AboutPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose HighHub?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose BRAMA?</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              We go above and beyond to ensure your satisfaction
+              We’re redefining beauty with trust, care, and excellence.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { icon: CheckCircle, text: 'Lab-tested products for quality assurance' },
-              { icon: Truck, text: 'Fast & discreet delivery nationwide' },
-              { icon: Shield, text: 'Secure payment & data protection' },
-              { icon: Users, text: '24/7 customer support team' },
-              { icon: Award, text: 'Industry-leading product selection' },
-              { icon: Star, text: 'Loyalty rewards & exclusive deals' },
+              { icon: CheckCircle, text: 'Dermatologist-tested for all skin types' },
+              { icon: Truck, text: 'Fast & reliable nationwide delivery' },
+              { icon: Shield, text: 'Safe payments & secure shopping' },
+              { icon: Users, text: 'Friendly and responsive customer care' },
+              { icon: Award, text: 'Award-winning beauty formulations' },
+              { icon: Star, text: 'Thousands of glowing reviews' },
             ].map((item, index) => {
               const Icon = item.icon;
               return (
@@ -373,9 +373,9 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold mb-6">Ready to Elevate Your Experience?</h2>
+            <h2 className="text-4xl font-bold mb-6">Discover the BRAMA Glow</h2>
             <p className="text-pink-50 text-lg mb-8">
-              Join thousands of satisfied customers and discover the HighHub difference today
+              Join thousands of beauty lovers and experience skincare made with love, care, and nature.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -385,7 +385,7 @@ export default function AboutPage() {
                 Shop Now
               </Link>
               <a
-                href="/contact"
+                href="tel:+233552119400"
                 className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-pink-600 transition-all"
               >
                 Contact Us

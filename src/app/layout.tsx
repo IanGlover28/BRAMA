@@ -14,8 +14,8 @@ import FloatingCartModal from '@/components/floating-cart-modal';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Exortica | Premium Edibles and Smoking Tools',
-  description: 'Premium edibles and smoking tools platform, featuring a secure and seamless shopping experience.',
+  title: 'BRAMA COSMETICS - Quality products for every Classy Lady.',
+  description: 'Premium cosmetics platform, featuring a secure and seamless shopping experience.',
 };
 
 export default function RootLayout({

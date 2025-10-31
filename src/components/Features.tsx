@@ -8,7 +8,7 @@ const features = [
     icon: <ShoppingBag className="w-10 h-10 text-pink-600" />,
     title: "Premium Quality",
     description:
-      "All our edibles and smoking tools are curated for safety and satisfaction.",
+      "All our Products and accessories are curated for your safety and satisfaction.",
   },
   {
     icon: <Truck className="w-10 h-10 text-pink-600" />,
@@ -28,7 +28,7 @@ export default function Features() {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold mb-12 text-gray-900">
-          Why Choose Exortica?
+          Why Choose .Brama?
         </h2>
         <div className="grid md:grid-cols-3 gap-10">
           {features.map((feature, i) => (

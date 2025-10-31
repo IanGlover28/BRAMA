@@ -1,68 +1,68 @@
-export interface Article {
+export interface Tutorial {
   title: string;
   slug: string;
   category: string;
   summary: string;
   image: string;
-  content: string; // Could be markdown or plain HTML
+  video?: string; // Added for video tutorials
+  content: string; // HTML or markdown content
 }
 
-export const articles: Article[] = [
+export const tutorials: Tutorial[] = [
   {
-    title: "What Is THC?",
-    slug: "what-is-thc",
-    category: "Cannabis Basics",
-    summary: "THC is the main psychoactive compound in cannabis responsible for the 'high'.",
-    image: "/images/learn/thc.jpg",
+    title: "How to Build a Natural Skincare Routine",
+    slug: "natural-skincare-routine",
+    category: "Skincare Basics",
+    summary: "Learn the perfect morning and night skincare routine for glowing skin.",
+    image: "/images/learn/skincare-routine.jpg",
+    video: "https://www.youtube.com/embed/abcd1234", // Replace with actual YouTube ID
     content: `
-      <h2>Understanding THC</h2>
-      <p>
-        Tetrahydrocannabinol (THC) is the most well-known cannabinoid found in cannabis. It interacts with your body’s endocannabinoid system to produce euphoric and relaxing effects.
-      </p>
-      <p>
-        The strength of THC effects depends on the strain, dose, and your individual tolerance.
-      </p>
-      <h3>Key Takeaways</h3>
-      <ul>
-        <li>THC produces psychoactive effects.</li>
-        <li>Higher doses can lead to anxiety for some users.</li>
-        <li>Balance with CBD can moderate THC’s intensity.</li>
-      </ul>
-    `,
-  },
-  {
-    title: "How to Properly Store Cannabis",
-    slug: "how-to-properly-store-cannabis",
-    category: "Cannabis How Tos",
-    summary: "Proper storage keeps your cannabis fresh and potent for longer periods.",
-    image: "/images/learn/storage.jpg",
-    content: `
-      <h2>How to Store Cannabis</h2>
-      <p>
-        Store cannabis in airtight containers in a cool, dark place to maintain potency and flavor. Avoid exposure to sunlight, humidity, and air.
-      </p>
-      <ul>
-        <li>Use glass jars with tight lids.</li>
-        <li>Keep away from direct heat.</li>
-        <li>Store in a dry environment (humidity 59–63%).</li>
-      </ul>
-    `,
-  },
-  {
-    title: "How to Roll a Joint",
-    slug: "how-to-roll-a-joint",
-    category: "Cannabis How Tos",
-    summary: "Learn the classic way to roll a joint with precision and ease.",
-    image: "/images/learn/joint.jpg",
-    content: `
-      <h2>Rolling a Perfect Joint</h2>
+      <h2>Step-by-Step Guide</h2>
       <ol>
-        <li>Grind your cannabis evenly.</li>
-        <li>Place it into rolling paper with a filter tip.</li>
-        <li>Shape, roll, lick, and seal the joint.</li>
-        <li>Light it up and enjoy responsibly.</li>
+        <li>Start with a gentle cleanser suitable for your skin type.</li>
+        <li>Apply toner to balance pH and prep your skin.</li>
+        <li>Use a serum with active ingredients like Vitamin C or Hyaluronic Acid.</li>
+        <li>Finish with moisturizer and sunscreen during the day.</li>
       </ol>
-      <p>Practice makes perfect — keep it consistent for a smooth burn.</p>
+      <p>Consistency is key! Stick to this routine daily for best results.</p>
+    `,
+  },
+  {
+    title: "Makeup for Beginners: Natural Everyday Look",
+    slug: "makeup-for-beginners",
+    category: "Makeup Tutorials",
+    summary: "Follow this simple makeup tutorial to achieve a fresh, natural look.",
+    image: "/images/learn/makeup-beginners.jpg",
+    video: "https://www.youtube.com/embed/xyz5678",
+    content: `
+      <h2>Natural Everyday Makeup</h2>
+      <p>
+        This tutorial covers how to apply foundation, blush, and lip tint for a radiant look that lasts all day.
+      </p>
+      <ul>
+        <li>Start with primer and light foundation.</li>
+        <li>Apply soft blush to cheeks.</li>
+        <li>Use nude or pink lipstick for a natural finish.</li>
+      </ul>
+    `,
+  },
+  {
+    title: "How to Choose the Right Foundation Shade",
+    slug: "choose-foundation-shade",
+    category: "Product Education",
+    summary: "Learn how to find your perfect BRAMA foundation shade.",
+    image: "/images/learn/foundation.jpg",
+    video: "https://www.youtube.com/embed/pqr9876",
+    content: `
+      <h2>Finding Your Perfect Match</h2>
+      <p>
+        Always test foundation on your jawline under natural light. BRAMA foundations come in 12 inclusive shades.
+      </p>
+      <ul>
+        <li>Identify your undertone (warm, cool, neutral).</li>
+        <li>Match shade to your neck, not just your face.</li>
+        <li>Blend properly for a seamless finish.</li>
+      </ul>
     `,
   },
 ];

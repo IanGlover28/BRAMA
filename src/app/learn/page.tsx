@@ -2,17 +2,17 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { articles } from "./data";
+import { tutorials } from "./data";
 
 export default function LearnPage() {
-  const categories = Array.from(new Set(articles.map(a => a.category)));
+  const categories = Array.from(new Set(tutorials.map((t) => t.category)));
 
   return (
     <main className="bg-white text-gray-800">
       <section className="py-20 text-center bg-pink-50">
-        <h1 className="text-4xl font-bold text-pink-800">Learn with HighHub</h1>
+        <h1 className="text-4xl font-bold text-pink-800">Learn with BRAMA Cosmetics</h1>
         <p className="mt-4 text-gray-600">
-          Your trusted guide to cannabis education, how-tos, and insights.
+          Your trusted guide to beauty care, skincare routines, and professional makeup tutorials.
         </p>
       </section>
 
@@ -25,20 +25,18 @@ export default function LearnPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-xl font-semibold text-pink-800 mb-3">
-              {category}
-            </h2>
+            <h2 className="text-xl font-semibold text-pink-800 mb-3">{category}</h2>
 
             <ul className="space-y-2">
-              {articles
-                .filter(a => a.category === category)
-                .map(article => (
-                  <li key={article.slug}>
+              {tutorials
+                .filter((t) => t.category === category)
+                .map((tutorial) => (
+                  <li key={tutorial.slug}>
                     <Link
-                      href={`/learn/${article.slug}`}
+                      href={`/learn/${tutorial.slug}`}
                       className="text-pink-700 hover:underline"
                     >
-                      {article.title}
+                      {tutorial.title}
                     </Link>
                   </li>
                 ))}

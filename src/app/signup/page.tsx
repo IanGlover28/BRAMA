@@ -62,14 +62,14 @@ export default function AuthPage() {
 
       {/* Promo Banner */}
       <div className="bg-pink-600 text-white text-center py-2 text-sm">
-        🎉 {isLoginMode ? "Welcome back to Exortica!" : "Sign up and get 10% off your first order!"}
+        🎉 {isLoginMode ? "Welcome back to .BRAMA!" : "Sign up and get 10% off your first order!"}
       </div>
 
       {/* Auth Form */}
       <main className="flex-grow flex items-center justify-center px-4 py-12">
         <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md space-y-5">
           <h1 className="text-3xl font-bold text-center text-pink-600">
-            {isLoginMode ? "Welcome Back!" : "Create Your Exortica Account"}
+            {isLoginMode ? "Welcome Back!" : "Create Your .BRAMA Account"}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">

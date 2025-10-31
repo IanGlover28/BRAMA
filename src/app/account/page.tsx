@@ -103,7 +103,7 @@ export default function AccountPage() {
 
         {/* My HighHub Account Section */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">My Exortica Account</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">My .BRAMA Account</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AccountMenuItem
               icon={Package}
