@@ -16,6 +16,10 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'BRAMA COSMETICS - Quality products for every Classy Lady.',
   description: 'Premium cosmetics platform, featuring a secure and seamless shopping experience.',
+  icons: {
+    icon: '/brama-logo.ico',
+    apple: '/brama-logo.ico',
+  },
 };
 
 export default function RootLayout({
@@ -25,6 +29,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
+      <head>
+        <link rel="icon" href="/brama-logo.png" />
+      </head>
       <body>
         <AuthProvider>
           {/* WRAP THE ENTIRE APP WITH THE CART PROVIDER */}

@@ -11,7 +11,7 @@ export default function AboutPage() {
       icon: Shield,
       title: 'Quality First',
       description:
-        'Every BRAMA product is crafted with the finest ingredients and tested for safety, purity, and effectiveness.',
+        'Every BRAMA product is crafted with the finest ingredients and tested for safety, purity and effectiveness.',
     },
     {
       icon: Leaf,
@@ -29,7 +29,7 @@ export default function AboutPage() {
       icon: Award,
       title: 'Excellence in Every Drop',
       description:
-        'From formulation to packaging, BRAMA stands for elegance, luxury, and authenticity you can trust.',
+        'From formulation to packaging, BRAMA stands for elegance, luxury and authenticity you can trust.',
     },
   ];
 
@@ -45,7 +45,7 @@ export default function AboutPage() {
       year: '2021',
       title: 'The Vision',
       description:
-        'BRAMA Cosmetics was founded with a vision to create inclusive, natural, and luxurious beauty products for all skin types.',
+        'BRAMA Cosmetics was founded with a vision to create inclusive, natural and luxurious beauty products for all skin types.',
     },
     {
       year: '2022',
@@ -333,7 +333,7 @@ export default function AboutPage() {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose BRAMA?</h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              We’re redefining beauty with trust, care, and excellence.
+              We’re redefining beauty with trust, care and excellence.
             </p>
           </motion.div>
 
@@ -375,7 +375,7 @@ export default function AboutPage() {
           >
             <h2 className="text-4xl font-bold mb-6">Discover the BRAMA Glow</h2>
             <p className="text-pink-50 text-lg mb-8">
-              Join thousands of beauty lovers and experience skincare made with love, care, and nature.
+              Join thousands of beauty lovers and experience skincare made with love, care and nature.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

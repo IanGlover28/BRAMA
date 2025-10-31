@@ -27,7 +27,7 @@ export default function Features() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold mb-12 text-gray-900">
+        <h2 className="text-4xl font-bold mb-12 ">
           Why Choose .Brama?
         </h2>
         <div className="grid md:grid-cols-3 gap-10">
@@ -41,7 +41,7 @@ export default function Features() {
               className="flex flex-col items-center text-center p-6 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition"
             >
               {feature.icon}
-              <h3 className="text-xl font-semibold mt-4 mb-2">
+              <h3 className="text-xl text-pink-400 font-semibold mt-4 mb-2">
                 {feature.title}
               </h3>
               <p className="text-gray-600">{feature.description}</p>

@@ -37,7 +37,7 @@ export default function Hero() {
           transition={{ duration: 1 }}
           className="text-lg text-white mt-5 mb-8 max-w-2xl" // Changed text color for contrast
         >
-          Discover the essence of natural beauty with BRAMA Cosmetics
+          Discover the essence <span className="text-pink-400">of natural beauty </span> with BRAMA Cosmetics
         </motion.p>
 
         <motion.button

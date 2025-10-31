@@ -12,7 +12,7 @@ export default function LearnPage() {
       <section className="py-20 text-center bg-pink-50">
         <h1 className="text-4xl font-bold text-pink-800">Learn with BRAMA Cosmetics</h1>
         <p className="mt-4 text-gray-600">
-          Your trusted guide to beauty care, skincare routines, and professional makeup tutorials.
+          Your trusted guide to beauty care, skincare routines and professional makeup tutorials.
         </p>
       </section>
 

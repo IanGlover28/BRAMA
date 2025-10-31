@@ -235,7 +235,7 @@ export const sampleProducts: Record<string, Product[]> = {
     {
       id: 'haircare-5',
       name: 'Brama Leave-In Conditioner',
-      description: 'Lightweight spray for hydration, detangling, and shine.',
+      description: 'Lightweight spray for hydration, detangling and shine.',
       price: 42.99,
       image: '/products/leave-in.jpg',
       category: 'haircare',
@@ -249,7 +249,7 @@ export const sampleProducts: Record<string, Product[]> = {
     {
       id: 'fragrance-1',
       name: 'Brama Bloom Eau de Parfum',
-      description: 'Floral fragrance with jasmine, rose, and vanilla undertones.',
+      description: 'Floral fragrance with jasmine, rose and vanilla undertones.',
       price: 89.99,
       image: '/products/bloom.jpg',
       category: 'fragrances',

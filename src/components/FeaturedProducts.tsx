@@ -68,7 +68,7 @@ export default function FeaturedProducts() {
   return (
     <section className="py-20 bg-pink-50">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
+        <h2 className="text-4xl font-bold text-center mb-12 text-pink-400">
           Featured Products
         </h2>
 
@@ -85,7 +85,7 @@ export default function FeaturedProducts() {
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="inline-flex items-center justify-center bg-gray-800 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-900 transition duration-300 shadow-md"
+            className="inline-flex items-center justify-center bg-pink-400 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-900 transition duration-300 shadow-md"
           >
             View All Products →
           </Link>

@@ -37,7 +37,7 @@ export const tutorials: Tutorial[] = [
     content: `
       <h2>Natural Everyday Makeup</h2>
       <p>
-        This tutorial covers how to apply foundation, blush, and lip tint for a radiant look that lasts all day.
+        This tutorial covers how to apply foundation, blush and lip tint for a radiant look that lasts all day.
       </p>
       <ul>
         <li>Start with primer and light foundation.</li>

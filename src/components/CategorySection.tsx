@@ -25,8 +25,8 @@ export default function CategorySection() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
-          Shop by Category
+        <h2 className="text-4xl font-bold text-center mb-12 text-pink-400">
+       .BRAMA
         </h2>
 
         <div className="grid md:grid-cols-3 gap-10">
@@ -47,7 +47,7 @@ export default function CategorySection() {
                 className="w-full h-56 object-contain"
               />
               <div className="p-6">
-                <h3 className="text-2xl font-semibold mb-2">{cat.title}</h3>
+                <h3 className="text-2xl text-pink-400 font-serif font-bold mb-2">{cat.title}</h3>
                 <p className="text-gray-600">{cat.description}</p>
               </div>
             </motion.div>

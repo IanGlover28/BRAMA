@@ -93,7 +93,7 @@ async function main() {
       },
       {
         name: "The Ordinary Niacinamide 10% + Zinc 1%",
-        description: "Reduces blemishes, controls oil, and improves skin texture.",
+        description: "Reduces blemishes, controls oil and improves skin texture.",
         price: 70.0,
         image: "/products/ordinary-niacinamide.jpg",
         category: "skincare",
@@ -349,7 +349,7 @@ async function main() {
       },
       {
         name: "E45 Dermatological Cream",
-        description: "Soothes dry, sensitive, and itchy skin.",
+        description: "Soothes dry, sensitive and itchy skin.",
         price: 70.0,
         image: "/products/e45-cream.jpg",
         category: "bodycare",
