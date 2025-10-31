@@ -61,7 +61,7 @@ export default function AuthPage() {
       <Navbar />
 
       {/* Promo Banner */}
-      <div className="bg-pink-600 text-white text-center py-2 text-sm">
+      <div className="bg-pink-600 text-white text-center py-2 text-sm mt-16">
         🎉 {isLoginMode ? "Welcome back to .BRAMA!" : "Sign up and get 10% off your first order!"}
       </div>
 
