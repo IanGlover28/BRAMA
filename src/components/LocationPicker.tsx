@@ -100,7 +100,7 @@ const handleSaveLocation = (loc: string) => {
                 Set Your Location
               </h2>
               <p className="text-sm text-gray-600 text-center mb-4">
-                We use your location to show nearby stores and delivery options.
+                We use your location to ensure smooth delivery process.
               </p>
 
               <div className="flex flex-col gap-3">
@@ -108,14 +108,14 @@ const handleSaveLocation = (loc: string) => {
                   onClick={detectLocation}
                   className="bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition"
                 >
-                  Detect My Location 🌍
+                 Detect current location
                 </button>
 
                 <input
                   type="text"
                   value={manualInput}
                   onChange={(e) => setManualInput(e.target.value)}
-                  placeholder="Enter your city or region"
+                  placeholder="Enter your exact Destination"
                   className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
 
