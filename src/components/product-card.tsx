@@ -77,7 +77,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price & Add to Cart Button */}
         <div className="flex justify-between items-center mt-3">
-          <p className="text-xl font-extrabold text-gray-900">
+          <p className="text-l font-extrabold text-gray-900">
             GHC {product.price.toFixed(2)}
           </p>
 
