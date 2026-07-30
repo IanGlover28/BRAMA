@@ -18,7 +18,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   // --- ADJUSTED/NEW COSMETIC-FOCUSED DATA ---
   const brandName = "BRAMA"; // Using brand name for consistency
   const productType = product.category; // e.g., Lip Care, Skin Care
-  const sizeOrVolume = "50ml / 1.7 fl oz"; // Placeholder for a typical cosmetic size
+// Placeholder for a typical cosmetic size
   const ratingPlaceholder = 4.7; // Placeholder for a rating
   // ------------------------------------------
 
@@ -69,12 +69,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
             <Star size={16} fill="currentColor" />
             <span>{ratingPlaceholder}</span>
-            <span className="text-gray-400 text-xs ml-1">(120)</span>
+  
           </div>
           
-          <span className="text-xs font-medium text-gray-600">
-            {sizeOrVolume}
-          </span>
+          
         </div>
 
         {/* Price & Add to Cart Button */}
