@@ -58,7 +58,7 @@ export default async function ProductsPage() {
 
       <h1 className="text-4xl font-extrabold text-gray-900 mb-10 text-center">
 
-        BRAMA&apos;s Collection 🌿
+        BRAMA&apos;s Collection 
 
       </h1>
 
