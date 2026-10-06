@@ -106,7 +106,7 @@ export default function AboutPage() {
             className="text-center"
           >
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Welcome to .<span className="text-pink-200">BRAMA</span> Cosmetics
+              Welcome to <span className="text-pink-200">BRAMA</span> Cosmetics
             </h1>
             <p className="text-xl md:text-2xl text-pink-50 max-w-3xl mx-auto leading-relaxed">
               At BRAMA Cosmetics, we believe beauty is confidence made visible. Our mission is to

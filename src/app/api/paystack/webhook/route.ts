@@ -1,71 +1,66 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
-
-const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY;
+import { fulfillOrder } from "@/lib/fulfillment";
 
 export async function POST(req: Request) {
   try {
-    if (!PAYSTACK_SECRET) {
-      console.error("Paystack secret not set");
+    if (!process.env.PAYSTACK_SECRET_KEY) {
       return NextResponse.json({ ok: false }, { status: 500 });
     }
 
     const rawBody = await req.text();
 
     const signature = req.headers.get("x-paystack-signature") || "";
-    const computed = crypto.createHmac("sha512", PAYSTACK_SECRET).update(rawBody).digest("hex");
+    const computed = crypto
+      .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
+      .update(rawBody)
+      .digest("hex");
 
     if (computed !== signature) {
-      console.warn("Paystack signature mismatch");
       return NextResponse.json({ ok: false }, { status: 401 });
     }
 
-
     const payload = JSON.parse(rawBody);
-    const data = payload.data;
 
-    
-    if (!data || !data.reference) {
-      return NextResponse.json({ ok: true }, { status: 200 });
+    // Ignore events we don't act on - must ack with 200 so Paystack
+    // doesn't retry them endlessly.
+    if (payload?.event !== "charge.success" || !payload.data?.reference) {
+      return NextResponse.json({ ok: true });
     }
 
-    const reference = data.reference;
+    const reference = payload.data.reference;
 
-    const verifyRes = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${PAYSTACK_SECRET}` },
-    });
+    // Double-check with Paystack so a spoofed-but-signed body can't mark orders paid.
+    const verifyRes = await fetch(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` },
+      }
+    );
     const verifyJson = await verifyRes.json();
 
     if (!verifyRes.ok || verifyJson.status !== true || verifyJson.data.status !== "success") {
-      console.warn("Paystack verification failed", verifyJson);
-
-      await prisma.order.updateMany({
-        where: { reference },
-        data: { status: "FAILED" },
-      });
       return NextResponse.json({ ok: false }, { status: 400 });
     }
 
-  
-    const tx = verifyJson.data;
-    const amountReceived = tx.amount / 100;
-
-  await prisma.order.updateMany({
+    const amountReceived = verifyJson.data.amount / 100;
+    const existing = await prisma.order.findUnique({
       where: { reference },
-      data: {
-        status: "PAID",
-        paidAt: new Date(),
-        total: amountReceived,
-      },
+      select: { total: true },
     });
 
-   
+    if (existing && Math.abs(existing.total - amountReceived) > 0.01) {
+      console.warn(
+        `[paystack] Amount mismatch for ${reference}: expected ${existing.total}, received ${amountReceived}`
+      );
+    }
+
+    await fulfillOrder(reference);
 
     return NextResponse.json({ ok: true });
-  } catch (err: unknown) {
-    console.error("Paystack webhook error:", err);
+  } catch {
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 }

@@ -39,8 +39,7 @@ export default function AccountPage() {
         
         const data = await res.json();
         setUser(data.user);
-      } catch (err) {
-        console.error('Failed to fetch user', err);
+      } catch {
         setUser(null);
       } finally {
         setLoading(false);

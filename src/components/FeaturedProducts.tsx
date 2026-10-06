@@ -1,40 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useFeaturedProducts } from "@/hooks/use-products";
+import ProductCard from "@/components/product-card";
+import { ProductCardSkeleton } from "@/components/product-skeleton";
 import Link from "next/link";
-import ProductCard from "@/components/product-card"; // ✅ import your production-ready ProductCard
-import { Product } from "@/types/product";
 
 export default function FeaturedProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, isError } = useFeaturedProducts(8);
+  const products = data?.products ?? [];
 
-  useEffect(() => {
-    let isMounted = true;
-
-    axios
-      .get("/api/products?limit=8")
-      .then((res) => {
-        if (isMounted) {
-          setProducts(res.data);
-          setLoading(false);
-        }
-      })
-      .catch(() => {
-        if (isMounted) {
-          setError("Failed to load products. Please try again later.");
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="py-20 bg-pink-50">
         <div className="max-w-7xl mx-auto px-6">
@@ -42,11 +17,10 @@ export default function FeaturedProducts() {
             Featured Products
           </h2>
           <div className="flex space-x-6 overflow-hidden">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="flex-shrink-0 w-80 sm:w-96 h-96 bg-gray-200 rounded-2xl animate-pulse"
-              ></div>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="flex-shrink-0 w-72 sm:w-80">
+                <ProductCardSkeleton />
+              </div>
             ))}
           </div>
         </div>
@@ -54,16 +28,7 @@ export default function FeaturedProducts() {
     );
   }
 
-  if (error) {
-    return (
-      <section className="py-20 bg-red-50">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-semibold text-red-700 mb-4">Error</h2>
-          <p className="text-gray-700">{error}</p>
-        </div>
-      </section>
-    );
-  }
+  if (isError || products.length === 0) return null;
 
   return (
     <section className="py-20 bg-pink-50">
@@ -72,7 +37,6 @@ export default function FeaturedProducts() {
           Featured Products
         </h2>
 
-        {/* ✅ Scrollable horizontal carousel */}
         <div className="flex space-x-6 pb-6 overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {products.map((product) => (
             <div key={product.id} className="flex-shrink-0 w-72 sm:w-80 snap-center">
@@ -81,7 +45,6 @@ export default function FeaturedProducts() {
           ))}
         </div>
 
-        {/* ✅ View All button */}
         <div className="text-center mt-12">
           <Link
             href="/products"

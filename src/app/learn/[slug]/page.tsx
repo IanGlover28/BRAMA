@@ -2,6 +2,15 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { tutorials } from "../data";
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, "")
+    .replace(/ on\w+="[^"]*"/gi, "")
+    .replace(/ on\w+='[^']*'/gi, "")
+    .replace(/javascript:/gi, "");
+}
+
 interface TutorialPageParams {
   slug: string;
 }
@@ -42,7 +51,7 @@ export default async function TutorialPage({
 
       <div
         className="prose prose-pink max-w-none"
-        dangerouslySetInnerHTML={{ __html: tutorial.content }}
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(tutorial.content) }}
       />
     </article>
   );

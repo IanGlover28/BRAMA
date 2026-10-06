@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Navbar from "@/components/navbar";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
@@ -58,8 +57,6 @@ export default function AuthPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <Navbar />
-
       {/* Promo Banner */}
       <div className="bg-pink-600 text-white text-center py-2 text-sm mt-16">
         🎉 {isLoginMode ? "Welcome back to .BRAMA!" : "Sign up and get 10% off your first order!"}

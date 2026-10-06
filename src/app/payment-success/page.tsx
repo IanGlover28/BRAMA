@@ -3,9 +3,11 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useCartStore } from "@/hooks/use-cart-store";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
+  const clearCart = useCartStore((s) => s.clearCart);
   const [verifying, setVerifying] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,22 +20,32 @@ function PaymentSuccessContent() {
       return;
     }
 
-    fetch(`/api/paystack/verify?reference=${reference}`)
+    let cancelled = false;
+
+    fetch(`/api/paystack/verify?reference=${encodeURIComponent(reference)}`, {
+        credentials: "include",
+      })
       .then((res) => res.json())
       .then((data) => {
+        if (cancelled) return;
         if (data.success) {
+          clearCart();
           setVerifying(false);
         } else {
-          setError(data.message || "Payment verification failed");
+          setError(data.message || data.error || "Payment verification failed");
           setVerifying(false);
         }
       })
-      .catch((err) => {
-        console.error("Verification error:", err);
+      .catch(() => {
+        if (cancelled) return;
         setError("Failed to verify payment");
         setVerifying(false);
       });
-  }, [searchParams]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [searchParams, clearCart]);
 
   if (verifying) {
     return (
@@ -50,7 +62,7 @@ function PaymentSuccessContent() {
         <h1 className="text-3xl font-bold text-red-700 mb-4">Payment Failed ❌</h1>
         <p className="text-gray-700 mb-4">{error}</p>
         <Link
-          href="/shop"
+          href="/products"
           className="mt-6 px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
         >
           Try Again
@@ -61,7 +73,7 @@ function PaymentSuccessContent() {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center text-center">
-      <h1 className="text-3xl font-bold text-pink-700 mb-4">Payment Successful ✅</h1>
+      <h1 className="text-3xl font-bold text-pink-700 mb-4">Payment Successful</h1>
       <p className="text-gray-700 mb-2">Thank you for your purchase!</p>
       <p className="text-sm text-gray-500 mb-6">Your order has been confirmed.</p>
       <div className="flex gap-4">
@@ -72,7 +84,7 @@ function PaymentSuccessContent() {
           View Orders
         </Link>
         <Link
-          href="/shop"
+          href="/products"
           className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
         >
           Continue Shopping

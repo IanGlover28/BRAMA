@@ -7,9 +7,10 @@ import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import AuthProvider from '@/components/auth-provider';
 import ToastProvider from '@/components/toast-provider';
+import QueryProvider from '@/components/query-provider';
 import {LocationProvider} from '@/context/location-context'
-import { CartProvider } from '@/context/cart-context';
 import FloatingCartModal from '@/components/floating-cart-modal';
+import ErrorBoundary from '@/components/error-boundary';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,9 +34,9 @@ export default function RootLayout({
         <link rel="icon" href="/brama-logo.png" />
       </head>
       <body>
+        <ErrorBoundary>
+        <QueryProvider>
         <AuthProvider>
-          {/* WRAP THE ENTIRE APP WITH THE CART PROVIDER */}
-          <CartProvider>
             <LocationProvider>
             <ToastProvider>
               <Navbar />
@@ -43,13 +44,12 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
-              
-              {/* RENDER THE FLOATING CART MODAL GLOBALLY */}
               <FloatingCartModal />
             </ToastProvider>
             </LocationProvider>
-          </CartProvider>
         </AuthProvider>
+        </QueryProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

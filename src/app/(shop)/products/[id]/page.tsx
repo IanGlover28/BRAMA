@@ -1,15 +1,9 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/authOptions";
 import ProductImage from "@/components/product-image";
 import ProductPurchaseOptions from "@/components/product-purchase-options";
 
 export default async function ProductDetailsPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-
-  const session = await getServerSession(authOptions);
-  if (!session) redirect("/signup");
 
   const product = await prisma.product.findUnique({ where: { id } });
 
@@ -43,10 +37,12 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             <h1 className="text-4xl font-extrabold text-gray-900">{product.name}</h1>
 
             <div className="flex items-baseline gap-4">
-              <p className="text-5xl font-bold text-pink-600">${product.price.toFixed(2)}</p>
-              <span className="text-lg text-gray-500 line-through">
-                GHC{(product.price * 1.2).toFixed(2)}
-              </span>
+              <p className="text-5xl font-bold text-pink-600">₵{product.price.toFixed(2)}</p>
+              {product.stock > 0 ? (
+                <span className="text-lg text-green-600 font-medium">In stock</span>
+              ) : (
+                <span className="text-lg text-red-500 font-medium">Out of stock</span>
+              )}
             </div>
 
             <div>

@@ -2,18 +2,23 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { X, ShoppingCart, Lock, Trash2 } from 'lucide-react';
-import { useCart } from '@/context/cart-context';
+import { useCartStore } from '@/hooks/use-cart-store';
 import CheckoutModal from './checkout-modal';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function FloatingCartModal() {
-  const { isCartOpen, toggleCart, cartItems, cartTotal, removeFromCart } = useCart();
+  const isCartOpen = useCartStore((s) => s.isCartOpen);
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const cartItems = useCartStore((s) => s.items);
+  const cartTotal = useCartStore((s) => s.cartTotal());
+  const removeFromCart = useCartStore((s) => s.removeFromCart);
   const modalRef = useRef<HTMLDivElement>(null);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      if (checkoutOpen) return;
       if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         toggleCart();
       }
@@ -26,7 +31,7 @@ export default function FloatingCartModal() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isCartOpen, toggleCart]);
+  }, [isCartOpen, toggleCart, checkoutOpen]);
 
   return (
     <AnimatePresence>

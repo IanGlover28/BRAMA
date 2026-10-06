@@ -1,6 +1,6 @@
 // app/api/auth/me/route.ts
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/lib/authOptions";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -12,8 +12,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ user: session.user }, { status: 200 });
-  } catch (err) {
-    console.error("Error fetching session:", err);
+  } catch {
     return NextResponse.json({ user: null, error: "Internal server error" }, { status: 500 });
   }
 }

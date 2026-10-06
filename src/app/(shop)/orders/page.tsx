@@ -1,9 +1,14 @@
-// app/(shop)/orders/page.tsx
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authOptions";
 import { prisma } from "@/lib/prisma";
-import  { Order } from "@prisma/client";
+
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 
 export default async function OrdersPage() {
   const session = await getServerSession(authOptions);
@@ -14,8 +19,7 @@ export default async function OrdersPage() {
   });
   if (!user) redirect("/signup");
 
-  // ✅ Tell TS this is an array of Order
-  const orders: Order[] = await prisma.order.findMany({
+  const orders = await prisma.order.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
@@ -29,7 +33,11 @@ export default async function OrdersPage() {
           <p className="text-gray-500">You have no orders yet.</p>
         ) : (
           <div className="space-y-4">
-            {orders.map((order: Order) => ( // ✅ Typed parameter
+            {orders.map((order) => {
+              const items = Array.isArray(order.items)
+                ? (order.items as unknown as OrderItem[])
+                : [];
+              return (
               <div key={order.id} className="bg-white p-4 rounded-lg shadow-sm border">
                 <div className="flex justify-between items-center">
                   <div>
@@ -40,9 +48,11 @@ export default async function OrdersPage() {
 
                   <div className="text-right">
                     <div className="text-sm text-gray-500">Total</div>
-                    <div className="font-bold text-lg">GHS {order.total.toFixed(2)}</div>
+                    <div className="font-bold text-lg">₵{order.total.toFixed(2)}</div>
                     <div className="text-xs mt-1">
                       {order.status === "PAID" && <span className="text-green-600 font-semibold">Paid</span>}
+                      {order.status === "APPROVED" && <span className="text-blue-600 font-semibold">Approved - being prepared</span>}
+                      {order.status === "DELIVERED" && <span className="text-gray-700 font-semibold">Delivered</span>}
                       {order.status === "PENDING" && <span className="text-yellow-600 font-semibold">Pending</span>}
                       {order.status === "FAILED" && <span className="text-red-600 font-semibold">Failed</span>}
                       {order.status === "CANCELLED" && <span className="text-gray-600 font-semibold">Cancelled</span>}
@@ -50,20 +60,48 @@ export default async function OrdersPage() {
                   </div>
                 </div>
 
-                {/* Expandable: show items */}
-                <div className="mt-3 text-sm text-gray-700">
-                  <div className="font-medium mb-1">Items</div>
-                  <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
-                    {JSON.stringify(order.items ?? [], null, 2)}
-                  </pre>
-                </div>
+                {/* Items */}
+                {items.length > 0 && (
+                  <div className="mt-3 text-sm text-gray-700">
+                    <div className="font-medium mb-1">Items</div>
+                    <ul className="divide-y divide-gray-100 border border-gray-100 rounded-lg">
+                      {items.map((item, idx) => (
+                        <li key={`${item.id}-${idx}`} className="flex justify-between px-3 py-2">
+                          <span>
+                            {item.name} <span className="text-gray-400">×{item.quantity}</span>
+                          </span>
+                          <span>₵{(item.price * item.quantity).toFixed(2)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Delivery details */}
+                {(order.shippingAddress || order.note) && (
+                  <div className="mt-3 text-sm text-gray-700 space-y-1">
+                    {order.shippingAddress && (
+                      <p>
+                        <span className="font-medium">Ship to: </span>
+                        {order.shippingAddress}
+                      </p>
+                    )}
+                    {order.note && (
+                      <p>
+                        <span className="font-medium">Note: </span>
+                        {order.note}
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="mt-3 text-xs text-gray-400">
                   Placed: {new Date(order.createdAt).toLocaleString()}
                   {order.paidAt && <> · Paid: {new Date(order.paidAt).toLocaleString()}</>}
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

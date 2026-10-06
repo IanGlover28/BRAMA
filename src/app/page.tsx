@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "@/components/navbar";
 import LocationPicker from "@/components/LocationPicker";
 import Hero from "@/components/Hero";
 import CategorySection from "@/components/CategorySection";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Features from "@/components/Features";
 import CTA from "@/components/CTA";
+
+const SkinAnalysisChat = lazy(() => import("@/components/SkinAnalysisChat"));
 
 export default function BramaLanding() {
   const [showIntro, setShowIntro] = useState(true);
@@ -119,9 +120,11 @@ export default function BramaLanding() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <Navbar />
             <LocationPicker />
             <Hero />
+            <Suspense fallback={null}>
+              <SkinAnalysisChat />
+            </Suspense>
             <CategorySection />
             <FeaturedProducts />
             <Features />

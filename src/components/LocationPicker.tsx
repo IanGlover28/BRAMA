@@ -21,8 +21,7 @@ const [showModal, setShowModal] = useState(false);
       setShowModal(true);
       setLoading(false);
     }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setLocation]);
 
 const handleSaveLocation = (loc: string) => {
   if (!loc.trim()) {

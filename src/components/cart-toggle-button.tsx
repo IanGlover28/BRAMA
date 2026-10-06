@@ -2,11 +2,11 @@
 'use client';
 
 import { ShoppingCart } from 'lucide-react';
-import { useCart } from '@/context/cart-context'; 
+import { useCartStore } from '@/hooks/use-cart-store'; 
 
 export default function CartToggleButton() {
-  const { toggleCart, cartItems } = useCart();
-  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const itemCount = useCartStore((s) => s.cartCount());
 
   return (
     <button

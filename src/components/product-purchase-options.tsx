@@ -1,26 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { useCart } from '@/context/cart-context';
+import { useCartStore } from '@/hooks/use-cart-store';
 import { Product } from '@/types/product';
 
 export default function ProductPurchaseOptions({ product }: { product: Product }) {
-  const { addToCart, toggleCart } = useCart();
+  const addToCart = useCartStore((s) => s.addToCart);
+  const toggleCart = useCartStore((s) => s.toggleCart);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
 
   const totalPrice = parseFloat((product.price * quantity).toFixed(2));
+  const maxQuantity = product.stock > 0 ? Math.min(product.stock, 99) : 99;
+  const outOfStock = product.stock <= 0;
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = () => {
     setLoading(true);
-
-    const item = {
-      id: `${product.id}::${quantity}`,
-      name: `${product.name} (${quantity})`,
-      price: totalPrice,
-    };
-
-    addToCart(item);
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity,
+    });
     toggleCart();
     setLoading(false);
   };
@@ -39,8 +41,9 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
           </button>
           <span className="text-lg font-semibold">{quantity}</span>
           <button
-            onClick={() => setQuantity((q) => q + 1)}
-            className="px-4 py-2 border rounded-lg"
+            onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
+            disabled={outOfStock || quantity >= maxQuantity}
+            className="px-4 py-2 border rounded-lg disabled:opacity-40"
           >
             +
           </button>
@@ -50,15 +53,15 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
       {/* Total and Buy */}
       <div className="pt-6">
         <p className="text-xl font-bold mb-3">
-          Total: <span className="text-pink-600">${totalPrice.toFixed(2)}</span>
+          Total: <span className="text-pink-600">₵{totalPrice.toFixed(2)}</span>
         </p>
 
         <button
           onClick={handleBuyNow}
-          disabled={loading}
+          disabled={loading || outOfStock}
           className="w-full bg-pink-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-pink-700 transition disabled:opacity-70"
         >
-          {loading ? 'Adding...' : 'Buy Now'}
+          {outOfStock ? 'Out of Stock' : loading ? 'Adding...' : 'Buy Now'}
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Product } from '@/types/product';
-import { useCart } from "@/context/cart-context";
+import { useCartStore } from "@/hooks/use-cart-store";
 import { ShoppingCart, Star } from "lucide-react"; // Added Star icon
 
 interface ProductCardProps {
@@ -13,14 +13,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((s) => s.addToCart);
 
-  // --- ADJUSTED/NEW COSMETIC-FOCUSED DATA ---
-  const brandName = "BRAMA"; // Using brand name for consistency
   const productType = product.category; // e.g., Lip Care, Skin Care
-// Placeholder for a typical cosmetic size
-  const ratingPlaceholder = 4.7; // Placeholder for a rating
-  // ------------------------------------------
 
   const imageSrc = imageError ? "/placeholder.png" : product.image;
 
@@ -51,11 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-7 text-left">
-        {/* Brand & Product Type */}
-        <h3 className="text-xs font-semibold text-pink-600 uppercase tracking-widest mb-1">
-          {brandName}
-        </h3>
-
+     
         <Link href={`/products/${product.id}`} className="block">
           <h2 className="text-lg font-bold text-gray-900 leading-snug mb-2 hover:text-pink-700 transition">
             {product.name}
@@ -68,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex justify-between items-center mb-4 pt-2 border-t border-gray-100">
           <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
             <Star size={16} fill="currentColor" />
-            <span>{ratingPlaceholder}</span>
+            <span>{product.stock > 40 ? "New" : "Popular"}</span>
   
           </div>
           
@@ -78,16 +69,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Price & Add to Cart Button */}
         <div className="flex justify-between items-center mt-3">
           <p className="text-md font-extrabold text-gray-900">
-            GHC {product.price.toFixed(2)}
+            ₵{product.price.toFixed(2)}
           </p>
 
-          {/* ✅ Add to Cart Button - Now full width with View Button inside */}
           <button
             onClick={() =>
               addToCart({
                 id: product.id,
                 name: product.name,
                 price: product.price,
+                image: product.image,
               })
             }
             // Elegant, pink primary button for action

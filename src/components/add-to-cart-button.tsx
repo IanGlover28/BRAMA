@@ -3,27 +3,22 @@
 import { useState } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useCart } from '@/context/cart-context';
-import { CartItem } from '@/context/cart-context';
-
+import { useCartStore, CartItem } from '@/hooks/use-cart-store';
 
 interface AddToCartButtonProps {
-  product: Omit<CartItem, 'quantity'>; 
+  product: Omit<CartItem, 'quantity'>;
 }
 
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
-  const { addToCart } = useCart(); 
+  const addToCart = useCartStore((s) => s.addToCart);
   const [loading, setLoading] = useState(false);
 
   const handleAddToCart = () => {
     setLoading(true);
-    
     addToCart(product);
-
     setTimeout(() => {
       setLoading(false);
-     
-      toast.success(`${product.name} added to Cart! 🛒`);
+      toast.success(`${product.name} added to Cart!`);
     }, 500);
   };
 

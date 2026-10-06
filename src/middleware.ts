@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
 
-  const protectedPages = ["/dashboard", "/account", "/products"];
+  const protectedPages = ["/dashboard", "/account", "/orders", "/vendor"];
   const isProtectedPage = protectedPages.some((route) =>
     req.nextUrl.pathname.startsWith(route)
   );
@@ -38,8 +38,8 @@ export const config = {
   matcher: [
     "/dashboard/:path*",
     "/account/:path*",
-    "/products/:path*",
+    "/orders/:path*",
+    "/vendor/:path*",
     "/api/orders/:path*",
-    "/api/cart/:path*",
   ],
 };

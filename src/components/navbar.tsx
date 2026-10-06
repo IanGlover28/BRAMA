@@ -89,8 +89,7 @@ const categories = {
 
 export default function Navbar() {
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_user, setUser] = useState<{ name?: string; email?: string } | null>(null);
+  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -105,15 +104,13 @@ export default function Navbar() {
         }
         const data = await res.json();
         setUser(data.user);
-      } catch (err) {
-        console.error('Failed to fetch user', err);
+      } catch {
         setUser(null);
       }
     }
     fetchUser();
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     setUser(null);
@@ -135,7 +132,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
          <Image onClick={() => router.push('/')} src="/brama-logo.png" alt="BRAMA Logo" width={120} height={50} />
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-8 items-center">
+          <div className="hidden md:flex gap-8 items-center text-white font-extrabold">
             
             {/* Featured Dropdown */}
             <div className="relative">
@@ -214,6 +211,14 @@ export default function Navbar() {
             </div>
 
             {/* Regular Links */}
+            {user?.email === 'ianglover31@gmail.com' && (
+              <Link
+                href="/vendor"
+                className="text-sm font-medium hover:text-pink-600 transition-colors"
+              >
+                Vendor
+              </Link>
+            )}
             <Link
               href="/about"
               className="text-sm font-medium hover:text-pink-600 transition-colors"
@@ -237,7 +242,7 @@ export default function Navbar() {
               onClick={() => router.push('/account')}
               className="hidden md:block bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition text-sm font-semibold"
             >
-              My Account
+              {user?.name ? user.name.split(' ')[0] : 'My Account'}
             </button>
 
             {/* Mobile: User Icon */}
@@ -340,6 +345,15 @@ export default function Navbar() {
 
               {/* Other Links */}
               <div className="pt-4 border-t border-gray-200 space-y-3">
+                {user?.email === 'ianglover31@gmail.com' && (
+                  <Link
+                    href="/vendor"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block w-full text-left font-medium text-gray-900 hover:text-pink-600 py-2"
+                  >
+                    Vendor Portal
+                  </Link>
+                )}
                 <Link
                   href="/about"
                   onClick={() => setMobileMenuOpen(false)}
@@ -354,6 +368,12 @@ export default function Navbar() {
                 >
                   Learn More
                 </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left font-medium text-red-600 hover:text-red-700 py-2"
+                >
+                  Sign Out
+                </button>
               </div>
             </div>
           </div>

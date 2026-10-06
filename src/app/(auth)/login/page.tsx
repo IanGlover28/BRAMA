@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,19 +16,17 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // important for HttpOnly cookie
-        body: JSON.stringify(form),
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: form.email,
+        password: form.password,
       });
 
-      const data = await res.json();
-      if (res.ok) {
+      if (res?.ok) {
         setMessage("Login successful! Redirecting...");
-        setTimeout(() => router.push("/"), 1500); // redirect to home
+        setTimeout(() => router.push("/"), 1500);
       } else {
-        setMessage(data.error || "Login failed.");
+        setMessage("Invalid credentials.");
       }
     } catch {
       setMessage("Something went wrong.");

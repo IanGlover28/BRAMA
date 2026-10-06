@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { sendConfirmationEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -56,6 +57,9 @@ export async function POST(req: Request) {
     });
 
     // ✅ Return a safe response (no password)
+    // Fire-and-forget welcome email - never block or fail signup on it.
+    void sendConfirmationEmail(newUser.email, newUser.name ?? "there").catch(() => {});
+
     return NextResponse.json(
       {
         message: "Account created successfully.",
@@ -63,8 +67,7 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error("❌ Registration Error:", error);
+  } catch {
     return NextResponse.json(
       { error: "Internal server error. Please try again." },
       { status: 500 }

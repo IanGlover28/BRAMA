@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocationContext } from '@/context/location-context';
 import { X, Lock, Truck, Tag, ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useCart } from '@/context/cart-context';
+import { useCartStore } from '@/hooks/use-cart-store';
+import { calcSubtotal, calcTotal, DELIVERY_FEE, getDiscountRate } from '@/lib/pricing';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -13,16 +14,17 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
-  const { cartItems, cartTotal } = useCart();
+  const cartItems = useCartStore((s) => s.items);
   const { location, setLocation } = useLocationContext();
   const [promo, setPromo] = useState('');
   const [delivery, setDelivery] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const deliveryFee = 10; // Flat rate
-  const discount = promo.toLowerCase() === 'highhub10' ? 0.1 * cartTotal : 0;
-  const finalTotal = cartTotal + deliveryFee - discount;
+  const deliveryFee = DELIVERY_FEE;
+  const subtotal = calcSubtotal(cartItems);
+  const discount = getDiscountRate(promo) * subtotal;
+  const finalTotal = calcTotal(subtotal, promo);
 
   // ✅ Auto-fill delivery field from location context
   useEffect(() => {
@@ -42,11 +44,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     try {
       const body = {
         items: cartItems.map((i) => ({
+          id: i.id,
           name: i.name,
           quantity: i.quantity,
           price: i.price,
         })),
         amount: finalTotal,
+        promo: promo || undefined,
         delivery,
         note: description,
       };
@@ -110,7 +114,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               ))}
               <hr className="my-2" />
               <p className="flex justify-between text-sm">
-                <span>Subtotal</span> <span>₵{cartTotal.toFixed(2)}</span>
+                <span>Subtotal</span> <span>₵{subtotal.toFixed(2)}</span>
               </p>
               <p className="flex justify-between text-sm">
                 <span>Delivery Fee</span> <span>₵{deliveryFee.toFixed(2)}</span>
