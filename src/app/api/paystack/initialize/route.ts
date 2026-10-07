@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authOptions";
+import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { calcSubtotal, calcTotal } from "@/lib/pricing";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 interface IncomingItem {
   id?: unknown;
@@ -18,8 +17,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Paystack secret not configured" }, { status: 500 });
     }
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const clerkUser = await currentUser();
+    const email = clerkUser?.primaryEmailAddress?.emailAddress;
+    if (!email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -70,7 +70,22 @@ export async function POST(req: Request) {
     }));
 
     const subtotal = calcSubtotal(pricedItems);
-    const total = calcTotal(subtotal, typeof promo === "string" ? promo : undefined);
+
+    // Voucher discounts come from the database, never from the client.
+    let discountRate = 0;
+    if (typeof promo === "string" && promo.trim()) {
+      const voucher = await prisma.voucher.findUnique({
+        where: { code: promo.trim().toLowerCase() },
+      });
+      if (
+        voucher &&
+        voucher.active &&
+        (!voucher.expiresAt || voucher.expiresAt > new Date())
+      ) {
+        discountRate = voucher.discountPct / 100;
+      }
+    }
+    const total = calcTotal(subtotal, discountRate);
 
     if (!amount || typeof amount !== "number" || amount <= 0) {
       return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
@@ -92,7 +107,13 @@ export async function POST(req: Request) {
       );
     }
 
-    const user = await prisma.user.findUnique({ where: { email: session.user.email } });
+    // Clerk is the identity source; keep a Prisma user row keyed by the
+    // verified Clerk email so orders can reference a stable user relation.
+    const user = await prisma.user.upsert({
+      where: { email },
+      update: {},
+      create: { email, name: clerkUser.fullName ?? undefined },
+    });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

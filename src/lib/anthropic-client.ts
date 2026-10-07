@@ -7,6 +7,7 @@
 // npm install @anthropic-ai/sdk
 
 import Anthropic from "@anthropic-ai/sdk";
+import { z } from "zod";
 import type { ChatMessage, SkinProfile, Product } from "./types";
 
 const anthropic = new Anthropic({
@@ -70,6 +71,28 @@ const SKIN_PROFILE_TOOL = {
   },
 };
 
+const SKIN_PROFILE_SCHEMA = z.object({
+  skinType: z.enum(["oily", "dry", "combination", "normal", "sensitive"]),
+  concerns: z.array(
+    z.enum([
+      "acne",
+      "hyperpigmentation",
+      "fine_lines_aging",
+      "dullness",
+      "large_pores",
+      "redness_irritation",
+      "dehydration",
+      "uneven_texture",
+      "dark_circles",
+    ])
+  ),
+  sensitivities: z.array(z.string()),
+  confidence: z.enum(["high", "medium", "low"]),
+  needsMoreInfo: z.boolean(),
+  clarifyingQuestion: z.string().optional(),
+  reasoning: z.string().min(1),
+});
+
 const SYSTEM_PROMPT = `You are a cosmetics skincare advisor for an ecommerce store. You are NOT a dermatologist and must never present your output as a medical diagnosis.
 
 Your job: given a photo of someone's face/skin and whatever they tell you (skin type, concerns, allergies), assess their skin at a cosmetic level (oiliness, visible texture, redness, etc.) and call the record_skin_profile tool with your structured findings.
@@ -122,7 +145,12 @@ export async function extractSkinProfile({ messages }: ExtractInput): Promise<Sk
     throw new Error("Claude did not return a structured skin profile");
   }
 
-  return toolUse.input as SkinProfile;
+  const parsed = SKIN_PROFILE_SCHEMA.safeParse(toolUse.input);
+  if (!parsed.success) {
+    throw new Error("Claude returned an invalid skin profile");
+  }
+
+  return parsed.data;
 }
 
 export async function composeReply(

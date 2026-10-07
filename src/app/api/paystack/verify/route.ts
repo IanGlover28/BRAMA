@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authOptions";
+import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { fulfillOrder } from "@/lib/fulfillment";
 
@@ -10,8 +9,9 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Paystack secret not configured" }, { status: 500 });
     }
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await currentUser();
+    const email = user?.primaryEmailAddress?.emailAddress;
+    if (!email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
 
     // Ensure the caller owns this order before revealing anything about it.
     const owned = await prisma.order.findFirst({
-      where: { reference, user: { email: session.user.email } },
+      where: { reference, user: { email } },
       select: { id: true },
     });
     if (!owned) {

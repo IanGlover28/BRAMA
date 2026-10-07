@@ -17,7 +17,12 @@ export async function POST(req: Request) {
       .update(rawBody)
       .digest("hex");
 
-    if (computed !== signature) {
+    const expected = Buffer.from(signature, "hex");
+    const actual = Buffer.from(computed, "hex");
+    const valid =
+      expected.length === actual.length && crypto.timingSafeEqual(expected, actual);
+
+    if (!valid) {
       return NextResponse.json({ ok: false }, { status: 401 });
     }
 

@@ -1,8 +1,7 @@
 // app/api/skin-analysis/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authOptions";
+import { auth } from "@clerk/nextjs/server";
 import { extractSkinProfile, composeReply } from "@/lib/anthropic-client";
 import { matchProducts } from "@/lib/product-matcher";
 import { sampleProducts } from "@/data/sample-products";
@@ -29,18 +28,12 @@ function isRateLimited(key: string): boolean {
 // Every Anthropic image is capped at 5MB of base64 payload.
 const MAX_IMAGE_CHARS = 5 * 1024 * 1024;
 const MAX_MESSAGES = 20;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: "Please log in to use the skin advisor.", code: "AUTH_REQUIRED" },
-        { status: 401 }
-      );
-    }
-
-    const rateKey = session.user.email ?? "anonymous";
+    const { userId } = await auth();
+    const rateKey = userId ?? "anonymous";
     if (isRateLimited(rateKey)) {
       return NextResponse.json(
         { error: "You're sending messages too quickly. Please wait a few minutes." },
@@ -73,15 +66,18 @@ export async function POST(req: NextRequest) {
       if (typeof msg.content === "string" && msg.content.length > 4000) {
         return NextResponse.json({ error: "Message too long" }, { status: 400 });
       }
-      if (
-        msg.role === "user" &&
-        typeof msg.imageBase64 === "string" &&
-        msg.imageBase64.length > MAX_IMAGE_CHARS
-      ) {
-        return NextResponse.json(
-          { error: "Image too large - please upload one under 5MB." },
-          { status: 413 }
-        );
+      if (msg.role === "user") {
+        if (typeof msg.imageBase64 === "string") {
+          if (!ACCEPTED_IMAGE_TYPES.includes(msg.imageMediaType as string)) {
+            return NextResponse.json({ error: "Unsupported image type" }, { status: 400 });
+          }
+          if (msg.imageBase64.length > MAX_IMAGE_CHARS) {
+            return NextResponse.json(
+              { error: "Image too large - please upload one under 5MB." },
+              { status: 413 }
+            );
+          }
+        }
       }
       messages.push(m as ChatMessage);
     }
@@ -113,10 +109,19 @@ export async function POST(req: NextRequest) {
       assistantReply,
     };
     return NextResponse.json(response);
-  } catch {
+  } catch (err) {
+    console.error("[skin-analysis]", err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    const isAuthError =
+      /authentication_error|invalid.*(api.?key|x-api-key)/i.test(message) ||
+      (err as { status?: number })?.status === 401;
     return NextResponse.json(
-      { error: "Something went wrong analyzing your skin." },
-      { status: 500 }
+      {
+        error: isAuthError
+          ? "Our AI skincare advisor can't authenticate right now. Check that ANTHROPIC_API_KEY in your .env is a valid key."
+          : "Something went wrong analyzing your skin. Please try again.",
+      },
+      { status: isAuthError ? 502 : 500 }
     );
   }
 }

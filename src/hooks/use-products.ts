@@ -26,7 +26,7 @@ export interface ProductFilters {
   pageSize?: number;
   category?: string;
   search?: string;
-  sort?: "newest" | "price_asc" | "price_desc" | "name_asc" | "name_desc";
+  sort?: "newest" | "price_asc" | "price_desc" | "name_asc" | "name_desc" | "bestsellers" | "popular";
   minPrice?: number;
   maxPrice?: number;
 }

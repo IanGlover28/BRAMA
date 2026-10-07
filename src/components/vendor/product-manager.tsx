@@ -6,15 +6,7 @@ import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import type { Product } from "@/types/product";
-
-const CATEGORIES = [
-  "lipcare",
-  "skincare",
-  "makeup",
-  "haircare",
-  "fragrances",
-  "bodycare",
-];
+import { categorySlugs as CATEGORIES } from "@/lib/categories";
 
 interface FormData {
   name: string;
@@ -22,8 +14,11 @@ interface FormData {
   price: string;
   image: string;
   category: string;
+  brand: string;
   stock: string;
 }
+
+const ADD_NEW_CATEGORY = "__add_new_category__";
 
 const EMPTY_FORM: FormData = {
   name: "",
@@ -31,6 +26,7 @@ const EMPTY_FORM: FormData = {
   price: "",
   image: "",
   category: CATEGORIES[0],
+  brand: "",
   stock: "0",
 };
 
@@ -39,6 +35,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
+  const [newCategoryMode, setNewCategoryMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -51,6 +48,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
 
   function openCreate() {
     setForm(EMPTY_FORM);
+    setNewCategoryMode(false);
     setEditingId(null);
     setShowForm(true);
   }
@@ -62,8 +60,10 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
       price: String(product.price),
       image: product.image,
       category: product.category,
+      brand: product.brand ?? "",
       stock: String(product.stock),
     });
+    setNewCategoryMode(!CATEGORIES.includes(product.category));
     setEditingId(product.id);
     setShowForm(true);
   }
@@ -78,7 +78,8 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
         description: form.description,
         price: Number(form.price),
         image: form.image,
-        category: form.category,
+        category: form.category.trim().toLowerCase(),
+        brand: form.brand.trim() || null,
         stock: Number(form.stock),
       };
 
@@ -172,20 +173,60 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
             </label>
             <label className="text-sm font-medium text-gray-700 space-y-1 block">
               Category
-              <select
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
-              >
-                {!CATEGORIES.includes(form.category) && (
-                  <option value={form.category}>{form.category}</option>
-                )}
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+              {newCategoryMode ? (
+                <>
+                  <input
+                    required
+                    placeholder="e.g. face-serums"
+                    value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewCategoryMode(false);
+                      setForm({ ...form, category: CATEGORIES[0] });
+                    }}
+                    className="text-xs text-pink-600 hover:underline"
+                  >
+                    Pick an existing category instead
+                  </button>
+                </>
+              ) : (
+                <select
+                  value={form.category}
+                  onChange={(e) => {
+                    if (e.target.value === ADD_NEW_CATEGORY) {
+                      setNewCategoryMode(true);
+                      setForm({ ...form, category: "" });
+                    } else {
+                      setForm({ ...form, category: e.target.value });
+                    }
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
+                >
+                  {!CATEGORIES.includes(form.category) && (
+                    <option value={form.category}>{form.category}</option>
+                  )}
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                  <option value={ADD_NEW_CATEGORY}>＋ Add new category</option>
+                </select>
+              )}
+            </label>
+            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+              Brand
+              <input
+                maxLength={100}
+                value={form.brand}
+                onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                placeholder="e.g. TWG, SADOER, CENTELLA..."
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              />
             </label>
             <label className="text-sm font-medium text-gray-700 space-y-1 block sm:col-span-2">
               Description
@@ -273,7 +314,8 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900 truncate">{product.name}</p>
                   <p className="text-xs text-gray-500">
-                    ₵{product.price.toFixed(2)} · {product.category} ·{" "}
+                    {product.brand ? `${product.brand} · ` : ""}₵{product.price.toFixed(2)} ·{" "}
+                    {product.category} ·{" "}
                     <span className={product.stock === 0 ? "text-red-600 font-semibold" : ""}>
                       {product.stock} in stock
                     </span>

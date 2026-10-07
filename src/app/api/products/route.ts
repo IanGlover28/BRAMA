@@ -26,12 +26,14 @@ export async function GET(req: NextRequest) {
       if (maxPrice !== undefined) (where.price as Record<string, number>).lte = maxPrice;
     }
 
-    let orderBy: { price?: "asc" | "desc"; name?: "asc" | "desc"; createdAt?: "asc" | "desc" };
+    let orderBy: { price?: "asc" | "desc"; name?: "asc" | "desc"; createdAt?: "asc" | "desc"; stock?: "asc" | "desc" };
     switch (sort) {
       case "price_asc": orderBy = { price: "asc" }; break;
       case "price_desc": orderBy = { price: "desc" }; break;
       case "name_asc": orderBy = { name: "asc" }; break;
       case "name_desc": orderBy = { name: "desc" }; break;
+      case "bestsellers":
+      case "popular": orderBy = { stock: "desc" }; break;
       default: orderBy = { createdAt: "desc" };
     }
 

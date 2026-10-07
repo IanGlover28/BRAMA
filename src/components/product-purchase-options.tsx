@@ -35,6 +35,7 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
         <div className="flex items-center gap-4">
           <button
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            aria-label="Decrease quantity"
             className="px-4 py-2 border rounded-lg"
           >
             –
@@ -43,6 +44,7 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
           <button
             onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
             disabled={outOfStock || quantity >= maxQuantity}
+            aria-label="Increase quantity"
             className="px-4 py-2 border rounded-lg disabled:opacity-40"
           >
             +

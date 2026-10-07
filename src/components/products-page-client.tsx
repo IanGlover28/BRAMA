@@ -1,21 +1,24 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useProducts } from "@/hooks/use-products";
 import ProductCard from "@/components/product-card";
 import ProductGridSkeleton from "@/components/product-skeleton";
 import SearchBar, { SortSelect, CategoryFilter } from "@/components/product-filters";
 import Pagination from "@/components/pagination";
+import { categorySlugs } from "@/lib/categories";
 
 const PAGE_SIZE = 12;
 
 const SORT_OPTIONS = ["newest", "price_asc", "price_desc", "name_asc", "name_desc"] as const;
-type SortOption = (typeof SORT_OPTIONS)[number];
+type SortOption = (typeof SORT_OPTIONS)[number] | "bestsellers" | "popular";
 
 function sortFromParams(sort: string | null, filter: string | null): SortOption {
-  // Navbar convenience links: ?filter=new maps to newest-first.
+  // Navbar convenience links: ?filter=new / ?filter=bestsellers / ?filter=popular
   if (filter === "new") return "newest";
+  if (filter === "bestsellers") return "bestsellers";
+  if (filter === "popular") return "popular";
   return (SORT_OPTIONS as readonly string[]).includes(sort ?? "")
     ? (sort as SortOption)
     : "newest";
@@ -49,31 +52,14 @@ export default function ProductsPageClient() {
 
   const products = data?.products ?? [];
   const totalPages = data?.totalPages ?? 0;
-  const total = data?.total ?? 0;
 
-  const categories = useMemo(() => {
-    if (!data?.products) return [];
-    const cats = new Set(data.products.map((p) => p.category).filter(Boolean));
-    return Array.from(cats).sort();
-  }, [data?.products]);
+  const categories = categorySlugs;
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8 pt-24">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-2 text-center">
-            BRAMA&apos;s Collection
-          </h1>
-          {data && (
-            <p className="text-center text-gray-500 text-sm">
-              {total} product{total !== 1 ? "s" : ""} found
-            </p>
-          )}
-        </div>
-
         {/* Filters Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8 items-start sm:items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-12 mb-6 items-start sm:items-center justify-between">
           <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} />
           <div className="flex gap-3 items-center">
             <SortSelect value={sort} onChange={(v) => { setSort(sortFromParams(v, null)); setPage(1); }} />

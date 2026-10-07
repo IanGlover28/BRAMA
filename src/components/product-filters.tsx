@@ -53,6 +53,7 @@ export default function SearchBar({ value, onChange, placeholder = "Search produ
       {localValue && (
         <button
           onClick={handleClear}
+          aria-label="Clear search"
           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
         >
           <X size={16} />
@@ -91,12 +92,12 @@ interface CategoryFilterProps {
 
 export function CategoryFilter({ categories, active, onChange }: CategoryFilterProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex gap-2 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-1">
       <button
         onClick={() => onChange("")}
-        className={`px-3 py-1.5 rounded-full text-sm font-medium transition ${
+        className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition ${
           active === ""
-            ? "bg-pink-600 text-white"
+            ? "bg-pink-600 text-white shadow-md shadow-pink-600/25 font-semibold"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
         }`}
       >
@@ -106,9 +107,9 @@ export function CategoryFilter({ categories, active, onChange }: CategoryFilterP
         <button
           key={cat}
           onClick={() => onChange(cat)}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition capitalize ${
+          className={`shrink-0 px-4 py-2 rounded-full text-sm font-medium transition capitalize ${
             active === cat
-              ? "bg-pink-600 text-white"
+              ? "bg-pink-600 text-white shadow-md shadow-pink-600/25 font-semibold"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
         >

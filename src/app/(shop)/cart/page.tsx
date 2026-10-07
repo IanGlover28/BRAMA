@@ -29,13 +29,15 @@ export default function CartPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    aria-label={`Decrease quantity of ${item.name}`}
                     className="px-2 py-1 border rounded text-sm"
                   >
                     -
                   </button>
-                  <span className="text-sm font-medium">{item.quantity}</span>
-                  <button
+                    <span className="text-sm font-medium">{item.quantity}</span>
+                    <button
                     onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    aria-label={`Increase quantity of ${item.name}`}
                     className="px-2 py-1 border rounded text-sm"
                   >
                     +

@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { name, description, price, image, category, stock } = body;
+    const { name, description, price, image, category, stock, brand } = body;
 
     if (typeof name !== "string" || !name.trim() || name.length > 200) {
       return NextResponse.json({ error: "Name is required (max 200 chars)." }, { status: 400 });
@@ -32,6 +32,9 @@ export async function POST(req: Request) {
     if (!Number.isInteger(parsedStock) || parsedStock < 0 || parsedStock > 100000) {
       return NextResponse.json({ error: "Stock must be a non-negative integer." }, { status: 400 });
     }
+    if (brand !== undefined && brand !== null && (typeof brand !== "string" || brand.trim().length > 100)) {
+      return NextResponse.json({ error: "Brand must be text (max 100 chars)." }, { status: 400 });
+    }
 
     const product = await prisma.product.create({
       data: {
@@ -41,6 +44,7 @@ export async function POST(req: Request) {
         image: image.trim(),
         category: category.trim().toLowerCase(),
         stock: parsedStock,
+        brand: brand !== undefined && brand !== null ? brand.trim() : null,
       },
     });
 

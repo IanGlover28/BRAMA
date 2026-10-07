@@ -1,7 +1,7 @@
-import { getServerSession } from "next-auth/next";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/authOptions";
 import { prisma } from "@/lib/prisma";
+import StatusBadge from "@/components/status-badge";
 
 interface OrderItem {
   id: string;
@@ -10,17 +10,36 @@ interface OrderItem {
   quantity: number;
 }
 
-export default async function OrdersPage() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) redirect("/signup");
+const ORDER_STATUS_LABELS: Record<string, string> = {
+  PAID: "Paid",
+  APPROVED: "Approved - being prepared",
+  DELIVERED: "Delivered",
+  PENDING: "Pending",
+  FAILED: "Failed",
+  CANCELLED: "Cancelled",
+};
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-  if (!user) redirect("/signup");
+export default async function OrdersPage() {
+  const user = await currentUser();
+  const email = user?.primaryEmailAddress?.emailAddress;
+  if (!email) redirect("/sign-in");
+
+  const prismaUser = email
+    ? await prisma.user.findUnique({ where: { email } })
+    : null;
+  if (!prismaUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-24 pb-12">
+        <div className="max-w-6xl mx-auto px-6">
+          <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
+          <p className="text-gray-500">You have no orders yet.</p>
+        </div>
+      </div>
+    );
+  }
 
   const orders = await prisma.order.findMany({
-    where: { userId: user.id },
+    where: { userId: prismaUser.id },
     orderBy: { createdAt: "desc" },
   });
 
@@ -50,12 +69,10 @@ export default async function OrdersPage() {
                     <div className="text-sm text-gray-500">Total</div>
                     <div className="font-bold text-lg">₵{order.total.toFixed(2)}</div>
                     <div className="text-xs mt-1">
-                      {order.status === "PAID" && <span className="text-green-600 font-semibold">Paid</span>}
-                      {order.status === "APPROVED" && <span className="text-blue-600 font-semibold">Approved - being prepared</span>}
-                      {order.status === "DELIVERED" && <span className="text-gray-700 font-semibold">Delivered</span>}
-                      {order.status === "PENDING" && <span className="text-yellow-600 font-semibold">Pending</span>}
-                      {order.status === "FAILED" && <span className="text-red-600 font-semibold">Failed</span>}
-                      {order.status === "CANCELLED" && <span className="text-gray-600 font-semibold">Cancelled</span>}
+                      <StatusBadge
+                        status={order.status}
+                        label={ORDER_STATUS_LABELS[order.status] ?? order.status}
+                      />
                     </div>
                   </div>
                 </div>

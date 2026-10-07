@@ -5,116 +5,32 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { ChevronDown, Menu, X, Sparkles, Package, User } from 'lucide-react'; 
+import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 import CartToggleButton from './cart-toggle-button'; 
+import { CATEGORIES } from '@/lib/categories';
+import { useCurrentUser } from '@/hooks/use-current-user'; 
 
-const categories = {
-  featured: {
-    icon: Package,
-    items: [
-      { name: 'New Arrivals', path: '/products?filter=new' },
-      { name: 'Best Sellers', path: '/products?filter=bestsellers' },
-      { name: 'Most Popular', path: '/products?filter=popular' },
-    ]
-  },
- shop: {
-  icon: Sparkles, // You can replace this with a cosmetic-related icon if you want (e.g., Sparkles or Droplet)
-  sections: [
-    {
-      title: 'Lip Care',
-      items: [
-        { name: 'Lip Balm', path: '/products?category=lip-balm' },
-        { name: 'Lip Gloss', path: '/products?category=lip-gloss' },
-        { name: 'Lip Oil', path: '/products?category=lip-oil' },
-        { name: 'Lip Scrub', path: '/products?category=lip-scrub' },
-        { name: 'Lip Mask', path: '/products?category=lip-mask' },
-      ],
-      shopAll: '/products?category=lipcare',
-    },
-    {
-      title: 'Skin Care',
-      items: [
-        { name: 'Cleansers', path: '/products?category=cleansers' },
-        { name: 'Toners', path: '/products?category=toners' },
-        { name: 'Moisturizers', path: '/products?category=moisturizers' },
-        { name: 'Serums', path: '/products?category=serums' },
-        { name: 'Sunscreens', path: '/products?category=sunscreens' },
-      ],
-      shopAll: '/products?category=skincare',
-    },
-    {
-      title: 'Makeup',
-      items: [
-        { name: 'Foundation', path: '/products?category=foundation' },
-        { name: 'Concealer', path: '/products?category=concealer' },
-        { name: 'Powder', path: '/products?category=powder' },
-        { name: 'Mascara', path: '/products?category=mascara' },
-        { name: 'Blush & Highlighter', path: '/products?category=blush-highlighter' },
-      ],
-      shopAll: '/products?category=makeup',
-    },
-    {
-      title: 'Hair Care',
-      items: [
-        { name: 'Shampoo', path: '/products?category=shampoo' },
-        { name: 'Conditioner', path: '/products?category=conditioner' },
-        { name: 'Hair Oil', path: '/products?category=hair-oil' },
-        { name: 'Hair Mask', path: '/products?category=hair-mask' },
-        { name: 'Styling Products', path: '/products?category=styling' },
-      ],
-      shopAll: '/products?category=haircare',
-    },
-    {
-      title: 'Fragrances',
-      items: [
-        { name: 'Perfumes', path: '/products?category=perfumes' },
-        { name: 'Body Mists', path: '/products?category=body-mists' },
-        { name: 'Deodorants', path: '/products?category=deodorants' },
-      ],
-      shopAll: '/products?category=fragrances',
-    },
-    {
-      title: 'Body Care',
-      items: [
-        { name: 'Body Lotion', path: '/products?category=body-lotion' },
-        { name: 'Body Wash', path: '/products?category=body-wash' },
-        { name: 'Body Scrub', path: '/products?category=body-scrub' },
-        { name: 'Hand Cream', path: '/products?category=hand-cream' },
-      ],
-      shopAll: '/products?category=bodycare',
-    },
-  ],
-}
+const featured = [
+  { name: 'New Arrivals', path: '/products?filter=new' },
+  { name: 'Best Sellers', path: '/products?filter=bestsellers' },
+  { name: 'Most Popular', path: '/products?filter=popular' },
+];
 
-};
+const shopSections = CATEGORIES.map((c) => ({
+  title: c.label,
+  path: `/products?category=${c.slug}`,
+}));
 
 export default function Navbar() {
   const router = useRouter();
-  const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
+  const { isVendor } = useCurrentUser();
+  const { signOut } = useClerk();
+  const { isSignedIn } = useUser();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
- 
-        if (!res.ok) {
-            setUser(null); 
-            return;
-        }
-        const data = await res.json();
-        setUser(data.user);
-      } catch {
-        setUser(null);
-      }
-    }
-    fetchUser();
-  }, []);
-
-  const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-    setUser(null);
-    router.push('/');
+  const handleLogout = () => {
+    signOut({ redirectUrl: "/" });
     setMobileMenuOpen(false);
   };
 
@@ -128,9 +44,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-pink-400 shadow-md">
-        <div className="max-w-7xl mx-auto px-6 py-2 flex justify-between items-center">
-         <Image onClick={() => router.push('/')} src="/brama-logo.png" alt="BRAMA Logo" width={120} height={50} />
+      <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] md:w-[calc(100%-3rem)] max-w-6xl z-50 bg-pink-400/90 backdrop-blur-md shadow-lg rounded-full border border-white/20">
+        <div className="px-4 md:px-6 py-2 flex justify-between items-center">
+         <Link href="/">
+           <Image src="/brama-logo.png" alt="BRAMA Logo" width={120} height={50} />
+         </Link>
           {/* Desktop Navigation */}
           <div className="hidden md:flex gap-8 items-center text-white font-extrabold">
             
@@ -149,7 +67,7 @@ export default function Navbar() {
 
               {activeDropdown === 'featured' && (
                 <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn">
-                  {categories.featured.items.map((item) => (
+                  {featured.map((item) => (
                     <Link
                       key={item.name}
                       href={item.path} 
@@ -179,30 +97,18 @@ export default function Navbar() {
               {activeDropdown === 'shop' && (
                 <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-4xl bg-white rounded-xl shadow-2xl border border-gray-100 p-6 animate-fadeIn">
                   <div className="grid grid-cols-3 gap-8">
-                    {categories.shop.sections.map((section) => (
+                    {shopSections.map((section) => (
                       <div key={section.title}>
                         <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">
                           {section.title}
                         </h3>
-                        <div className="space-y-2">
-                          {section.items.map((item) => (
-                            <Link
-                              key={item.name}
-                              href={item.path}
-                              onClick={() => setActiveDropdown(null)}
-                              className="block w-full text-left text-sm text-gray-600 hover:text-pink-600 hover:translate-x-1 transition-all"
-                            >
-                              {item.name}
-                            </Link>
-                          ))}
-                          <Link
-                            href={section.shopAll}
-                            onClick={() => setActiveDropdown(null)}
-                            className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700 mt-3 pt-2 border-t border-gray-200"
-                          >
-                            Shop All {section.title} →
-                          </Link>
-                        </div>
+                        <Link
+                          href={section.path}
+                          onClick={() => setActiveDropdown(null)}
+                          className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700"
+                        >
+                          Shop All {section.title} →
+                        </Link>
                       </div>
                     ))}
                   </div>
@@ -211,7 +117,7 @@ export default function Navbar() {
             </div>
 
             {/* Regular Links */}
-            {user?.email === 'ianglover31@gmail.com' && (
+            {isVendor && (
               <Link
                 href="/vendor"
                 className="text-sm font-medium hover:text-pink-600 transition-colors"
@@ -237,28 +143,52 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <CartToggleButton />
             
-            {/* Desktop: My Account Button */}
-            <button
-              onClick={() => router.push('/account')}
-              className="hidden md:block bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition text-sm font-semibold"
-            >
-              {user?.name ? user.name.split(' ')[0] : 'My Account'}
-            </button>
+            {/* Desktop: Auth Controls */}
+            {isSignedIn ? (
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label="My Account"
+                    labelIcon={<User size={16} />}
+                    href="/account"
+                  />
+                </UserButton.MenuItems>
+              </UserButton>
+            ) : (
+              <div className="hidden md:flex items-center gap-3">
+                <Link
+                  href="/sign-in"
+                  className="text-sm font-semibold text-white hover:text-pink-100 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition text-sm font-semibold"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
-            {/* Mobile: User Icon */}
-            <button
-              onClick={() => router.push('/account')}
-              className="md:hidden text-gray-900 hover:text-pink-600 transition-colors"
-            >
-              <User size={24} />
-            </button>
+            {/* Mobile: User Icon (signed out only — Clerk dropdown handles signed-in) */}
+            {!isSignedIn && (
+              <button
+                onClick={() => router.push('/account')}
+                aria-label="My Account"
+                className="md:hidden text-gray-900 hover:text-pink-600 transition-colors"
+              >
+                <User size={24} />
+              </button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-gray-900 hover:text-pink-600 transition-colors"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              className="md:hidden flex items-center justify-center h-10 w-10 rounded-full bg-white text-pink-600 shadow-sm hover:bg-pink-50 transition-colors"
             >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -266,7 +196,7 @@ export default function Navbar() {
 
       {/* Mobile Sidebar Menu */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition-all duration-300 ${
+        className={`fixed inset-0 z-[60] md:hidden transition-all duration-300 ${
           mobileMenuOpen ? 'visible' : 'invisible'
         }`}
       >
@@ -288,9 +218,10 @@ export default function Navbar() {
             {/* Close Button */}
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-900"
+              aria-label="Close menu"
+              className="absolute top-4 right-4 flex items-center justify-center h-10 w-10 rounded-full bg-pink-600 text-white shadow-md hover:bg-pink-700 transition-colors"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
 
             <div className="mt-12 space-y-6">
@@ -301,7 +232,7 @@ export default function Navbar() {
                   Featured
                 </h3>
                 <div className="space-y-2 pl-6">
-                  {categories.featured.items.map((item) => (
+                  {featured.map((item) => (
                     <Link
                       key={item.name}
                       href={item.path}
@@ -315,27 +246,17 @@ export default function Navbar() {
               </div>
 
               {/* Shop Categories */}
-              {categories.shop.sections.map((section) => (
+              {shopSections.map((section) => (
                 <div key={section.title}>
                   <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
                     <Sparkles size={18} className="text-pink-600" />
                     {section.title}
                   </h3>
                   <div className="space-y-2 pl-6">
-                    {section.items.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.path}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="block w-full text-left text-sm text-gray-600 hover:text-pink-600 py-1"
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
                     <Link
-                      href={section.shopAll}
+                      href={section.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700 mt-2 pt-2 border-t border-gray-200"
+                      className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700"
                     >
                       Shop All {section.title} →
                     </Link>
@@ -345,7 +266,7 @@ export default function Navbar() {
 
               {/* Other Links */}
               <div className="pt-4 border-t border-gray-200 space-y-3">
-                {user?.email === 'ianglover31@gmail.com' && (
+                {isVendor && (
                   <Link
                     href="/vendor"
                     onClick={() => setMobileMenuOpen(false)}

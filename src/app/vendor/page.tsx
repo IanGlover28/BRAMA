@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import StatusBadge from "@/components/status-badge";
 
 // Orders that represent real revenue (payment captured).
 const EARNING_STATUSES = ["PAID", "APPROVED", "DELIVERED"];
@@ -56,9 +57,12 @@ export default async function VendorDashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex gap-4 overflow-x-auto pb-1 snap-x [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-xl shadow-sm border p-5">
+          <div
+            key={stat.label}
+            className="shrink-0 snap-start basis-2/5 sm:basis-1/4 min-w-[170px] bg-white rounded-2xl shadow-sm border p-5"
+          >
             <p className="text-sm text-gray-500">{stat.label}</p>
             <p className="text-2xl font-extrabold text-pink-600 mt-1">{stat.value}</p>
             <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
@@ -90,7 +94,7 @@ export default async function VendorDashboardPage() {
                       {new Date(order.createdAt).toLocaleString()} · Ref {order.reference ?? "—"}
                     </p>
                   </div>
-                  <StatusPill status={order.status} />
+                  <StatusBadge status={order.status} />
                 </li>
               ))}
             </ul>
@@ -126,25 +130,5 @@ export default async function VendorDashboardPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-function StatusPill({ status }: { status: string }) {
-  const styles: Record<string, string> = {
-    PAID: "bg-green-100 text-green-700",
-    APPROVED: "bg-blue-100 text-blue-700",
-    DELIVERED: "bg-gray-200 text-gray-700",
-    PENDING: "bg-yellow-100 text-yellow-700",
-    FAILED: "bg-red-100 text-red-700",
-    CANCELLED: "bg-gray-100 text-gray-500",
-  };
-  return (
-    <span
-      className={`shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full ${
-        styles[status] ?? "bg-gray-100 text-gray-600"
-      }`}
-    >
-      {status}
-    </span>
   );
 }

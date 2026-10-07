@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Product } from '@/types/product';
 import { useCartStore } from "@/hooks/use-cart-store";
 import { ShoppingCart, Star } from "lucide-react"; // Added Star icon
+import WishlistButton from "./wishlist-button";
 
 interface ProductCardProps {
   product: Product;
@@ -21,6 +22,11 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 relative group">
+
+      {/* Wishlist heart */}
+      <div className="absolute top-3 left-3 z-20">
+        <WishlistButton productId={product.id} />
+      </div>
 
       {/* BEST SELLER Badge */}
       {product.stock > 40 && (
@@ -81,20 +87,19 @@ export default function ProductCard({ product }: ProductCardProps) {
                 image: product.image,
               })
             }
-            // Elegant, pink primary button for action
-            className="flex items-center justify-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            aria-label={`Add ${product.name} to bag`}
+            className="flex items-center justify-center bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <ShoppingCart size={18} />
-            <span>Add to Bag</span>
           </button>
         </div>
         
         {/* Simplified View Button/Link */}
-        <Link 
+        <Link
             href={`/products/${product.id}`}
             className="text-xs text-gray-500 mt-2 block hover:text-pink-600 transition text-center"
         >
-            Quick View
+            View Details
         </Link>
 
       </div>

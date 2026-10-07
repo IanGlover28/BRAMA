@@ -26,7 +26,10 @@ export async function PATCH(req: Request, { params }: Params) {
       );
     }
 
-    const existing = await prisma.order.findUnique({ where: { id } });
+    const existing = await prisma.order.findUnique({
+      where: { id },
+      include: { user: { select: { email: true } } },
+    });
     if (!existing) {
       return NextResponse.json({ error: "Order not found." }, { status: 404 });
     }
@@ -40,6 +43,34 @@ export async function PATCH(req: Request, { params }: Params) {
     }
 
     const order = await prisma.order.update({ where: { id }, data: { status } });
+
+    // Notify the customer in their inbox when their order progresses.
+    const notification: Record<string, { subject: string; body: string }> = {
+      APPROVED: {
+        subject: `Order ${order.reference ?? order.id} approved`,
+        body: "Great news! Your order has been approved and is being prepared. We'll notify you when it's on the way.",
+      },
+      DELIVERED: {
+        subject: `Order ${order.reference ?? order.id} delivered`,
+        body: "Your order has been delivered. Thank you for shopping with BRAMA Cosmetics!",
+      },
+      CANCELLED: {
+        subject: `Order ${order.reference ?? order.id} cancelled`,
+        body: "Your order was cancelled. If you have any questions, reach out to us - we're happy to help.",
+      },
+    };
+    const note = notification[status];
+    if (note && existing.user.email) {
+      await prisma.message.create({
+        data: {
+          email: existing.user.email,
+          sender: "system",
+          subject: note.subject,
+          body: note.body,
+        },
+      }).catch(() => {});
+    }
+
     return NextResponse.json({ order });
   } catch {
     return NextResponse.json({ error: "Failed to update order." }, { status: 500 });

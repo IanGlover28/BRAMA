@@ -53,6 +53,12 @@ export async function PATCH(req: Request, { params }: Params) {
       }
       data.stock = stock;
     }
+    if (body.brand !== undefined) {
+      if (body.brand !== null && (typeof body.brand !== "string" || body.brand.trim().length > 100)) {
+        return NextResponse.json({ error: "Invalid brand." }, { status: 400 });
+      }
+      data.brand = body.brand === null ? null : body.brand.trim();
+    }
 
     if (Object.keys(data).length === 0) {
       return NextResponse.json({ error: "Nothing to update." }, { status: 400 });

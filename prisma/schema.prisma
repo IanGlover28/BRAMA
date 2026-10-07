@@ -11,9 +11,10 @@ model User {
   id        String   @id @default(cuid())
   name      String?
   email     String   @unique
-  password  String
+  password  String?
   createdAt DateTime @default(now())
   orders    Order[]
+  wishlist  WishlistItem[]
 }
 
 model Product {
@@ -23,8 +24,11 @@ model Product {
   price       Float
   image       String
   category    String
+  brand       String?
   stock       Int      @default(0)
   createdAt   DateTime @default(now())
+  reviews     Review[]
+  wishlistItems WishlistItem[]
 }
 
 model Order {
@@ -39,4 +43,57 @@ model Order {
   createdAt       DateTime  @default(now())
   paidAt          DateTime?
   user            User      @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  email     String
+  sender    String    @default("vendor")
+  subject   String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email, createdAt])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  email     String
+  name      String?
+  rating    Int
+  title     String?
+  body      String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([email])
+
+  @@unique([productId, email])
+}
+
+model Voucher {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  label       String
+  description String?
+  discountPct Int       @default(10)
+  active      Boolean   @default(true)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId, createdAt])
 }

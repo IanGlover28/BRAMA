@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import {  CreditCard, Lock } from 'lucide-react';
+import { CATEGORIES } from '@/lib/categories';
 
 export default function Footer() {
   return (
@@ -19,8 +20,15 @@ export default function Footer() {
           {/* Quick Links */}
           <div className="space-y-3">
             <h4 className="font-semibold text-pink-500 mb-2">Shop</h4>
-            <Link href="/products?category=LipCare" className="block text-sm text-gray-300 hover:text-pink-400 transition">LipCare</Link>
-            <Link href="/products?category=SkinCare" className="block text-sm text-gray-300 hover:text-pink-400 transition">SkinCare</Link>
+            {CATEGORIES.slice(0, 2).map((c) => (
+              <Link
+                key={c.slug}
+                href={`/products?category=${c.slug}`}
+                className="block text-sm text-gray-300 hover:text-pink-400 transition"
+              >
+                {c.label}
+              </Link>
+            ))}
             <Link href="/products?filter=bestsellers" className="block text-sm text-gray-300 hover:text-pink-400 transition">Best Sellers</Link>
           </div>
           

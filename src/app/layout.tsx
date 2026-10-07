@@ -1,25 +1,26 @@
+import { ClerkProvider } from "@clerk/nextjs";
 // app/layout.tsx
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-import Navbar from '@/components/navbar';
-import Footer from '@/components/footer';
-import AuthProvider from '@/components/auth-provider';
-import ToastProvider from '@/components/toast-provider';
-import QueryProvider from '@/components/query-provider';
-import {LocationProvider} from '@/context/location-context'
-import FloatingCartModal from '@/components/floating-cart-modal';
-import ErrorBoundary from '@/components/error-boundary';
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import ToastProvider from "@/components/toast-provider";
+import QueryProvider from "@/components/query-provider";
+import { LocationProvider } from "@/context/location-context";
+import FloatingCartModal from "@/components/floating-cart-modal";
+import ErrorBoundary from "@/components/error-boundary";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'BRAMA COSMETICS - Quality products for every Classy Lady.',
-  description: 'Premium cosmetics platform, featuring a secure and seamless shopping experience.',
+  title: "BRAMA COSMETICS - Quality products for every Classy Lady.",
+  description:
+    "Premium cosmetics platform, featuring a secure and seamless shopping experience.",
   icons: {
-    icon: '/brama-logo.ico',
-    apple: '/brama-logo.ico',
+    icon: "/brama-logo.ico",
+    apple: "/brama-logo.ico",
   },
 };
 
@@ -34,22 +35,22 @@ export default function RootLayout({
         <link rel="icon" href="/brama-logo.png" />
       </head>
       <body>
-        <ErrorBoundary>
-        <QueryProvider>
-        <AuthProvider>
-            <LocationProvider>
-            <ToastProvider>
-              <Navbar />
-              <main className="min-h-[calc(100vh-100px)] pt-[80px]"> 
-                {children}
-              </main>
-              <Footer />
-              <FloatingCartModal />
-            </ToastProvider>
-            </LocationProvider>
-        </AuthProvider>
-        </QueryProvider>
-        </ErrorBoundary>
+        <ClerkProvider>
+          <ErrorBoundary>
+            <QueryProvider>
+              <LocationProvider>
+                <ToastProvider>
+                  <Navbar />
+                  <main className="min-h-[calc(100vh-100px)] pt-[120px] md:pt-[90px]">
+                    {children}
+                  </main>
+                  <Footer />
+                  <FloatingCartModal />
+                </ToastProvider>
+              </LocationProvider>
+            </QueryProvider>
+          </ErrorBoundary>
+        </ClerkProvider>
       </body>
     </html>
   );

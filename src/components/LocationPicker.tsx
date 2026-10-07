@@ -128,6 +128,7 @@ const handleSaveLocation = (loc: string) => {
 
               <button
                 onClick={() => setShowModal(false)}
+                aria-label="Close location picker"
                 className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 text-xl"
               >
                 ×

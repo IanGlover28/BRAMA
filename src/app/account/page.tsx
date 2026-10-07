@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Package, 
@@ -16,46 +15,20 @@ import {
   LogIn,
   ChevronRight
 } from 'lucide-react';
-
-interface User {
-  name?: string;
-  email?: string;
-}
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { useClerk } from '@clerk/nextjs';
 
 export default function AccountPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useCurrentUser();
+  const { signOut } = useClerk();
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
-        
-        if (!res.ok) {
-          setUser(null);
-          return;
-        }
-        
-        const data = await res.json();
-        setUser(data.user);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUser();
-  }, []);
-
-  const handleLogout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-    setUser(null);
-    router.push('/');
+  const handleLogout = () => {
+    signOut({ redirectUrl: "/" });
   };
 
   const handleSignIn = () => {
-    router.push('/signup');
+    router.push('/sign-in');
   };
 
   if (loading) {
@@ -69,21 +42,21 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Welcome Section - Fixed at top */}
-        <div className="bg-gradient-to-r from-pink-600 to-pink-500 rounded-xl shadow-lg p-6 mb-6 sticky top-20 z-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-1">
+        {/* My BRAMA Account Section */}
+        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div className="min-w-0">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
                 Welcome, {user?.name || 'Guest'}!
-              </h1>
+              </h2>
               {user?.email && (
-                <p className="text-pink-100 text-sm">{user.email}</p>
+                <p className="text-sm text-gray-500 truncate">{user.email}</p>
               )}
             </div>
             {user ? (
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 bg-white text-pink-600 px-5 py-2.5 rounded-full hover:bg-pink-50 transition font-semibold"
+                className="flex items-center justify-center gap-2 bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition font-semibold text-sm sm:text-base self-start sm:self-auto"
               >
                 <LogOut size={18} />
                 Sign Out
@@ -91,18 +64,13 @@ export default function AccountPage() {
             ) : (
               <button
                 onClick={handleSignIn}
-                className="flex items-center gap-2 bg-white text-pink-600 px-5 py-2.5 rounded-full hover:bg-pink-50 transition font-semibold"
+                className="flex items-center justify-center gap-2 bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition font-semibold text-sm sm:text-base self-start sm:self-auto"
               >
                 <LogIn size={18} />
                 Sign In
               </button>
             )}
           </div>
-        </div>
-
-        {/* My HighHub Account Section */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">My .BRAMA Account</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <AccountMenuItem
               icon={Package}
