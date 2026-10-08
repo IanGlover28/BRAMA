@@ -119,8 +119,8 @@ const handleSaveLocation = (loc: string) => {
               <h2 className="text-xl font-extrabold text-gray-900 mb-2">
                 Set Your Location
               </h2>
-              <p className="text-sm text-gray-500 mb-6">
-                We use this to show you accurate delivery options and fees.
+              <p className="text-sm text-gray-600 text-center mb-4">
+                We use your location to ensure smooth delivery process.
               </p>
 
               <div className="flex flex-col gap-3">
@@ -128,8 +128,7 @@ const handleSaveLocation = (loc: string) => {
                   onClick={detectLocation}
                   className="flex items-center justify-center gap-2 bg-pink-600 text-white py-3 rounded-full font-semibold hover:bg-pink-700 transition shadow-md shadow-pink-600/25"
                 >
-                  <LocateFixed size={16} />
-                  Detect My Location
+                 Detect current location
                 </button>
 
                 <div className="flex items-center gap-1.5 text-xs text-gray-400 uppercase tracking-wider">
@@ -142,8 +141,8 @@ const handleSaveLocation = (loc: string) => {
                   type="text"
                   value={manualInput}
                   onChange={(e) => setManualInput(e.target.value)}
-                  placeholder="Enter your city or region"
-                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                  placeholder="Enter your exact Destination"
+                  className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
 
                 <button
