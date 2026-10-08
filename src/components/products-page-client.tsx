@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useProducts } from "@/hooks/use-products";
 import ProductCard from "@/components/product-card";
-import ProductGridSkeleton from "@/components/product-skeleton";
 import SearchBar, { SortSelect, CategoryFilter } from "@/components/product-filters";
 import Pagination from "@/components/pagination";
+import Loader from "@/components/loader";
 import { categorySlugs } from "@/lib/categories";
 
 const PAGE_SIZE = 12;
@@ -56,10 +56,10 @@ export default function ProductsPageClient() {
   const categories = categorySlugs;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 pt-24">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 pt-[96px]">
       <div className="max-w-7xl mx-auto">
         {/* Filters Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-12 mb-6 items-start sm:items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 mt-2 md:mt-4 mb-6 items-start sm:items-center justify-between">
           <SearchBar value={search} onChange={(v) => { setSearch(v); setPage(1); }} />
           <div className="flex gap-3 items-center">
             <SortSelect value={sort} onChange={(v) => { setSort(sortFromParams(v, null)); setPage(1); }} />
@@ -78,7 +78,7 @@ export default function ProductsPageClient() {
         )}
 
         {/* Loading State */}
-        {isLoading && <ProductGridSkeleton count={PAGE_SIZE} />}
+        {isLoading && <Loader count={PAGE_SIZE} />}
 
         {/* Error State */}
         {isError && (

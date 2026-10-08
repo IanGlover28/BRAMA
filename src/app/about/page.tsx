@@ -101,7 +101,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-36 pb-40">
+      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-[210px] md:pt-[160px] pb-40">
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-16 left-1/4 w-80 h-80 bg-white rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-pink-300 rounded-full blur-3xl animate-pulse delay-700" />

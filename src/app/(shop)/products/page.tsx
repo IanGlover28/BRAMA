@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import ProductsPageClient from "@/components/products-page-client";
-import ProductGridSkeleton from "@/components/product-skeleton";
+import Loader from "@/components/loader";
 
 export const metadata = {
   title: "Products | BRAMA Cosmetics",
@@ -12,8 +12,7 @@ export default function ProductsPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 p-8 pt-24">
         <div className="max-w-7xl mx-auto">
-          <div className="h-10 bg-gray-200 rounded w-64 mx-auto mb-8 animate-pulse" />
-          <ProductGridSkeleton count={12} />
+          <Loader count={12} />
         </div>
       </div>
     }>

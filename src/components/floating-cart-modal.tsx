@@ -51,11 +51,7 @@ export default function FloatingCartModal() {
             className="bg-white/75 backdrop-blur-xl border-l border-white/30 w-full sm:w-[420px] h-full shadow-2xl flex flex-col relative"
           >
             {/* Header */}
-            <div className="flex justify-between items-center p-5 border-b border-white/40">
-              <h2 className="font-bold text-lg text-gray-900 flex items-center gap-2">
-                <ShoppingCart size={20} className="text-pink-600" />
-                Your Cart ({cartItems.length})
-              </h2>
+            <div className="flex justify-end items-center p-5 border-b border-white/40">
               <button
                 onClick={toggleCart}
                 aria-label="Close cart"

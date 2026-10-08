@@ -8,7 +8,8 @@ import { ChevronDown, Menu, X, Sparkles, Package, User } from 'lucide-react';
 import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 import CartToggleButton from './cart-toggle-button'; 
 import { CATEGORIES } from '@/lib/categories';
-import { useCurrentUser } from '@/hooks/use-current-user'; 
+import { useCurrentUser } from '@/hooks/use-current-user';
+import LocationPicker from './LocationPicker'; 
 
 const featured = [
   { name: 'New Arrivals', path: '/products?filter=new' },
@@ -300,6 +301,8 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      <LocationPicker />
 
       <style jsx>{`
         @keyframes fadeIn {

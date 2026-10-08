@@ -2,7 +2,7 @@
 
 import { useFeaturedProducts } from "@/hooks/use-products";
 import ProductCard from "@/components/product-card";
-import { ProductCardSkeleton } from "@/components/product-skeleton";
+import Loader from "@/components/loader";
 import Link from "next/link";
 
 export default function FeaturedProducts() {
@@ -16,13 +16,7 @@ export default function FeaturedProducts() {
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
             Featured Products
           </h2>
-          <div className="flex space-x-6 overflow-hidden">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex-shrink-0 w-72 sm:w-80">
-                <ProductCardSkeleton />
-              </div>
-            ))}
-          </div>
+          <Loader count={4} />
         </div>
       </section>
     );

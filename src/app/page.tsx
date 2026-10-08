@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense, lazy } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import LocationPicker from "@/components/LocationPicker";
 import Hero from "@/components/Hero";
 import CategorySection from "@/components/CategorySection";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -120,7 +119,6 @@ export default function BramaLanding() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <LocationPicker />
             <Hero />
             <Suspense fallback={null}>
               <SkinAnalysisChat />

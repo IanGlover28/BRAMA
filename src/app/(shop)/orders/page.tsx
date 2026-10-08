@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import StatusBadge from "@/components/status-badge";
+import BackToAccount from "@/components/back-to-account";
 
 interface OrderItem {
   id: string;
@@ -31,6 +32,7 @@ export default async function OrdersPage() {
     return (
       <div className="min-h-screen bg-gray-50 pt-24 pb-12">
         <div className="max-w-6xl mx-auto px-6">
+          <BackToAccount className="mb-4" />
           <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
           <p className="text-gray-500">You have no orders yet.</p>
         </div>
@@ -46,6 +48,7 @@ export default async function OrdersPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="max-w-6xl mx-auto px-6">
+        <BackToAccount className="mb-4" />
         <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
 
         {orders.length === 0 ? (

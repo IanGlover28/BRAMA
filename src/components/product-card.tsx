@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { Product } from '@/types/product';
 import { useCartStore } from "@/hooks/use-cart-store";
 import { ShoppingCart, Star } from "lucide-react"; // Added Star icon
@@ -79,14 +80,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           </p>
 
           <button
-            onClick={() =>
+            onClick={() => {
               addToCart({
                 id: product.id,
                 name: product.name,
                 price: product.price,
                 image: product.image,
-              })
-            }
+              });
+              toast.success(`${product.name} added to your bag`, { duration: 1800 });
+            }}
             aria-label={`Add ${product.name} to bag`}
             className="flex items-center justify-center bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
           >

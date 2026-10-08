@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import ProductCard from "@/components/product-card";
-import ProductGridSkeleton from "@/components/product-skeleton";
+import Loader from "@/components/loader";
 import { useWishlistItems } from "@/hooks/use-wishlist";
 import { Heart } from "lucide-react";
 
@@ -23,7 +23,7 @@ export default function WishlistPage() {
           )}
         </div>
 
-        {isLoading && <ProductGridSkeleton count={8} />}
+        {isLoading && <Loader count={8} />}
 
         {isError && (
           <div className="flex flex-col items-center py-20 text-center">

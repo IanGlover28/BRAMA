@@ -18,6 +18,19 @@ import {
 import { useCurrentUser } from '@/hooks/use-current-user';
 import { useClerk } from '@clerk/nextjs';
 
+function getInitials(name?: string, email?: string): string {
+  if (name) {
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part[0])
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
+  }
+  return (email?.[0] ?? 'B').toUpperCase();
+}
+
 export default function AccountPage() {
   const router = useRouter();
   const { user, loading } = useCurrentUser();
@@ -40,23 +53,34 @@ export default function AccountPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* My BRAMA Account Section */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-            <div className="min-w-0">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                Welcome, {user?.name || 'Guest'}!
-              </h2>
-              {user?.email && (
-                <p className="text-sm text-gray-500 truncate">{user.email}</p>
-              )}
-            </div>
+    <main className="min-h-screen bg-gray-50 pb-20">
+      {/* Profile hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-[200px] md:pt-[150px] pb-24">
+        <div className="absolute inset-0 opacity-15">
+          <div className="absolute top-16 left-1/4 w-80 h-80 bg-white rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-pink-300 rounded-full blur-3xl animate-pulse delay-700" />
+        </div>
+
+        <div className="max-w-4xl mx-auto px-4 relative z-10 flex flex-col sm:flex-row items-center gap-6">
+          <div className="flex items-center justify-center h-20 w-20 rounded-full bg-white/15 border-2 border-white/30 text-2xl font-extrabold backdrop-blur-sm shrink-0">
+            {getInitials(user?.name, user?.email)}
+          </div>
+          <div className="text-center sm:text-left min-w-0">
+            <p className="text-xs uppercase tracking-widest text-pink-200 font-semibold mb-1">
+              My .BRAMA Account
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-extrabold truncate">
+              Welcome, {user?.name || 'Guest'}!
+            </h1>
+            {user?.email && (
+              <p className="text-sm text-pink-100 truncate mt-1">{user.email}</p>
+            )}
+          </div>
+          <div className="sm:ml-auto shrink-0">
             {user ? (
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center gap-2 bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition font-semibold text-sm sm:text-base self-start sm:self-auto"
+                className="flex items-center justify-center gap-2 bg-white text-pink-700 px-5 py-2.5 rounded-full hover:bg-pink-50 transition font-semibold text-sm shadow-lg"
               >
                 <LogOut size={18} />
                 Sign Out
@@ -64,14 +88,24 @@ export default function AccountPage() {
             ) : (
               <button
                 onClick={handleSignIn}
-                className="flex items-center justify-center gap-2 bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition font-semibold text-sm sm:text-base self-start sm:self-auto"
+                className="flex items-center justify-center gap-2 bg-white text-pink-700 px-5 py-2.5 rounded-full hover:bg-pink-50 transition font-semibold text-sm shadow-lg"
               >
                 <LogIn size={18} />
                 Sign In
               </button>
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-4 -mt-14 relative z-10 space-y-6">
+        {/* My Account */}
+        <section className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
+          <h2 className="font-bold text-gray-900 mb-5 flex items-center gap-2">
+            <span className="h-6 w-1 rounded-full bg-pink-600" />
+            My Account
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <AccountMenuItem
               icon={Package}
               label="Orders"
@@ -103,11 +137,14 @@ export default function AccountPage() {
               onClick={() => router.push('/wishlist')}
             />
           </div>
-        </div>
+        </section>
 
-        {/* My Settings Section */}
-        <div className="bg-white rounded-xl shadow-md p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">My Settings</h2>
+        {/* My Settings */}
+        <section className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 sm:p-8">
+          <h2 className="font-bold text-gray-900 mb-5 flex items-center gap-2">
+            <span className="h-6 w-1 rounded-full bg-pink-600" />
+            Settings
+          </h2>
           <div className="space-y-3">
             <SettingsMenuItem
               icon={CreditCard}
@@ -131,9 +168,9 @@ export default function AccountPage() {
               danger
             />
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -148,18 +185,16 @@ function AccountMenuItem({ icon: Icon, label, description, onClick }: AccountMen
   return (
     <button
       onClick={onClick}
-      className="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-pink-500 hover:bg-pink-50 transition-all group text-left"
+      className="flex items-center gap-4 p-4 rounded-2xl border border-gray-100 bg-gray-50/50 hover:border-pink-400 hover:bg-white hover:shadow-md transition-all group text-left"
     >
-      <div className="flex-shrink-0">
-        <div className="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center group-hover:bg-pink-200 transition">
-          <Icon size={24} className="text-pink-600" />
-        </div>
-      </div>
-      <div className="flex-1 min-w-0">
-        <h3 className="font-semibold text-gray-900 mb-1">{label}</h3>
-        <p className="text-sm text-gray-600">{description}</p>
-      </div>
-      <ChevronRight size={20} className="text-gray-400 group-hover:text-pink-600 transition flex-shrink-0 mt-1" />
+      <span className="flex items-center justify-center h-12 w-12 shrink-0 rounded-full bg-pink-50 text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-colors">
+        <Icon size={22} />
+      </span>
+      <span className="flex-1 min-w-0">
+        <span className="block font-semibold text-gray-900">{label}</span>
+        <span className="block text-sm text-gray-500">{description}</span>
+      </span>
+      <ChevronRight size={18} className="text-gray-300 group-hover:text-pink-600 group-hover:translate-x-0.5 transition-all shrink-0" />
     </button>
   );
 }
@@ -175,19 +210,25 @@ function SettingsMenuItem({ icon: Icon, label, onClick, danger }: SettingsMenuIt
   return (
     <button
       onClick={onClick}
-      className={`flex items-center justify-between w-full p-4 rounded-lg border transition-all ${
+      className={`flex items-center justify-between w-full p-4 rounded-2xl border transition-all ${
         danger
-          ? 'border-red-200 hover:border-red-500 hover:bg-red-50'
-          : 'border-gray-200 hover:border-pink-500 hover:bg-pink-50'
+          ? 'border-red-100 hover:border-red-300 hover:bg-red-50'
+          : 'border-gray-100 hover:border-pink-300 hover:bg-pink-50/50'
       }`}
     >
       <div className="flex items-center gap-3">
-        <Icon size={20} className={danger ? 'text-red-600' : 'text-pink-600'} />
-        <span className={`font-medium ${danger ? 'text-red-900' : 'text-gray-900'}`}>
+        <span
+          className={`flex items-center justify-center h-10 w-10 rounded-full ${
+            danger ? 'bg-red-50 text-red-600' : 'bg-pink-50 text-pink-600'
+          }`}
+        >
+          <Icon size={18} />
+        </span>
+        <span className={`font-medium ${danger ? 'text-red-700' : 'text-gray-900'}`}>
           {label}
         </span>
       </div>
-      <ChevronRight size={20} className={danger ? 'text-red-400' : 'text-gray-400'} />
+      <ChevronRight size={18} className={danger ? 'text-red-300' : 'text-gray-300'} />
     </button>
   );
 }

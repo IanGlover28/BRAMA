@@ -74,7 +74,7 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-32 pb-24 text-center">
+      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-[200px] md:pt-[150px] pb-24 text-center">
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-16 left-1/4 w-80 h-80 bg-white rounded-full blur-3xl animate-pulse" />
         </div>

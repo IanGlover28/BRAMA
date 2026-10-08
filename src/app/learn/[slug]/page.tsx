@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import CopyLinkButton from "@/components/copy-link-button";
 import { tutorials } from "../data";
 
 function sanitizeHtml(html: string): string {
@@ -55,9 +56,12 @@ export default async function TutorialPage({
             <span className="inline-flex items-center bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold mb-4">
               {tutorial.category}
             </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3 leading-tight">
-              {tutorial.title}
-            </h1>
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+                {tutorial.title}
+              </h1>
+              <CopyLinkButton path={`/learn/${tutorial.slug}`} className="bg-white" />
+            </div>
             <p className="text-gray-600 mb-8">{tutorial.summary}</p>
 
             <div className="prose prose-pink max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tutorial.content) }} />

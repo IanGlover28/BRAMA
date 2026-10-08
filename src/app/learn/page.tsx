@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Play, Sparkles, BookOpen } from "lucide-react";
+import { Play, Sparkles } from "lucide-react";
+import CopyLinkButton from "@/components/copy-link-button";
 import { tutorials } from "./data";
 
 function videoId(url: string) {
@@ -22,7 +23,7 @@ export default function LearnPage() {
   return (
     <main className="min-h-screen bg-gray-50 pb-20">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-32 pb-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-[200px] md:pt-[150px] pb-28">
         <div className="absolute inset-0 opacity-15">
           <div className="absolute top-16 left-1/4 w-80 h-80 bg-white rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-pink-300 rounded-full blur-3xl animate-pulse delay-700" />
@@ -74,23 +75,19 @@ export default function LearnPage() {
 
       {/* Grid */}
       <section className="max-w-7xl mx-auto px-6 mt-10">
-        <p className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-          <BookOpen size={16} className="text-pink-600" />
-          {filtered.length} tutorial{filtered.length !== 1 ? "s" : ""}
-          {active ? ` in ${active}` : ""}
-        </p>
-
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-gray-500">No tutorials in this category yet.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((tutorial) => (
-              <Link
+              <div
                 key={tutorial.slug}
-                href={`/learn/${tutorial.slug}`}
-                className="group bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+                className="group relative bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
               >
-                <div className="relative aspect-video bg-gradient-to-br from-pink-100 to-pink-200 overflow-hidden">
+                <Link
+                  href={`/learn/${tutorial.slug}`}
+                  className="relative block aspect-video bg-gradient-to-br from-pink-100 to-pink-200 overflow-hidden"
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={thumbnail(tutorial.video)}
@@ -106,19 +103,30 @@ export default function LearnPage() {
                   <span className="absolute top-3 left-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                     {tutorial.category}
                   </span>
-                </div>
+                </Link>
+
+                <CopyLinkButton
+                  path={`/learn/${tutorial.slug}`}
+                  label="Share"
+                  className="absolute top-3 right-3 z-10"
+                />
 
                 <div className="p-6">
-                  <h2 className="font-bold text-gray-900 leading-snug mb-2 group-hover:text-pink-700 transition-colors">
-                    {tutorial.title}
-                  </h2>
+                  <Link href={`/learn/${tutorial.slug}`}>
+                    <h2 className="font-bold text-gray-900 leading-snug mb-2 group-hover:text-pink-700 transition-colors">
+                      {tutorial.title}
+                    </h2>
+                  </Link>
                   <p className="text-sm text-gray-500 leading-relaxed">{tutorial.summary}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-pink-600">
+                  <Link
+                    href={`/learn/${tutorial.slug}`}
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-pink-600 hover:text-pink-700"
+                  >
                     Watch tutorial
                     <Play size={14} />
-                  </span>
+                  </Link>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}

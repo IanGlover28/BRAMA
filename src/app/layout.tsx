@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/site-navbar";
 import Footer from "@/components/footer";
 import ToastProvider from "@/components/toast-provider";
 import QueryProvider from "@/components/query-provider";
@@ -41,7 +41,7 @@ export default function RootLayout({
               <LocationProvider>
                 <ToastProvider>
                   <Navbar />
-                  <main className="min-h-[calc(100vh-100px)] pt-[120px] md:pt-[90px]">
+                  <main className="min-h-[calc(100vh-100px)]">
                     {children}
                   </main>
                   <Footer />
