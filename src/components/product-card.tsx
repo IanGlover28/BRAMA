@@ -18,6 +18,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
 
   const productType = product.category; // e.g., Lip Care, Skin Care
+  const outOfStock = product.stock === 0;
 
   const imageSrc = imageError ? "/placeholder.png" : product.image;
 
@@ -81,6 +82,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
           <button
             onClick={() => {
+              if (outOfStock) return;
               addToCart({
                 id: product.id,
                 name: product.name,
@@ -89,8 +91,14 @@ export default function ProductCard({ product }: ProductCardProps) {
               });
               toast.success(`${product.name} added to your bag`, { duration: 1800 });
             }}
-            aria-label={`Add ${product.name} to bag`}
-            className="flex items-center justify-center bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            disabled={outOfStock}
+            aria-label={outOfStock ? `${product.name} is out of stock` : `Add ${product.name} to bag`}
+            title={outOfStock ? "Out of stock" : undefined}
+            className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${
+              outOfStock
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-pink-600 text-white hover:bg-pink-700 shadow-md hover:shadow-lg"
+            }`}
           >
             <ShoppingCart size={18} />
           </button>

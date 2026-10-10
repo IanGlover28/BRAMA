@@ -3,9 +3,17 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./navbar";
 
-// Pages with a full-bleed gradient band at the top — they own their own
-// top spacing so the band runs under the floating navbar.
-const FULL_BLEED_PATHS = ["/", "/account", "/about", "/learn", "/terms"];
+// Pages with a full-bleed band at the top — they own their own top spacing
+// so the band runs under the floating navbar.
+const FULL_BLEED_PATHS = [
+  "/",
+  "/account",
+  "/about",
+  "/learn",
+  "/terms",
+  "/sign-in",
+  "/sign-up",
+];
 
 export default function SiteNavbar() {
   const pathname = usePathname();
