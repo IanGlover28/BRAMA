@@ -242,48 +242,69 @@ export default function SkinAnalysisChat() {
       </AnimatePresence>
 
       {/* Floating bubble button */}
-      <motion.button
-        onClick={handleToggle}
-        aria-label={isOpen ? "Close skin advisor chat" : "Open skin advisor chat"}
-        whileTap={{ scale: 0.92 }}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600 text-white shadow-lg shadow-pink-300/50"
-      >
-        {!hasOpenedOnce && (
-          <motion.span
-            className="absolute inset-0 rounded-full bg-pink-400"
-            animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
-          />
-        )}
-        <AnimatePresence mode="wait" initial={false}>
-          {isOpen ? (
-            <motion.svg
-              key="close"
-              initial={{ rotate: -45, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 45, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
+      <div className="mt-3 flex items-end justify-end gap-3">
+        <AnimatePresence>
+          {!isOpen && (
+            <motion.button
+              key="teaser"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              onClick={handleToggle}
+              className="max-w-[210px] rounded-2xl rounded-br-sm border border-pink-100 bg-white/95 px-4 py-2.5 text-left shadow-lg shadow-pink-200/40 backdrop-blur-sm"
             >
-              <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </motion.svg>
-          ) : (
-            <motion.span
-              key="sparkle"
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.6, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="text-2xl"
-            >
-              ✨
-            </motion.span>
+              <p className="text-[11px] font-bold uppercase tracking-wider text-pink-500">BRAMA AI</p>
+              <p className="text-sm font-medium leading-snug text-neutral-800">
+                Hi babes, talk to me about your skin, hair &amp; more
+              </p>
+            </motion.button>
           )}
         </AnimatePresence>
-      </motion.button>
+
+        <motion.button
+          onClick={handleToggle}
+          aria-label={isOpen ? "Close skin advisor chat" : "Open skin advisor chat"}
+          whileTap={{ scale: 0.92 }}
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600 text-white shadow-lg shadow-pink-300/50"
+        >
+          {!hasOpenedOnce && (
+            <motion.span
+              className="absolute inset-0 rounded-full bg-pink-400"
+              animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
+            />
+          )}
+          <AnimatePresence mode="wait" initial={false}>
+            {isOpen ? (
+              <motion.svg
+                key="close"
+                initial={{ rotate: -45, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 45, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </motion.svg>
+            ) : (
+              <motion.span
+                key="sparkle"
+                initial={{ scale: 0.6, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.6, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="text-2xl"
+              >
+                ✨
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
+      </div>
     </div>
   );
 }
