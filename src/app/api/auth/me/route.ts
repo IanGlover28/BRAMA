@@ -1,19 +1,24 @@
 // app/api/auth/me/route.ts
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
+import { currentUser } from "@clerk/nextjs/server";
+import { isVendorEmail } from "@/lib/vendor";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  try {
-    const session = await getServerSession(authOptions);
+  const user = await currentUser();
 
-    if (!session) {
-      return NextResponse.json({ user: null }, { status: 401 });
-    }
-
-    return NextResponse.json({ user: session.user }, { status: 200 });
-  } catch (err) {
-    console.error("Error fetching session:", err);
-    return NextResponse.json({ user: null, error: "Internal server error" }, { status: 500 });
+  if (!user) {
+    return NextResponse.json({ user: null }, { status: 401 });
   }
+
+  const email = user.primaryEmailAddress?.emailAddress;
+
+  const name = user.fullName ?? (email ? email.split("@")[0] : undefined);
+
+  return NextResponse.json(
+    {
+      user: { name, email, image: user.imageUrl },
+      isVendor: isVendorEmail(email),
+    },
+    { status: 200 }
+  );
 }

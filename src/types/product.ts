@@ -1,12 +1,13 @@
 export interface Product { 
-id: string; 
+  id: string; 
   name: string;
   description: string;
   price: number; 
   image: string;
   category: string;
+  brand?: string | null;
   stock: number;
-  createdAt: Date;
+  createdAt: Date | string;
 }
 
 export interface Category {

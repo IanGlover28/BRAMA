@@ -2,20 +2,24 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 const categories = [
   {
     title: "LipCare",
+    slug: "lipcare",
     image: "/categories/lipcare.jpg",
     description: "Discover our premium selection of lip care products.",
   },
   {
     title: "Skincare & Wellness",
+    slug: "skincare",
     image: "/categories/skin.jpg",
     description: "Explore our high-end skincare and wellness products.",
   },
   {
     title: "Makeup & Accessories",
+    slug: "makeup",
     image: "/categories/makeup.jpg",
     description: "Everything you need to elevate your makeup game.",
   },
@@ -31,13 +35,16 @@ export default function CategorySection() {
 
         <div className="grid md:grid-cols-3 gap-10">
           {categories.map((cat, index) => (
+<Link
+            key={cat.title}
+            href={`/products?category=${cat.slug}`}
+            className="block bg-gray-50 rounded-2xl overflow-hidden shadow hover:shadow-lg transition"
+          >
             <motion.div
-              key={cat.title}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              className="bg-gray-50 rounded-2xl overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
             >
               <Image
                 src={cat.image}
@@ -51,6 +58,7 @@ export default function CategorySection() {
                 <p className="text-gray-600">{cat.description}</p>
               </div>
             </motion.div>
+          </Link>
           ))}
         </div>
       </div>

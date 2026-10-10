@@ -355,7 +355,161 @@ async function main() {
         category: "bodycare",
         stock: 22,
       },
+
+      // 🧪 FACE SERUMS CATEGORY
+      {
+        name: "TWG Vitamin C Face Serum",
+        description: "Brightening vitamin C serum for glowing, even-toned skin.",
+        price: 85.0,
+        image: "/placeholder.png",
+        category: "face-serums",
+        brand: "TWG",
+        stock: 40,
+      },
+      {
+        name: "CENTELLA Asiatica Hydrating Serum",
+        description: "Soothing centella serum that calms and hydrates the skin.",
+        price: 85.0,
+        image: "/placeholder.png",
+        category: "face-serums",
+        brand: "CENTELLA",
+        stock: 35,
+      },
+
+      // 💧 FACE TONERS CATEGORY
+      {
+        name: "TWG Clarifying Face Toner",
+        description: "Refreshing toner that tightens pores and balances the skin.",
+        price: 60.0,
+        image: "/placeholder.png",
+        category: "face-toners",
+        brand: "TWG",
+        stock: 30,
+      },
+      {
+        name: "SADOER Rose Water Face Toner",
+        description: "Gentle rose toner that refreshes and preps the skin.",
+        price: 60.0,
+        image: "/placeholder.png",
+        category: "face-toners",
+        brand: "SADOER",
+        stock: 30,
+      },
+
+      // 🧼 FACE WASH CATEGORY
+      {
+        name: "SADOER Deep Clean Face Wash",
+        description: "Deep-cleansing face wash that removes dirt and excess oil.",
+        price: 50.0,
+        image: "/placeholder.png",
+        category: "face-wash",
+        brand: "SADOER",
+        stock: 45,
+      },
+      {
+        name: "CENTELLA Gentle Face Wash",
+        description: "Mild centella face wash for sensitive, daily cleansing.",
+        price: 50.0,
+        image: "/placeholder.png",
+        category: "face-wash",
+        brand: "CENTELLA",
+        stock: 45,
+      },
+
+      // 🫧 FACE CREAM CATEGORY
+      {
+        name: "CENTELLA Repairing Face Cream",
+        description: "Nourishing cream that repairs and strengthens the skin barrier.",
+        price: 85.0,
+        image: "/placeholder.png",
+        category: "face-cream",
+        brand: "CENTELLA",
+        stock: 25,
+      },
+      {
+        name: "SADOER Firming Face Cream",
+        description: "Moisturizing cream that firms and smooths the complexion.",
+        price: 85.0,
+        image: "/placeholder.png",
+        category: "face-cream",
+        brand: "SADOER",
+        stock: 25,
+      },
+
+      // 💦 SUGAR BODY SCRUB CATEGORY
+      {
+        name: "SADOER Sugar Body Scrub",
+        description: "Gentle sugar scrub that exfoliates and softens skin.",
+        price: 75.0,
+        image: "/placeholder.png",
+        category: "sugar-body-scrub",
+        brand: "SADOER",
+        stock: 30,
+      },
+
+      // 🧂 SALT BODY SCRUBS CATEGORY
+      {
+        name: "SADOER Salt Body Scrub",
+        description: "Invigorating salt scrub that buffs away dull skin.",
+        price: 55.0,
+        image: "/placeholder.png",
+        category: "salt-body-scrubs",
+        brand: "SADOER",
+        stock: 30,
+      },
+
+      // 🧴 BODY LOTION CATEGORY
+      {
+        name: "BODY AND BATH WORKS Shea Body Lotion",
+        description: "Rich shea body lotion for soft, deeply moisturized skin.",
+        price: 80.0,
+        image: "/placeholder.png",
+        category: "body-lotion",
+        brand: "BODY AND BATH WORKS",
+        stock: 28,
+      },
+      {
+        name: "SADOER Nourishing Body Lotion",
+        description: "Everyday body lotion that keeps skin smooth and hydrated.",
+        price: 80.0,
+        image: "/placeholder.png",
+        category: "body-lotion",
+        brand: "SADOER",
+        stock: 28,
+      },
+
+      // 🛁 BODY & BATH WORKS CATEGORY
+      {
+        name: "BODY AND BATH WORKS Body Wash",
+        description: "Cleansing body wash with a rich, lasting fragrance.",
+        price: 85.0,
+        image: "/placeholder.png",
+        category: "body-and-bath-works",
+        brand: "BODY AND BATH WORKS",
+        stock: 35,
+      },
+      {
+        name: "BODY AND BATH WORKS Body Splash",
+        description: "Refreshing body splash that keeps you smelling great all day.",
+        price: 70.0,
+        image: "/placeholder.png",
+        category: "body-and-bath-works",
+        brand: "BODY AND BATH WORKS",
+        stock: 40,
+      },
     ],
+  });
+
+  await prisma.voucher.upsert({
+    where: { code: "brama10" },
+    update: { active: true },
+    create: {
+      code: "brama10",
+      label: "First order discount",
+      description: "Get 10% off your order.",
+      discountPct: 10,
+      active: true,
+    },
   });
 
   console.log("✅ Database seeded successfully with Brama's top cosmetics in Ghana!");

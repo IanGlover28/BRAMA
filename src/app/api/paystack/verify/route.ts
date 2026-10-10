@@ -1,18 +1,17 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authOptions";
+import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
-
-const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY;
+import { fulfillOrder } from "@/lib/fulfillment";
 
 export async function GET(req: Request) {
   try {
-    if (!PAYSTACK_SECRET) {
+    if (!process.env.PAYSTACK_SECRET_KEY) {
       return NextResponse.json({ error: "Paystack secret not configured" }, { status: 500 });
     }
 
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await currentUser();
+    const email = user?.primaryEmailAddress?.emailAddress;
+    if (!email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -23,13 +22,21 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "No reference provided" }, { status: 400 });
     }
 
+    // Ensure the caller owns this order before revealing anything about it.
+    const owned = await prisma.order.findFirst({
+      where: { reference, user: { email } },
+      select: { id: true },
+    });
+    if (!owned) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
 
     const verifyRes = await fetch(
-      `https://api.paystack.co/transaction/verify/${reference}`,
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${PAYSTACK_SECRET}`,
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
         },
       }
     );
@@ -37,50 +44,38 @@ export async function GET(req: Request) {
     const data = await verifyRes.json();
 
     if (!verifyRes.ok) {
-      console.error("Paystack verification failed", data);
       return NextResponse.json({ error: "Payment verification failed" }, { status: 400 });
     }
 
-
     if (data.data.status === "success") {
-      const order = await prisma.order.updateMany({
-        where: {
-          reference,
-          status: "PENDING",
-        },
-        data: {
-          status: "PAID",
-        },
-      });
+      await fulfillOrder(reference);
 
-      if (order.count === 0) {
-        return NextResponse.json({ error: "Order not found or already processed" }, { status: 404 });
-      }
-
-      return NextResponse.json({ 
-        success: true, 
+      return NextResponse.json({
+        success: true,
         message: "Payment verified successfully",
-        status: "PAID"
+        status: "PAID",
       });
-    } else {
-
-      await prisma.order.updateMany({
-        where: {
-          reference,
-        },
-        data: {
-          status: "FAILED",
-        },
-      });
-
-      return NextResponse.json({ 
-        success: false, 
-        message: "Payment was not successful",
-        status: data.data.status
-      }, { status: 400 });
     }
-  } catch (err: unknown) {
-    console.error("Payment verification error", err);
-    return NextResponse.json({ error: (err as Error).message || "Server error" }, { status: 500 });
+
+    // Only an explicit failure closes the order. Transient statuses
+    // (ongoing, abandoned, etc.) stay PENDING - the webhook may still
+    // complete them asynchronously.
+    if (data.data.status === "failed") {
+      await prisma.order.updateMany({
+        where: { reference, status: "PENDING" },
+        data: { status: "FAILED" },
+      });
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Payment was not successful",
+        status: data.data.status,
+      },
+      { status: 400 }
+    );
+  } catch {
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

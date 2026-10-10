@@ -33,8 +33,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/global.d.ts",
-    "types/**/*.d.ts",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [

@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { Product } from '@/types/product';
-import { useCart } from "@/context/cart-context";
+import { useCartStore } from "@/hooks/use-cart-store";
 import { ShoppingCart, Star } from "lucide-react"; // Added Star icon
+import WishlistButton from "./wishlist-button";
 
 interface ProductCardProps {
   product: Product;
@@ -13,19 +15,19 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((s) => s.addToCart);
 
-  // --- ADJUSTED/NEW COSMETIC-FOCUSED DATA ---
-  const brandName = "BRAMA"; // Using brand name for consistency
   const productType = product.category; // e.g., Lip Care, Skin Care
-// Placeholder for a typical cosmetic size
-  const ratingPlaceholder = 4.7; // Placeholder for a rating
-  // ------------------------------------------
 
   const imageSrc = imageError ? "/placeholder.png" : product.image;
 
   return (
     <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 relative group">
+
+      {/* Wishlist heart */}
+      <div className="absolute top-3 left-3 z-20">
+        <WishlistButton productId={product.id} />
+      </div>
 
       {/* BEST SELLER Badge */}
       {product.stock > 40 && (
@@ -51,11 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-7 text-left">
-        {/* Brand & Product Type */}
-        <h3 className="text-xs font-semibold text-pink-600 uppercase tracking-widest mb-1">
-          {brandName}
-        </h3>
-
+     
         <Link href={`/products/${product.id}`} className="block">
           <h2 className="text-lg font-bold text-gray-900 leading-snug mb-2 hover:text-pink-700 transition">
             {product.name}
@@ -68,7 +66,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="flex justify-between items-center mb-4 pt-2 border-t border-gray-100">
           <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
             <Star size={16} fill="currentColor" />
-            <span>{ratingPlaceholder}</span>
+            <span>{product.stock > 40 ? "New" : "Popular"}</span>
   
           </div>
           
@@ -78,32 +76,32 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Price & Add to Cart Button */}
         <div className="flex justify-between items-center mt-3">
           <p className="text-md font-extrabold text-gray-900">
-            GHC {product.price.toFixed(2)}
+            ₵{product.price.toFixed(2)}
           </p>
 
-          {/* ✅ Add to Cart Button - Now full width with View Button inside */}
           <button
-            onClick={() =>
+            onClick={() => {
               addToCart({
                 id: product.id,
                 name: product.name,
                 price: product.price,
-              })
-            }
-            // Elegant, pink primary button for action
-            className="flex items-center justify-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                image: product.image,
+              });
+              toast.success(`${product.name} added to your bag`, { duration: 1800 });
+            }}
+            aria-label={`Add ${product.name} to bag`}
+            className="flex items-center justify-center bg-pink-600 text-white p-2 rounded-full hover:bg-pink-700 transition-all duration-200 shadow-md hover:shadow-lg"
           >
             <ShoppingCart size={18} />
-            <span>Add to Bag</span>
           </button>
         </div>
         
         {/* Simplified View Button/Link */}
-        <Link 
+        <Link
             href={`/products/${product.id}`}
             className="text-xs text-gray-500 mt-2 block hover:text-pink-600 transition text-center"
         >
-            Quick View
+            View Details
         </Link>
 
       </div>
