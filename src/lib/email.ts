@@ -1,14 +1,14 @@
 import { Resend } from "resend";
 import { VENDOR_EMAILS } from "@/lib/vendor";
+import { CONTACT_EMAIL, SITE_URL } from "@/lib/site";
 
-const SHOP_URL = "https://brama.com";
+const SHOP_URL = SITE_URL;
 const BRAND_PINK = "#DB2777";
 
-// Resend only sends from a domain verified in your Resend account. Once
-// brama.com is purchased, add it at https://resend.com/domains, add the DNS
-// records and verify — then the default no-reply@brama.com works. Override
-// with RESEND_FROM_EMAIL if needed.
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Brama <no-reply@brama.com>";
+// Resend only sends from a verified domain - bramacosmetics.com is verified in Resend.
+// Replies go to the shop inbox, since the sending address has no mailbox.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "BRAMA Cosmetics <orders@bramacosmetics.com>";
+const REPLY_TO = process.env.RESEND_REPLY_TO || "bramacosmetics@gmail.com";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
@@ -46,6 +46,7 @@ export async function sendConfirmationEmail(to: string, name: string) {
   try {
     await resend.emails.send({
       from: FROM_EMAIL,
+      replyTo: REPLY_TO,
       to,
       subject: "Welcome to BRAMA — you're glowing already",
       html: `
@@ -88,7 +89,7 @@ export async function sendConfirmationEmail(to: string, name: string) {
                   </tr>
                   <tr>
                     <td style="background:#FFF1F5;border-radius:12px;padding:12px 16px;font-size:14px;color:#4B5563;">
-                      <strong style="color:#DB2777;">Learn on our blog</strong> — free tutorials and tips at brama.com/learn
+                      <strong style="color:#DB2777;">Learn on our blog</strong> — free tutorials and tips at bramacosmetics.com/learn
                     </td>
                   </tr>
                 </table>
@@ -117,7 +118,7 @@ export async function sendConfirmationEmail(to: string, name: string) {
             <tr>
               <td style="padding:26px 16px 10px;text-align:center;color:#9CA3AF;font-size:12px;">
                 <p style="margin:0 0 4px;">
-                  <strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; no-reply@brama.com
+                  <strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; ${CONTACT_EMAIL}
                 </p>
                 <p style="margin:0;">You&rsquo;re receiving this because you created a BRAMA account.</p>
               </td>
@@ -162,7 +163,7 @@ function emailShell(inner: string): string {
         </tr>
         <tr>
           <td style="padding:24px 16px 8px;text-align:center;color:#9CA3AF;font-size:12px;">
-            <p style="margin:0;"><strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; no-reply@brama.com</p>
+            <p style="margin:0;"><strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; ${CONTACT_EMAIL}</p>
           </td>
         </tr>
       </table>
@@ -179,6 +180,7 @@ export async function sendOrderConfirmationEmail(
     const itemsHtml = orderItemsHtml(order.items);
     await resend.emails.send({
       from: FROM_EMAIL,
+      replyTo: REPLY_TO,
       to,
       subject: `Your BRAMA order is confirmed — Ref ${order.reference ?? "BRAMA"}`.trim(),
       html: emailShell(`
@@ -233,6 +235,7 @@ export async function sendNewOrderVendorEmail(order: EmailOrder) {
       const itemsHtml = orderItemsHtml(order.items);
       await resend.emails.send({
       from: FROM_EMAIL,
+      replyTo: REPLY_TO,
       to: vendorEmail,
       subject: `New order ${order.reference ? `#${order.reference} ` : ""}— ${order.customerName || order.customerEmail}`,
         html: emailShell(`
