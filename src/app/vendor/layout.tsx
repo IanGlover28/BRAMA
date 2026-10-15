@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import { getVendorSession } from "@/lib/vendor";
 import VendorNav from "@/components/vendor/vendor-nav";
 
+// Vendor pages show live, per-vendor data - never prerender them at build time.
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Vendor Portal | BRAMA Cosmetics",
 };
