@@ -66,8 +66,9 @@ const SECTIONS = [
 ];
 
 export const metadata = {
-  title: "Terms & Conditions | BRAMA",
+  title: "Terms & Privacy",
   description: "The terms and privacy policy governing the BRAMA online beauty store.",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

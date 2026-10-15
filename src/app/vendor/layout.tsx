@@ -6,7 +6,8 @@ import VendorNav from "@/components/vendor/vendor-nav";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Vendor Portal | BRAMA Cosmetics",
+  title: "Vendor Portal",
+  robots: { index: false, follow: false },
 };
 
 export default async function VendorLayout({ children }: { children: React.ReactNode }) {

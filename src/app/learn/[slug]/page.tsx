@@ -1,7 +1,31 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import CopyLinkButton from "@/components/copy-link-button";
 import { tutorials } from "../data";
+import { SITE_NAME } from "@/lib/site";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<TutorialPageParams>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const tutorial = tutorials.find((t) => t.slug === slug);
+  if (!tutorial) return { title: "Tutorial not found", robots: { index: false } };
+
+  return {
+    title: { absolute: `${tutorial.title} | ${SITE_NAME}` },
+    description: tutorial.summary,
+    alternates: { canonical: `/learn/${tutorial.slug}` },
+    openGraph: {
+      type: "article",
+      title: tutorial.title,
+      description: tutorial.summary,
+      url: `/learn/${tutorial.slug}`,
+    },
+  };
+}
 
 function sanitizeHtml(html: string): string {
   return html
