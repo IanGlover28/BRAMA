@@ -7,6 +7,7 @@ import { X, Lock, Truck, Tag, ShoppingCart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCartStore } from '@/hooks/use-cart-store';
 import { calcSubtotal, calcTotal, DELIVERY_FEE } from '@/lib/pricing';
+import { trackBeginCheckout } from '@/lib/analytics';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -61,6 +62,10 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setLocation(delivery);
 
     setLoading(true);
+    trackBeginCheckout(cartItems, {
+      value: finalTotal,
+      coupon: discountRate > 0 ? promo.trim().toLowerCase() : undefined,
+    });
     try {
       const body = {
         items: cartItems.map((i) => ({

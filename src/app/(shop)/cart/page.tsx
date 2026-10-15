@@ -2,6 +2,7 @@
 
 import { useCartStore } from "@/hooks/use-cart-store"
 import { useRouter } from "next/navigation"
+import { trackRemoveFromCart } from "@/lib/analytics"
 
 export default function CartPage() {
   const cartItems = useCartStore((s) => s.items)
@@ -52,7 +53,10 @@ export default function CartPage() {
             <span>₵{cartTotal.toFixed(2)}</span>
           </div>
           <button
-            onClick={clearCart}
+            onClick={() => {
+              cartItems.forEach((item) => trackRemoveFromCart(item, item.quantity))
+              clearCart()
+            }}
             className="text-red-500 text-sm underline w-full mt-2 hover:text-red-700"
           >
             Clear cart
