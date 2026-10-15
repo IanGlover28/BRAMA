@@ -1,3 +1,5 @@
+import { cache } from "react";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
@@ -8,6 +10,48 @@ import ProductPurchaseOptions from "@/components/product-purchase-options";
 import ReviewSection from "@/components/review-section";
 import StarRating from "@/components/star-rating";
 import WishlistButton from "@/components/wishlist-button";
+import JsonLd from "@/components/json-ld";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+
+// Shared by generateMetadata and the page so the product is fetched once per request.
+const getProduct = cache((id: string) => prisma.product.findUnique({ where: { id } }));
+
+function productImageSrc(image: string | null | undefined) {
+  return image?.startsWith("http") || image?.startsWith("/") ? image : `/${image}`;
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await props.params;
+  const product = await getProduct(id);
+  if (!product) return { title: "Product not found", robots: { index: false } };
+
+  const description =
+    product.description.length > 155
+      ? `${product.description.slice(0, 152).trimEnd()}...`
+      : product.description;
+  const image = productImageSrc(product.image);
+
+  return {
+    title: product.brand ? `${product.name} by ${product.brand}` : product.name,
+    description,
+    alternates: { canonical: `/products/${product.id}` },
+    openGraph: {
+      type: "website",
+      title: `${product.name} | ${SITE_NAME}`,
+      description,
+      url: `/products/${product.id}`,
+      images: [{ url: image, alt: product.name }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} | ${SITE_NAME}`,
+      description,
+      images: [image],
+    },
+  };
+}
 
 export default async function ProductDetailsPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
@@ -16,7 +60,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
   const email = user?.primaryEmailAddress?.emailAddress;
 
   const [product, reviews] = await Promise.all([
-    prisma.product.findUnique({ where: { id } }),
+    getProduct(id),
     prisma.review.findMany({ where: { productId: id }, orderBy: { createdAt: "desc" } }),
   ]);
 
@@ -41,17 +85,43 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
     }
   }
 
-  const imageSrc =
-    product.image?.startsWith("http") || product.image?.startsWith("/")
-      ? product.image
-      : `/${product.image}`;
+  const imageSrc = productImageSrc(product.image);
 
   const avgRating = reviews.length
     ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     : null;
 
+  const productUrl = `${SITE_URL}/products/${product.id}`;
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: imageSrc.startsWith("http") ? imageSrc : `${SITE_URL}${imageSrc}`,
+    sku: product.id,
+    category: product.category,
+    ...(product.brand && { brand: { "@type": "Brand", name: product.brand } }),
+    offers: {
+      "@type": "Offer",
+      url: productUrl,
+      priceCurrency: "GHS",
+      price: product.price.toFixed(2),
+      availability:
+        product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: SITE_NAME },
+    },
+    ...(avgRating !== null && {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: avgRating.toFixed(1),
+        reviewCount: reviews.length,
+      },
+    }),
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-16 px-4">
+      <JsonLd data={productJsonLd} />
       <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Product Image */}

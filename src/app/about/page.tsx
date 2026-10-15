@@ -14,9 +14,10 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'About Us | BRAMA Cosmetics',
+  title: 'About Us',
   description:
     'BRAMA Cosmetics: clean, luxurious and eco-friendly beauty products for every skin type.',
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

@@ -11,29 +11,41 @@ import QueryProvider from "@/components/query-provider";
 import { LocationProvider } from "@/context/location-context";
 import FloatingCartModal from "@/components/floating-cart-modal";
 import ErrorBoundary from "@/components/error-boundary";
+import GoogleAnalytics from "@/components/google-analytics";
+import JsonLd from "@/components/json-ld";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://brama-cosmetics.vercel.app";
-
 const title = "BRAMA COSMETICS - Quality products for every Classy Lady.";
 const description =
-  "Premium cosmetics platform, featuring a secure and seamless shopping experience.";
+  "Shop premium skincare, makeup and beauty products in Ghana. Secure checkout with Mobile Money and card, delivered to your door.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
-  title,
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: title,
+    template: `%s | ${SITE_NAME}`,
+  },
   description,
+  applicationName: SITE_NAME,
+  keywords: [
+    "cosmetics Ghana",
+    "skincare Ghana",
+    "makeup Accra",
+    "beauty products online",
+    "BRAMA Cosmetics",
+  ],
   icons: {
     apple: "/brama-logo.png",
   },
   openGraph: {
     type: "website",
     siteName: "BRAMA COSMETICS",
+    locale: "en_GH",
     title,
     description,
-    url: baseUrl,
+    url: SITE_URL,
     images: [
       {
         url: "/og-image.png",
@@ -59,6 +71,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "OnlineStore",
+            name: SITE_NAME,
+            url: SITE_URL,
+            logo: `${SITE_URL}/brama-logo.png`,
+            description,
+            currenciesAccepted: "GHS",
+            areaServed: "GH",
+          }}
+        />
+        <GoogleAnalytics />
         <ClerkProvider>
           <ErrorBoundary>
             <QueryProvider>

@@ -3,8 +3,9 @@ import ProductsPageClient from "@/components/products-page-client";
 import Loader from "@/components/loader";
 
 export const metadata = {
-  title: "Products | BRAMA Cosmetics",
+  title: "Shop All Products",
   description: "Browse our collection of premium cosmetics and beauty products.",
+  alternates: { canonical: "/products" },
 };
 
 export default function ProductsPage() {
