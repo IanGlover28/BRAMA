@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useCartStore } from "@/hooks/use-cart-store";
+import { trackPurchase } from "@/lib/analytics";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
@@ -29,6 +30,14 @@ function PaymentSuccessContent() {
       .then((data) => {
         if (cancelled) return;
         if (data.success) {
+          if (data.order) {
+            trackPurchase({
+              transactionId: data.order.reference,
+              value: data.order.total,
+              shipping: data.order.shipping,
+              items: data.order.items,
+            });
+          }
           clearCart();
           setVerifying(false);
         } else {

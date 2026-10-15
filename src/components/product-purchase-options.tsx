@@ -21,6 +21,8 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
       name: product.name,
       price: product.price,
       image: product.image,
+      brand: product.brand,
+      category: product.category,
       quantity,
     });
     toggleCart();

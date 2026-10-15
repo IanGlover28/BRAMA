@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
-import { fulfillOrder } from "@/lib/fulfillment";
+import { fulfillOrder, type OrderItem } from "@/lib/fulfillment";
+import { DELIVERY_FEE } from "@/lib/pricing";
 
 export async function GET(req: Request) {
   try {
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
     // Ensure the caller owns this order before revealing anything about it.
     const owned = await prisma.order.findFirst({
       where: { reference, user: { email } },
-      select: { id: true },
+      select: { id: true, total: true, items: true },
     });
     if (!owned) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
@@ -50,10 +51,32 @@ export async function GET(req: Request) {
     if (data.data.status === "success") {
       await fulfillOrder(reference);
 
+      // Order details for the client's GA4 purchase event. Brand and
+      // category aren't stored on the order, so look them up.
+      const items = Array.isArray(owned.items) ? (owned.items as unknown as OrderItem[]) : [];
+      const products = await prisma.product.findMany({
+        where: { id: { in: items.map((i) => i.id) } },
+        select: { id: true, brand: true, category: true },
+      });
+      const meta = new Map(products.map((p) => [p.id, p]));
+
       return NextResponse.json({
         success: true,
         message: "Payment verified successfully",
         status: "PAID",
+        order: {
+          reference,
+          total: owned.total,
+          shipping: DELIVERY_FEE,
+          items: items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            brand: meta.get(i.id)?.brand ?? null,
+            category: meta.get(i.id)?.category ?? null,
+          })),
+        },
       });
     }
 
