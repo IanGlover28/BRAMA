@@ -1,3 +1,4 @@
+import { after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import {
   sendOrderConfirmationEmail,
@@ -64,8 +65,10 @@ export async function fulfillOrder(reference: string) {
     return { fulfilled: true as const, order };
   });
 
-  // Notify customer + vendor once, after the transaction commits. Fails
-  // silently - order fulfillment must not depend on mail delivery.
+  // Notify customer + vendor once, after the transaction commits. after() keeps
+  // the serverless function alive until the emails are sent (a bare promise can
+  // be frozen mid-send once the response goes out). Failures are logged, never
+  // thrown - order fulfillment must not depend on mail delivery.
   if (result.fulfilled && result.order) {
     const o = result.order as unknown as FulfilledOrder;
     const emailOrder: EmailOrder = {
@@ -77,12 +80,14 @@ export async function fulfillOrder(reference: string) {
       customerName: o.user?.name ?? null,
       customerEmail: o.user?.email ?? "",
     };
-    void Promise.allSettled([
-      emailOrder.customerEmail
-        ? sendOrderConfirmationEmail(emailOrder.customerEmail, emailOrder.customerName, emailOrder)
-        : Promise.resolve(),
-      sendNewOrderVendorEmail(emailOrder),
-    ]);
+    after(() =>
+      Promise.allSettled([
+        emailOrder.customerEmail
+          ? sendOrderConfirmationEmail(emailOrder.customerEmail, emailOrder.customerName, emailOrder)
+          : Promise.resolve(),
+        sendNewOrderVendorEmail(emailOrder),
+      ])
+    );
   }
 
   return result;

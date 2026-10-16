@@ -16,7 +16,7 @@ export async function POST(_req: Request, { params }: Params) {
   const { productId } = await params;
   const { user, email } = await getUserAndEmail();
   if (!user || !email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Please sign in to continue." }, { status: 401 });
   }
 
   const product = await prisma.product.findUnique({ where: { id: productId } });
@@ -41,7 +41,7 @@ export async function DELETE(_req: Request, { params }: Params) {
   const { productId } = await params;
   const { user, email } = await getUserAndEmail();
   if (!user || !email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Please sign in to continue." }, { status: 401 });
   }
 
   try {

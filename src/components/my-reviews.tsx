@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { Trash2, Star } from "lucide-react";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 interface MyReview {
   id: string;
@@ -25,12 +26,11 @@ export default function MyReviews({ initialReviews }: { initialReviews: MyReview
     setDeletingId(review.id);
     try {
       const res = await fetch(`/api/reviews/${review.id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to delete review.");
+      await parseResponse(res, "Failed to delete review.");
       toast.success("Review deleted.");
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setDeletingId(null);
     }

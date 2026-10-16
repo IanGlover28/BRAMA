@@ -3,11 +3,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocationContext } from '@/context/location-context';
-import { X, Lock, Truck, Tag, ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
+import { useUser } from '@clerk/nextjs';
+import { X, Lock, Truck, Tag, ShoppingCart, UserRound, Mail, Phone } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useCartStore } from '@/hooks/use-cart-store';
 import { calcSubtotal, calcTotal, DELIVERY_FEE } from '@/lib/pricing';
 import { trackBeginCheckout } from '@/lib/analytics';
+import { friendlyError, parseResponse } from '@/lib/http';
+import { normalizeEmail, normalizeName, normalizePhone } from '@/lib/guest-checkout';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -22,6 +26,11 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [delivery, setDelivery] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const { isLoaded, isSignedIn } = useUser();
+  const isGuest = isLoaded && !isSignedIn;
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
   const deliveryFee = DELIVERY_FEE;
   const subtotal = calcSubtotal(cartItems);
@@ -53,8 +62,30 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   }, [isOpen]);
 
   const handleCheckout = async () => {
+    if (!isLoaded) return;
+    if (cartItems.length === 0) {
+      toast.error('Your cart is empty. Add a product before checking out.');
+      return;
+    }
+    if (isGuest) {
+      if (!normalizeName(guestName)) {
+        toast.error('Please enter your full name.');
+        return;
+      }
+      if (!normalizeEmail(guestEmail)) {
+        toast.error('Please enter a valid email address so we can send your receipt.');
+        return;
+      }
+      if (!normalizePhone(phone)) {
+        toast.error('Please enter a valid phone number so the rider can reach you.');
+        return;
+      }
+    } else if (phone.trim() && !normalizePhone(phone)) {
+      toast.error("That phone number doesn't look right. Please check it and try again.");
+      return;
+    }
     if (!delivery.trim()) {
-      toast.error('Please enter your delivery destination.');
+      toast.error('Please enter your delivery address.');
       return;
     }
 
@@ -78,6 +109,8 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         promo: promo || undefined,
         delivery,
         note: description,
+        phone: phone.trim() || undefined,
+        guest: isGuest ? { name: guestName.trim(), email: guestEmail.trim() } : undefined,
       };
 
       const res = await fetch('/api/paystack/initialize', {
@@ -86,12 +119,17 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         body: JSON.stringify(body),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Checkout initialization failed');
+      const data = await parseResponse<{ authorization_url?: string }>(
+        res,
+        "We couldn't start your checkout. Please try again."
+      );
+      if (!data.authorization_url) {
+        throw new Error("We couldn't connect to Paystack. Please try again in a moment.");
+      }
 
       window.location.href = data.authorization_url;
     } catch (err: unknown) {
-      toast.error((err as Error).message || 'Failed to start checkout');
+      toast.error(friendlyError(err, "We couldn't start your checkout. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -192,6 +230,63 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 )}
               </div>
 
+              {/* Contact details - guests only; signed-in shoppers use their account */}
+              {isGuest && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-gray-700">Your details</h3>
+                    <Link
+                      href="/sign-in?redirect_url=/cart"
+                      className="text-xs font-semibold text-pink-600 underline underline-offset-4 hover:text-pink-700"
+                    >
+                      Have an account? Sign in
+                    </Link>
+                  </div>
+                  <label className="block">
+                    <span className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1.5">
+                      <UserRound size={13} className="text-pink-600" /> Full name
+                    </span>
+                    <input
+                      type="text"
+                      autoComplete="name"
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      placeholder="e.g. Ama Mensah"
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1.5">
+                      <Mail size={13} className="text-pink-600" /> Email for your receipt
+                    </span>
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      value={guestEmail}
+                      onChange={(e) => setGuestEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                    />
+                  </label>
+                </div>
+              )}
+
+              {/* Phone - required for guests so the rider can call */}
+              <div>
+                <label className="text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
+                  <Phone size={15} className="text-pink-600" /> Phone number
+                  {!isGuest && <span className="text-xs font-normal text-gray-400">(optional)</span>}
+                </label>
+                <input
+                  type="tel"
+                  autoComplete="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="e.g. 055 211 9400"
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                />
+              </div>
+
               {/* Delivery Info */}
               <div>
                 <label className="text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
@@ -201,12 +296,12 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   type="text"
                   value={delivery}
                   onChange={(e) => setDelivery(e.target.value)}
-                  placeholder="Confirm or edit your location"
+                  placeholder="House number, street, area, city"
                   className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
                 />
-                {!location && (
-                  <p className="text-xs text-red-500 mt-1 font-medium">
-                    ⚠ No saved location found. Please set one in Location Picker.
+                {!delivery.trim() && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter the address where we should deliver your order.
                   </p>
                 )}
               </div>
@@ -235,10 +330,10 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               {/* Confirm Button */}
               <button
                 onClick={handleCheckout}
-                disabled={loading}
+                disabled={loading || !isLoaded}
                 className="w-full bg-pink-600 text-white py-3.5 rounded-full font-bold text-base hover:bg-pink-700 transition disabled:bg-pink-400 flex items-center justify-center gap-2 shadow-lg shadow-pink-600/25"
               >
-                {loading ? 'Processing...' : (<><Lock size={18} /> Confirm Order</>)}
+                {loading ? 'Taking you to Paystack...' : (<><Lock size={18} /> {isGuest ? 'Pay as guest' : 'Confirm Order'}</>)}
               </button>
             </div>
           </motion.div>
