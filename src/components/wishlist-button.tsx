@@ -37,8 +37,8 @@ export default function WishlistButton({ productId }: WishlistButtonProps) {
       aria-pressed={liked}
       className={`flex items-center justify-center h-9 w-9 rounded-full shadow-md transition-all ${
         liked
-          ? "bg-pink-600 text-white hover:bg-pink-700"
-          : "bg-white text-gray-400 hover:text-pink-600 hover:bg-pink-50"
+          ? "bg-brand-600 text-white hover:bg-brand-700"
+          : "bg-surface text-ink-400 hover:text-brand-600 hover:bg-brand-50"
       }`}
     >
       <Heart size={17} className={liked ? "fill-current" : ""} />

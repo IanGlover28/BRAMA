@@ -2,7 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*
+ * Theme palette. Colours are stored as RGB channels so Tailwind opacity
+ * modifiers (bg-brand-50/60) keep working. Light values are the default;
+ * dark values apply when the visitor's system is in dark mode, unless they
+ * chose a theme with the navbar toggle (data-theme="light" | "dark" on <html>).
+ *
+ * .theme-fixed pins a section to the light palette in both modes (for bands
+ * that are already dark or brand-coloured, like the footer and hero gradients).
+ * .theme-auto inside it opts a child back into the active theme.
+ */
+@layer base {
+  :root,
+  .theme-auto,
+  .theme-fixed {
+    --brand-50: 253 246 245;
+    --brand-100: 250 224 223;
+    --brand-200: 244 201 199;
+    --brand-300: 235 170 168;
+    --brand-400: 219 136 133;
+    --brand-500: 192 96 94;
+    --brand-600: 163 74 72;
+    --brand-700: 138 62 61;
+    --brand-800: 107 49 48;
+    --brand-900: 74 35 34;
+    --brand-950: 46 21 21;
+    --ink-50: 250 248 247;
+    --ink-100: 243 239 237;
+    --ink-200: 231 224 221;
+    --ink-300: 211 202 198;
+    --ink-400: 169 157 152;
+    --ink-500: 125 113 108;
+    --ink-600: 97 86 82;
+    --ink-700: 74 65 62;
+    --ink-800: 50 43 41;
+    --ink-900: 31 26 25;
+    --ink-950: 18 15 14;
+    --surface: 255 255 255;
+    --surface-canvas: 255 255 255;
+  }
+
+  :root {
+    color-scheme: light dark;
+  }
+
+  /* Dark values: follow the system unless the visitor picked light... */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]),
+    :root:not([data-theme="light"]) .theme-auto {
+      --brand-50: 36 24 26;
+      --brand-100: 58 35 36;
+      --brand-200: 82 48 47;
+      --brand-300: 110 63 61;
+      --brand-400: 154 87 84;
+      --brand-500: 184 92 89;
+      --brand-600: 196 98 95;
+      --brand-700: 210 123 120;
+      --brand-800: 230 169 166;
+      --brand-900: 244 207 205;
+      --brand-950: 251 233 232;
+      --ink-50: 24 20 19;
+      --ink-100: 34 29 28;
+      --ink-200: 46 40 38;
+      --ink-300: 62 54 51;
+      --ink-400: 107 96 91;
+      --ink-500: 154 142 137;
+      --ink-600: 181 170 165;
+      --ink-700: 207 198 194;
+      --ink-800: 227 220 217;
+      --ink-900: 243 239 237;
+      --ink-950: 250 248 247;
+      --surface: 28 24 23;
+      --surface-canvas: 20 17 16;
+    }
+  }
+
+  /* ...or apply them when the visitor picked dark, whatever the system says. */
+  :root[data-theme="dark"],
+  :root[data-theme="dark"] .theme-auto {
+    --brand-50: 36 24 26;
+    --brand-100: 58 35 36;
+    --brand-200: 82 48 47;
+    --brand-300: 110 63 61;
+    --brand-400: 154 87 84;
+    --brand-500: 184 92 89;
+    --brand-600: 196 98 95;
+    --brand-700: 210 123 120;
+    --brand-800: 230 169 166;
+    --brand-900: 244 207 205;
+    --brand-950: 251 233 232;
+    --ink-50: 24 20 19;
+    --ink-100: 34 29 28;
+    --ink-200: 46 40 38;
+    --ink-300: 62 54 51;
+    --ink-400: 107 96 91;
+    --ink-500: 154 142 137;
+    --ink-600: 181 170 165;
+    --ink-700: 207 198 194;
+    --ink-800: 227 220 217;
+    --ink-900: 243 239 237;
+    --ink-950: 250 248 247;
+    --surface: 28 24 23;
+    --surface-canvas: 20 17 16;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  .theme-fixed {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-surface-canvas text-ink-900 font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings echo the high-contrast serif of the BRAMA logo. */
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+}
+
+@layer components {
+  /* Wide-tracked caps, as in the "BRAMA COSMETICS" logo lockup. */
+  .brand-eyebrow {
+    @apply font-sans text-xs uppercase tracking-brand text-brand-600;
+  }
 }

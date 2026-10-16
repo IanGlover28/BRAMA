@@ -38,12 +38,12 @@ export default function MyReviews({ initialReviews }: { initialReviews: MyReview
 
   if (initialReviews.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-10 text-center">
-        <Star size={32} className="mx-auto mb-3 text-pink-300" />
-        <p className="text-sm text-gray-500 mb-4">
+      <div className="bg-surface rounded-xl shadow-sm border p-10 text-center">
+        <Star size={32} className="mx-auto mb-3 text-brand-300" />
+        <p className="text-sm text-ink-500 mb-4">
           You haven&apos;t written any reviews yet.
         </p>
-        <Link href="/products" className="text-sm font-semibold text-pink-600 hover:underline">
+        <Link href="/products" className="text-sm font-semibold text-brand-600 hover:underline">
           Browse products to review →
         </Link>
       </div>
@@ -53,10 +53,10 @@ export default function MyReviews({ initialReviews }: { initialReviews: MyReview
   return (
     <ul className="space-y-3">
       {initialReviews.map((review) => (
-        <li key={review.id} className="bg-white rounded-xl shadow-sm border p-4 flex gap-4">
+        <li key={review.id} className="bg-surface rounded-xl shadow-sm border p-4 flex gap-4">
           <Link
             href={`/products/${review.product.id}`}
-            className="relative w-16 h-16 shrink-0 rounded-lg bg-pink-50 overflow-hidden"
+            className="relative w-16 h-16 shrink-0 rounded-lg bg-brand-50 overflow-hidden"
           >
             <Image
               src={review.product.image || "/placeholder.png"}
@@ -68,7 +68,7 @@ export default function MyReviews({ initialReviews }: { initialReviews: MyReview
             />
           </Link>
           <div className="flex-1 min-w-0">
-            <Link href={`/products/${review.product.id}`} className="font-semibold text-gray-900 hover:text-pink-600 transition truncate block">
+            <Link href={`/products/${review.product.id}`} className="font-semibold text-ink-900 hover:text-brand-600 transition truncate block">
               {review.product.name}
             </Link>
             <div className="flex items-center gap-2 mt-0.5">
@@ -76,20 +76,20 @@ export default function MyReviews({ initialReviews }: { initialReviews: MyReview
                 <Star
                   key={star}
                   size={14}
-                  className={star <= review.rating ? "fill-amber-400 text-amber-400" : "text-gray-300"}
+                  className={star <= review.rating ? "fill-amber-400 text-amber-400" : "text-ink-300"}
                 />
               ))}
-              <span className="text-xs text-gray-400">
+              <span className="text-xs text-ink-400">
                 {new Date(review.createdAt).toLocaleDateString()}
               </span>
             </div>
-            {review.title && <p className="mt-1 text-sm font-medium text-gray-800">{review.title}</p>}
-            {review.body && <p className="text-sm text-gray-600 mt-0.5">{review.body}</p>}
+            {review.title && <p className="mt-1 text-sm font-medium text-ink-800">{review.title}</p>}
+            {review.body && <p className="text-sm text-ink-600 mt-0.5">{review.body}</p>}
           </div>
           <button
             onClick={() => handleDelete(review)}
             disabled={deletingId === review.id}
-            className="p-2 self-start rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition disabled:opacity-40 shrink-0"
+            className="p-2 self-start rounded-lg text-ink-400 hover:text-red-600 hover:bg-red-50 transition disabled:opacity-40 shrink-0"
             aria-label={`Delete review of ${review.product.name}`}
           >
             <Trash2 size={16} />

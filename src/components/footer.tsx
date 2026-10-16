@@ -5,49 +5,50 @@ import { CATEGORIES } from '@/lib/categories';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-12">
+    <footer className="theme-fixed bg-ink-900 text-white mt-12">
       <div className="max-w-7xl mx-auto px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           
           {/* Logo & Info */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">
-              .<span className="text-pink-500 font-serif">BRAMA</span>
+            <h3 className="mb-4 leading-none">
+              <span className="block font-serif text-3xl text-brand-100">BRAMA</span>
+              <span className="mt-1 block font-sans text-[10px] uppercase tracking-brand text-ink-300">Cosmetics</span>
             </h3>
-            <p className="text-gray-400 text-sm">Quality products for a better life. Shop secure, shop smart.</p>
+            <p className="text-ink-400 text-sm">Quality products for a better life. Shop secure, shop smart.</p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="font-semibold text-pink-500 mb-2">Shop</h4>
+            <h4 className="font-semibold text-brand-200 mb-2">Shop</h4>
             {CATEGORIES.slice(0, 2).map((c) => (
               <Link
                 key={c.slug}
                 href={`/products?category=${c.slug}`}
-                className="block text-sm text-gray-300 hover:text-pink-400 transition"
+                className="block text-sm text-ink-300 hover:text-brand-200 transition"
               >
                 {c.label}
               </Link>
             ))}
-            <Link href="/products?filter=bestsellers" className="block text-sm text-gray-300 hover:text-pink-400 transition">Best Sellers</Link>
+            <Link href="/products?filter=bestsellers" className="block text-sm text-ink-300 hover:text-brand-200 transition">Best Sellers</Link>
           </div>
           
           {/* Company */}
           <div className="space-y-3">
-            <h4 className="font-semibold text-pink-500 mb-2">Company</h4>
-            <Link href="/about" className="block text-sm text-gray-300 hover:text-pink-400 transition">About Us</Link>
-            <Link href="/contact" className="block text-sm text-gray-300 hover:text-pink-400 transition">Contact</Link>
-            <Link href="/terms" className="block text-sm text-gray-300 hover:text-pink-400 transition">Terms & Privacy</Link>
+            <h4 className="font-semibold text-brand-200 mb-2">Company</h4>
+            <Link href="/about" className="block text-sm text-ink-300 hover:text-brand-200 transition">About Us</Link>
+            <Link href="/contact" className="block text-sm text-ink-300 hover:text-brand-200 transition">Contact</Link>
+            <Link href="/terms" className="block text-sm text-ink-300 hover:text-brand-200 transition">Terms & Privacy</Link>
           </div>
 
           {/* Payment Security */}
           <div className="space-y-3">
-            <h4 className="font-semibold text-pink-500 mb-2">Secure Payments</h4>
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <h4 className="font-semibold text-brand-200 mb-2">Secure Payments</h4>
+            <div className="flex items-center gap-2 text-sm text-ink-300">
                 <Lock size={16} className="text-yellow-400" />
                 SSL Secured Checkout
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-ink-300">
                 <CreditCard size={16} />
                 Powered by Paystack
             </div>
@@ -60,7 +61,7 @@ export default function Footer() {
           
         </div>
 
-        <div className="mt-10 pt-6 border-t border-gray-800 text-center text-sm text-gray-500">
+        <div className="mt-10 pt-6 border-t border-ink-800 text-center text-sm text-ink-500">
           © {new Date().getFullYear()} BRAMA. All rights reserved.
         </div>
       </div>

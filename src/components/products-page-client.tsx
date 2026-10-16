@@ -56,7 +56,7 @@ export default function ProductsPageClient() {
   const categories = categorySlugs;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8 pt-[96px]">
+    <div className="min-h-screen bg-ink-50 p-4 sm:p-8 pt-[96px]">
       <div className="max-w-7xl mx-auto">
         {/* Filters Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mt-2 md:mt-4 mb-6 items-start sm:items-center justify-between">
@@ -84,10 +84,10 @@ export default function ProductsPageClient() {
         {isError && (
           <div className="text-center py-20">
             <h2 className="text-xl font-semibold text-red-600 mb-2">Failed to load products</h2>
-            <p className="text-gray-500 mb-4">{(error as Error)?.message || "Something went wrong"}</p>
+            <p className="text-ink-500 mb-4">{(error as Error)?.message || "Something went wrong"}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition"
+              className="px-4 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition"
             >
               Try Again
             </button>
@@ -98,8 +98,8 @@ export default function ProductsPageClient() {
         {!isLoading && !isError && products.length === 0 && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
-            <h2 className="text-xl font-semibold text-gray-700 mb-2">No products found</h2>
-            <p className="text-gray-500">
+            <h2 className="text-xl font-semibold text-ink-700 mb-2">No products found</h2>
+            <p className="text-ink-500">
               {search || category
                 ? "Try adjusting your search or filters."
                 : "Check back soon for new arrivals!"}
@@ -107,7 +107,7 @@ export default function ProductsPageClient() {
             {(search || category) && (
               <button
                 onClick={() => { setSearch(""); setCategory(""); setPage(1); }}
-                className="mt-4 px-4 py-2 text-pink-600 underline hover:text-pink-700"
+                className="mt-4 px-4 py-2 text-brand-600 underline hover:text-brand-700"
               >
                 Clear filters
               </button>
@@ -126,8 +126,8 @@ export default function ProductsPageClient() {
 
             {/* Background refetch indicator */}
             {isFetching && !isLoading && (
-              <div className="fixed bottom-4 right-4 bg-white border border-gray-200 shadow-lg rounded-full px-4 py-2 text-sm text-gray-600 flex items-center gap-2 z-50">
-                <div className="w-3 h-3 border-2 border-pink-600 border-t-transparent rounded-full animate-spin" />
+              <div className="fixed bottom-4 right-4 bg-surface border border-ink-200 shadow-lg rounded-full px-4 py-2 text-sm text-ink-600 flex items-center gap-2 z-50">
+                <div className="w-3 h-3 border-2 border-brand-600 border-t-transparent rounded-full animate-spin" />
                 Updating...
               </div>
             )}

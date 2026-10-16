@@ -41,7 +41,7 @@ export default function BramaLanding() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600"
+            className="theme-fixed fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}

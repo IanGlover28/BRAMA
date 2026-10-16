@@ -48,7 +48,7 @@ export default function ReviewForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 mt-4">
-      <label className="text-sm font-medium text-gray-700 space-y-1 block">
+      <label className="text-sm font-medium text-ink-700 space-y-1 block">
         Your rating
         <StarRating value={rating} onChange={setRating} size={24} />
       </label>
@@ -57,7 +57,7 @@ export default function ReviewForm({
         placeholder="Review title (optional)"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+        className="w-full border border-ink-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300"
       />
       <textarea
         rows={3}
@@ -65,12 +65,12 @@ export default function ReviewForm({
         placeholder="Share your experience with this product (optional)"
         value={body}
         onChange={(e) => setBody(e.target.value)}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+        className="w-full border border-ink-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300"
       />
       <button
         type="submit"
         disabled={saving}
-        className="bg-pink-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-pink-700 transition disabled:bg-pink-400"
+        className="bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-700 transition disabled:bg-brand-400"
       >
         {saving ? "Submitting..." : "Submit Review"}
       </button>

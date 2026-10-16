@@ -11,7 +11,7 @@ export const metadata = {
 export default function ProductsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gray-50 p-8 pt-24">
+      <div className="min-h-screen bg-ink-50 p-8 pt-24">
         <div className="max-w-7xl mx-auto">
           <Loader count={12} />
         </div>

@@ -121,7 +121,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-ink-50 pt-24 pb-16 px-4">
       <JsonLd data={productJsonLd} />
       <TrackViewItem
         product={{
@@ -132,10 +132,10 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
           category: product.category,
         }}
       />
-      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
+      <div className="max-w-6xl mx-auto bg-surface rounded-3xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Product Image */}
-          <div className="relative h-[320px] sm:h-[420px] lg:h-[560px] bg-gradient-to-br from-pink-50 via-white to-pink-100/60 flex items-center justify-center overflow-hidden">
+          <div className="relative h-[320px] sm:h-[420px] lg:h-[560px] bg-gradient-to-br from-brand-50 via-surface to-brand-100/60 flex items-center justify-center overflow-hidden">
             <ProductImage src={imageSrc} alt={product.name} />
 
             {/* Wishlist heart */}
@@ -145,14 +145,14 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
 
             {/* BEST SELLER Badge */}
             {product.stock > 40 && (
-              <span className="absolute top-4 right-4 z-20 bg-pink-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+              <span className="absolute top-4 right-4 z-20 bg-brand-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
                 BEST SELLER
               </span>
             )}
 
             {/* Category chip */}
-            <span className="absolute bottom-4 left-4 z-20 inline-flex items-center gap-1.5 bg-white/80 backdrop-blur-sm text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
-              <Tag size={12} className="text-pink-600" />
+            <span className="absolute bottom-4 left-4 z-20 inline-flex items-center gap-1.5 bg-surface/80 backdrop-blur-sm text-ink-700 text-xs font-semibold px-3 py-1.5 rounded-full shadow-sm">
+              <Tag size={12} className="text-brand-600" />
               {product.category.replace(/-/g, " ")}
             </span>
           </div>
@@ -160,26 +160,26 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
           {/* Product Details */}
           <div className="p-6 sm:p-10 flex flex-col justify-center">
             {/* Breadcrumb */}
-            <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5 min-w-0">
-              <Link href="/" className="hover:text-pink-600 transition-colors shrink-0">
+            <nav className="text-xs text-ink-500 mb-4 flex items-center gap-1.5 min-w-0">
+              <Link href="/" className="hover:text-brand-600 transition-colors shrink-0">
                 Home
               </Link>
               <span>/</span>
-              <Link href="/products" className="hover:text-pink-600 transition-colors shrink-0">
+              <Link href="/products" className="hover:text-brand-600 transition-colors shrink-0">
                 Products
               </Link>
               <span>/</span>
-              <span className="text-gray-700 font-medium truncate">{product.name}</span>
+              <span className="text-ink-700 font-medium truncate">{product.name}</span>
             </nav>
 
             {product.brand && (
-              <span className="self-start inline-flex items-center gap-1.5 bg-pink-50 text-pink-700 text-xs font-bold px-3 py-1.5 rounded-full mb-3">
+              <span className="self-start inline-flex items-center gap-1.5 bg-brand-50 text-brand-700 text-xs font-bold px-3 py-1.5 rounded-full mb-3">
                 <Store size={12} />
                 {product.brand}
               </span>
             )}
 
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight mb-3">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-ink-900 leading-tight mb-3">
               {product.name}
             </h1>
 
@@ -187,7 +187,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             {avgRating ? (
               <div className="flex items-center gap-2 mb-4">
                 <StarRating value={avgRating} size={16} />
-                <span className="text-sm text-gray-500 font-medium">
+                <span className="text-sm text-ink-500 font-medium">
                   {avgRating.toFixed(1)} ({reviews.length} review
                   {reviews.length !== 1 ? "s" : ""})
                 </span>
@@ -195,7 +195,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             ) : (
               <div className="flex items-center gap-2 mb-4 text-amber-500">
                 <Star size={16} fill="currentColor" />
-                <span className="text-sm font-medium text-gray-500">
+                <span className="text-sm font-medium text-ink-500">
                   {product.stock > 40 ? "New" : "Popular"}
                 </span>
               </div>
@@ -203,7 +203,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
 
             {/* Price & Stock */}
             <div className="flex items-center gap-4 mb-6">
-              <p className="text-4xl font-extrabold text-pink-600">
+              <p className="text-4xl font-extrabold text-brand-600">
                 ₵{product.price.toFixed(2)}
               </p>
               {product.stock > 0 ? (
@@ -218,7 +218,7 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             </div>
 
             {/* Description */}
-            <p className="text-gray-600 leading-relaxed mb-8">
+            <p className="text-ink-600 leading-relaxed mb-8">
               {product.description ||
                 "Premium .BRAMA product with top-tier quality and satisfaction guaranteed."}
             </p>
@@ -226,16 +226,16 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
             <ProductPurchaseOptions product={product} />
 
             {/* Meta chips */}
-            <div className="pt-6 mt-8 border-t border-gray-100 flex flex-wrap gap-2 text-xs font-medium text-gray-500">
-              <span className="bg-gray-100 px-3 py-1.5 rounded-full">
+            <div className="pt-6 mt-8 border-t border-ink-100 flex flex-wrap gap-2 text-xs font-medium text-ink-500">
+              <span className="bg-ink-100 px-3 py-1.5 rounded-full">
                 SKU: {product.id.slice(0, 8).toUpperCase()}
               </span>
               {product.brand && (
-                <span className="bg-gray-100 px-3 py-1.5 rounded-full">
+                <span className="bg-ink-100 px-3 py-1.5 rounded-full">
                   Brand: {product.brand}
                 </span>
               )}
-              <span className="bg-gray-100 px-3 py-1.5 rounded-full capitalize">
+              <span className="bg-ink-100 px-3 py-1.5 rounded-full capitalize">
                 Category: {product.category.replace(/-/g, " ")}
               </span>
             </div>

@@ -149,12 +149,12 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative overflow-y-auto max-h-[90vh]"
+            className="bg-surface rounded-3xl shadow-2xl w-full max-w-lg relative overflow-y-auto max-h-[90vh]"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 pb-4 sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 z-10 rounded-t-3xl">
-              <h2 className="text-xl font-extrabold text-gray-900 flex items-center gap-3">
-                <span className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-50 text-pink-600">
+            <div className="flex items-center justify-between p-6 pb-4 sticky top-0 bg-surface/95 backdrop-blur-sm border-b border-ink-100 z-10 rounded-t-3xl">
+              <h2 className="text-xl font-extrabold text-ink-900 flex items-center gap-3">
+                <span className="flex items-center justify-center h-10 w-10 rounded-full bg-brand-50 text-brand-600">
                   <Lock size={18} />
                 </span>
                 Confirm Your Order
@@ -162,7 +162,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               <button
                 onClick={onClose}
                 aria-label="Close checkout"
-                className="flex items-center justify-center h-10 w-10 rounded-full bg-pink-600 text-white shadow-md hover:bg-pink-700 transition-colors"
+                className="flex items-center justify-center h-10 w-10 rounded-full bg-brand-600 text-white shadow-md hover:bg-brand-700 transition-colors"
               >
                 <X size={20} />
               </button>
@@ -170,9 +170,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
             <div className="p-6 pt-5 space-y-5">
               {/* Order Summary */}
-              <div className="bg-gray-50 rounded-2xl border border-gray-100 p-5">
-                <h3 className="font-bold mb-3 flex items-center gap-2 text-gray-900">
-                  <span className="flex items-center justify-center h-7 w-7 rounded-full bg-white text-pink-600 shadow-sm">
+              <div className="bg-ink-50 rounded-2xl border border-ink-100 p-5">
+                <h3 className="font-bold mb-3 flex items-center gap-2 text-ink-900">
+                  <span className="flex items-center justify-center h-7 w-7 rounded-full bg-surface text-brand-600 shadow-sm">
                     <ShoppingCart size={14} />
                   </span>
                   Order Summary
@@ -180,32 +180,32 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                 <div className="space-y-1.5">
                   {cartItems.map((item) => (
                     <div key={item.id} className="flex justify-between items-center text-sm">
-                      <span className="text-gray-700">
-                        {item.name} <span className="text-gray-400">x{item.quantity}</span>
+                      <span className="text-ink-700">
+                        {item.name} <span className="text-ink-400">x{item.quantity}</span>
                       </span>
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-ink-900">
                         ₵{(item.price * item.quantity).toFixed(2)}
                       </span>
                     </div>
                   ))}
                 </div>
-                <hr className="my-3 border-gray-200" />
+                <hr className="my-3 border-ink-200" />
                 <div className="space-y-1.5 text-sm">
-                  <p className="flex justify-between text-gray-600">
+                  <p className="flex justify-between text-ink-600">
                     <span>Subtotal</span> <span>₵{subtotal.toFixed(2)}</span>
                   </p>
-                  <p className="flex justify-between text-gray-600">
+                  <p className="flex justify-between text-ink-600">
                     <span>Delivery Fee</span> <span>₵{deliveryFee.toFixed(2)}</span>
                   </p>
                   {discount > 0 && (
-                    <p className="flex justify-between text-pink-600 font-medium">
+                    <p className="flex justify-between text-brand-600 font-medium">
                       <span>Promo Discount</span> <span>-₵{discount.toFixed(2)}</span>
                     </p>
                   )}
                 </div>
-                <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
-                  <span className="font-bold text-gray-900">Total</span>
-                  <span className="text-2xl font-extrabold text-pink-600">
+                <div className="flex justify-between items-center mt-3 pt-3 border-t border-ink-200">
+                  <span className="font-bold text-ink-900">Total</span>
+                  <span className="text-2xl font-extrabold text-brand-600">
                     ₵{finalTotal.toFixed(2)}
                   </span>
                 </div>
@@ -213,15 +213,15 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
               {/* Promo Code */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Tag size={15} className="text-pink-600" /> Promo Code
+                <label className="text-sm font-semibold text-ink-700 mb-1.5 flex items-center gap-1.5">
+                  <Tag size={15} className="text-brand-600" /> Promo Code
                 </label>
                 <input
                   type="text"
                   value={promo}
                   onChange={(e) => setPromo(e.target.value)}
                   placeholder="Enter promo code"
-                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                  className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                 />
                 {discount > 0 && (
                   <p className="text-xs text-green-600 mt-1 font-medium">
@@ -234,17 +234,17 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               {isGuest && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-gray-700">Your details</h3>
+                    <h3 className="text-sm font-semibold text-ink-700">Your details</h3>
                     <Link
                       href="/sign-in?redirect_url=/cart"
-                      className="text-xs font-semibold text-pink-600 underline underline-offset-4 hover:text-pink-700"
+                      className="text-xs font-semibold text-brand-600 underline underline-offset-4 hover:text-brand-700"
                     >
                       Have an account? Sign in
                     </Link>
                   </div>
                   <label className="block">
-                    <span className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1.5">
-                      <UserRound size={13} className="text-pink-600" /> Full name
+                    <span className="text-xs font-medium text-ink-600 mb-1 flex items-center gap-1.5">
+                      <UserRound size={13} className="text-brand-600" /> Full name
                     </span>
                     <input
                       type="text"
@@ -252,12 +252,12 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       value={guestName}
                       onChange={(e) => setGuestName(e.target.value)}
                       placeholder="e.g. Ama Mensah"
-                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                      className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                     />
                   </label>
                   <label className="block">
-                    <span className="text-xs font-medium text-gray-600 mb-1 flex items-center gap-1.5">
-                      <Mail size={13} className="text-pink-600" /> Email for your receipt
+                    <span className="text-xs font-medium text-ink-600 mb-1 flex items-center gap-1.5">
+                      <Mail size={13} className="text-brand-600" /> Email for your receipt
                     </span>
                     <input
                       type="email"
@@ -265,7 +265,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                       value={guestEmail}
                       onChange={(e) => setGuestEmail(e.target.value)}
                       placeholder="you@example.com"
-                      className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                      className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                     />
                   </label>
                 </div>
@@ -273,9 +273,9 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
               {/* Phone - required for guests so the rider can call */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Phone size={15} className="text-pink-600" /> Phone number
-                  {!isGuest && <span className="text-xs font-normal text-gray-400">(optional)</span>}
+                <label className="text-sm font-semibold text-ink-700 mb-1.5 flex items-center gap-1.5">
+                  <Phone size={15} className="text-brand-600" /> Phone number
+                  {!isGuest && <span className="text-xs font-normal text-ink-400">(optional)</span>}
                 </label>
                 <input
                   type="tel"
@@ -283,24 +283,24 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="e.g. 055 211 9400"
-                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                  className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                 />
               </div>
 
               {/* Delivery Info */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-1.5 flex items-center gap-1.5">
-                  <Truck size={15} className="text-pink-600" /> Delivery Destination
+                <label className="text-sm font-semibold text-ink-700 mb-1.5 flex items-center gap-1.5">
+                  <Truck size={15} className="text-brand-600" /> Delivery Destination
                 </label>
                 <input
                   type="text"
                   value={delivery}
                   onChange={(e) => setDelivery(e.target.value)}
                   placeholder="House number, street, area, city"
-                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                  className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                 />
                 {!delivery.trim() && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-ink-500 mt-1">
                     Enter the address where we should deliver your order.
                   </p>
                 )}
@@ -308,21 +308,21 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
               {/* Order Notes */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                <label className="block text-sm font-semibold text-ink-700 mb-1.5">
                   Order Description
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Add delivery notes or preferences..."
-                  className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-400"
+                  className="w-full rounded-xl border border-ink-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400"
                   rows={3}
                 />
               </div>
 
               <button
                 onClick={onClose}
-                className="block mx-auto text-sm font-semibold text-pink-600 underline underline-offset-4 hover:text-pink-700"
+                className="block mx-auto text-sm font-semibold text-brand-600 underline underline-offset-4 hover:text-brand-700"
               >
                 Modify Cart
               </button>
@@ -331,7 +331,7 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               <button
                 onClick={handleCheckout}
                 disabled={loading || !isLoaded}
-                className="w-full bg-pink-600 text-white py-3.5 rounded-full font-bold text-base hover:bg-pink-700 transition disabled:bg-pink-400 flex items-center justify-center gap-2 shadow-lg shadow-pink-600/25"
+                className="w-full bg-brand-600 text-white py-3.5 rounded-full font-bold text-base hover:bg-brand-700 transition disabled:bg-brand-400 flex items-center justify-center gap-2 shadow-lg shadow-brand-600/25"
               >
                 {loading ? 'Taking you to Paystack...' : (<><Lock size={18} /> {isGuest ? 'Pay as guest' : 'Confirm Order'}</>)}
               </button>

@@ -27,13 +27,13 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
-        className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        className="px-3 py-2 text-sm rounded-lg border border-ink-300 hover:bg-ink-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
         Prev
       </button>
       {pages.map((p, i) =>
         p === "..." ? (
-          <span key={`dots-${i}`} className="px-2 py-2 text-sm text-gray-400">
+          <span key={`dots-${i}`} className="px-2 py-2 text-sm text-ink-400">
             ...
           </span>
         ) : (
@@ -42,8 +42,8 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
             onClick={() => onPageChange(p)}
             className={`px-3 py-2 text-sm rounded-lg border transition ${
               p === page
-                ? "bg-pink-600 text-white border-pink-600"
-                : "border-gray-300 hover:bg-gray-50"
+                ? "bg-brand-600 text-white border-brand-600"
+                : "border-ink-300 hover:bg-ink-50"
             }`}
           >
             {p}
@@ -53,7 +53,7 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
-        className="px-3 py-2 text-sm rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+        className="px-3 py-2 text-sm rounded-lg border border-ink-300 hover:bg-ink-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
         Next
       </button>

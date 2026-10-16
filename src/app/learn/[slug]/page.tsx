@@ -51,21 +51,21 @@ export default async function TutorialPage({
   if (!tutorial) return notFound();
 
   return (
-    <main className="min-h-screen bg-gray-50 pt-24 pb-16 px-4">
+    <main className="min-h-screen bg-ink-50 pt-24 pb-16 px-4">
       <div className="max-w-3xl mx-auto">
-        <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5">
-          <Link href="/" className="hover:text-pink-600 transition-colors">
+        <nav className="text-xs text-ink-500 mb-4 flex items-center gap-1.5">
+          <Link href="/" className="hover:text-brand-600 transition-colors">
             Home
           </Link>
           <span>/</span>
-          <Link href="/learn" className="hover:text-pink-600 transition-colors">
+          <Link href="/learn" className="hover:text-brand-600 transition-colors">
             Learn
           </Link>
           <span>/</span>
-          <span className="text-gray-700 font-medium truncate">{tutorial.title}</span>
+          <span className="text-ink-700 font-medium truncate">{tutorial.title}</span>
         </nav>
 
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-surface rounded-3xl shadow-lg border border-ink-100 overflow-hidden">
           <div className="aspect-video bg-black">
             <iframe
               src={tutorial.video}
@@ -77,23 +77,23 @@ export default async function TutorialPage({
           </div>
 
           <div className="p-6 sm:p-8">
-            <span className="inline-flex items-center bg-pink-50 text-pink-700 px-3 py-1 rounded-full text-xs font-bold mb-4">
+            <span className="inline-flex items-center bg-brand-50 text-brand-700 px-3 py-1 rounded-full text-xs font-bold mb-4">
               {tutorial.category}
             </span>
             <div className="flex flex-wrap items-center gap-3 mb-3">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-ink-900 leading-tight">
                 {tutorial.title}
               </h1>
-              <CopyLinkButton path={`/learn/${tutorial.slug}`} className="bg-white" />
+              <CopyLinkButton path={`/learn/${tutorial.slug}`} className="bg-surface" />
             </div>
-            <p className="text-gray-600 mb-8">{tutorial.summary}</p>
+            <p className="text-ink-600 mb-8">{tutorial.summary}</p>
 
             <div className="prose prose-pink max-w-none" dangerouslySetInnerHTML={{ __html: sanitizeHtml(tutorial.content) }} />
 
-            <div className="mt-10 pt-6 border-t border-gray-100">
+            <div className="mt-10 pt-6 border-t border-ink-100">
               <Link
                 href="/learn"
-                className="inline-flex items-center gap-2 bg-pink-600 text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-pink-700 transition"
+                className="inline-flex items-center gap-2 bg-brand-600 text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-brand-700 transition"
               >
                 ← Back to Learn
               </Link>

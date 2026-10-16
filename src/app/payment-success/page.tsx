@@ -99,8 +99,8 @@ function PaymentSuccessContent() {
   if (outcome.kind === "verifying") {
     return (
       <div className="h-screen flex flex-col items-center justify-center text-center px-6">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-700 mb-4"></div>
-        <p className="text-gray-700">Confirming your payment...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-700 mb-4"></div>
+        <p className="text-ink-700">Confirming your payment...</p>
       </div>
     );
   }
@@ -108,24 +108,24 @@ function PaymentSuccessContent() {
   if (outcome.kind === "paid") {
     return (
       <div className="h-screen flex flex-col items-center justify-center text-center px-6">
-        <h1 className="text-3xl font-bold text-pink-700 mb-4">Thank you - your order is confirmed</h1>
-        <p className="text-gray-700 mb-2">
+        <h1 className="text-3xl font-bold text-brand-700 mb-4">Thank you - your order is confirmed</h1>
+        <p className="text-ink-700 mb-2">
           {outcome.receiptEmail
             ? <>We&apos;ve sent your receipt to <strong>{outcome.receiptEmail}</strong>.</>
             : <>We&apos;ve emailed your receipt.</>}
         </p>
-        <p className="text-sm text-gray-500 mb-6">Order reference: {outcome.reference}</p>
+        <p className="text-sm text-ink-500 mb-6">Order reference: {outcome.reference}</p>
         <div className="flex flex-wrap justify-center gap-4">
           {outcome.guest ? (
-            <Link href="/sign-up" className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">
+            <Link href="/sign-up" className="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">
               Create an account to track orders
             </Link>
           ) : (
-            <Link href="/orders" className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">
+            <Link href="/orders" className="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">
               View Orders
             </Link>
           )}
-          <Link href="/products" className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
+          <Link href="/products" className="px-6 py-2 bg-ink-200 text-ink-700 rounded-lg hover:bg-ink-300">
             Continue Shopping
           </Link>
         </div>
@@ -144,29 +144,29 @@ function PaymentSuccessContent() {
     <div className="h-screen flex flex-col items-center justify-center text-center px-6">
       <h1
         className={`text-3xl font-bold mb-4 ${
-          outcome.kind === "failed" ? "text-red-700" : "text-gray-900"
+          outcome.kind === "failed" ? "text-red-700" : "text-ink-900"
         }`}
       >
         {heading}
       </h1>
-      <p className="text-gray-700 mb-4 max-w-md">{outcome.message}</p>
+      <p className="text-ink-700 mb-4 max-w-md">{outcome.message}</p>
       <div className="flex flex-wrap justify-center gap-4 mt-2">
         {outcome.kind === "pending" || outcome.kind === "error" ? (
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700"
+            className="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700"
           >
             Check again
           </button>
         ) : (
-          <Link href="/cart" className="px-6 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700">
+          <Link href="/cart" className="px-6 py-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700">
             Back to cart
           </Link>
         )}
         <a
           href={`mailto:${CONTACT_EMAIL}`}
-          className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+          className="px-6 py-2 bg-ink-200 text-ink-700 rounded-lg hover:bg-ink-300"
         >
           Contact us
         </a>

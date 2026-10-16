@@ -23,7 +23,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const imageSrc = imageError ? "/placeholder.png" : product.image;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 relative group">
+    <div className="bg-surface border border-ink-100 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1 relative group">
 
       {/* Wishlist heart */}
       <div className="absolute top-3 left-3 z-20">
@@ -32,7 +32,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* BEST SELLER Badge */}
       {product.stock > 40 && (
-        <div className="absolute top-3 right-3 bg-pink-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10 shadow-md">
+        <div className="absolute top-3 right-3 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10 shadow-md">
           BEST SELLER
         </div>
       )}
@@ -40,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       {/* Link the image area for quick viewing */}
       <Link href={`/products/${product.id}`}>
         {/* Product Image */}
-        <div className="relative w-full h-52 flex justify-center items-center p-4 bg-pink-50/70 overflow-hidden">
+        <div className="relative w-full h-52 flex justify-center items-center p-4 bg-brand-50/70 overflow-hidden">
           <Image
             src={imageSrc}
             alt={product.name}
@@ -56,15 +56,15 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-7 text-left">
      
         <Link href={`/products/${product.id}`} className="block">
-          <h2 className="text-lg font-bold text-gray-900 leading-snug mb-2 hover:text-pink-700 transition">
+          <h2 className="text-lg font-bold text-ink-900 leading-snug mb-2 hover:text-brand-700 transition">
             {product.name}
           </h2>
         </Link>
         
-        <p className="text-sm text-gray-500 mb-2">{productType}</p>
+        <p className="text-sm text-ink-500 mb-2">{productType}</p>
 
         {/* Rating & Size/Volume */}
-        <div className="flex justify-between items-center mb-4 pt-2 border-t border-gray-100">
+        <div className="flex justify-between items-center mb-4 pt-2 border-t border-ink-100">
           <div className="flex items-center gap-1 text-sm font-medium text-amber-500">
             <Star size={16} fill="currentColor" />
             <span>{product.stock > 40 ? "New" : "Popular"}</span>
@@ -76,7 +76,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         {/* Price & Add to Cart Button */}
         <div className="flex justify-between items-center mt-3">
-          <p className="text-md font-extrabold text-gray-900">
+          <p className="text-md font-extrabold text-ink-900">
             ₵{product.price.toFixed(2)}
           </p>
 
@@ -98,8 +98,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             title={outOfStock ? "Out of stock" : undefined}
             className={`flex items-center justify-center p-2 rounded-full transition-all duration-200 ${
               outOfStock
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-pink-600 text-white hover:bg-pink-700 shadow-md hover:shadow-lg"
+                ? "bg-ink-200 text-ink-400 cursor-not-allowed"
+                : "bg-brand-600 text-white hover:bg-brand-700 shadow-md hover:shadow-lg"
             }`}
           >
             <ShoppingCart size={18} />
@@ -109,7 +109,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Simplified View Button/Link */}
         <Link
             href={`/products/${product.id}`}
-            className="text-xs text-gray-500 mt-2 block hover:text-pink-600 transition text-center"
+            className="text-xs text-ink-500 mt-2 block hover:text-brand-600 transition text-center"
         >
             View Details
         </Link>

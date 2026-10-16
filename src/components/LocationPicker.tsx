@@ -72,12 +72,12 @@ const handleSaveLocation = (loc: string) => {
       {/* Location banner — only on the landing page, floating beneath the navbar */}
       {isHome && location && (
         <div className="fixed left-1/2 -translate-x-1/2 top-[158px] md:top-[152px] z-40 px-4 w-full flex justify-center pointer-events-none">
-          <div className="pointer-events-auto inline-flex items-center gap-2 bg-white/90 backdrop-blur-md border border-white/50 shadow-lg rounded-full pl-3 pr-1.5 py-1.5 max-w-full">
-            <MapPin size={14} className="text-pink-600 shrink-0" />
-            <span className="text-sm text-gray-700 truncate">{location}</span>
+          <div className="pointer-events-auto inline-flex items-center gap-2 bg-surface/90 backdrop-blur-md border border-white/50 shadow-lg rounded-full pl-3 pr-1.5 py-1.5 max-w-full">
+            <MapPin size={14} className="text-brand-600 shrink-0" />
+            <span className="text-sm text-ink-700 truncate">{location}</span>
             <button
               onClick={() => setShowModal(true)}
-              className="shrink-0 bg-pink-600 text-white text-xs font-semibold px-3 py-1 rounded-full hover:bg-pink-700 transition-colors"
+              className="shrink-0 bg-brand-600 text-white text-xs font-semibold px-3 py-1 rounded-full hover:bg-brand-700 transition-colors"
             >
               Change
             </button>
@@ -102,39 +102,39 @@ const handleSaveLocation = (loc: string) => {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 8 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="bg-white rounded-3xl shadow-2xl p-6 sm:p-7 w-full max-w-sm sm:max-w-md relative"
+              className="bg-surface rounded-3xl shadow-2xl p-6 sm:p-7 w-full max-w-sm sm:max-w-md relative"
             >
               <button
                 onClick={() => setShowModal(false)}
                 aria-label="Close location picker"
-                className="absolute top-4 right-4 flex items-center justify-center h-9 w-9 rounded-full bg-gray-100 text-gray-500 hover:bg-pink-600 hover:text-white transition-colors"
+                className="absolute top-4 right-4 flex items-center justify-center h-9 w-9 rounded-full bg-ink-100 text-ink-500 hover:bg-brand-600 hover:text-white transition-colors"
               >
                 <X size={16} />
               </button>
 
-              <span className="flex items-center justify-center h-12 w-12 rounded-full bg-pink-50 text-pink-600 mb-4">
+              <span className="flex items-center justify-center h-12 w-12 rounded-full bg-brand-50 text-brand-600 mb-4">
                 <MapPin size={22} />
               </span>
 
-              <h2 className="text-xl font-extrabold text-gray-900 mb-2">
+              <h2 className="text-xl font-extrabold text-ink-900 mb-2">
                 Set Your Location
               </h2>
-              <p className="text-sm text-gray-600 text-center mb-4">
+              <p className="text-sm text-ink-600 text-center mb-4">
                 We use your location to ensure smooth delivery process.
               </p>
 
               <div className="flex flex-col gap-3">
                 <button
                   onClick={detectLocation}
-                  className="flex items-center justify-center gap-2 bg-pink-600 text-white py-3 rounded-full font-semibold hover:bg-pink-700 transition shadow-md shadow-pink-600/25"
+                  className="flex items-center justify-center gap-2 bg-brand-600 text-white py-3 rounded-full font-semibold hover:bg-brand-700 transition shadow-md shadow-brand-600/25"
                 >
                  Detect current location
                 </button>
 
-                <div className="flex items-center gap-1.5 text-xs text-gray-400 uppercase tracking-wider">
-                  <span className="h-px flex-1 bg-gray-200" />
+                <div className="flex items-center gap-1.5 text-xs text-ink-400 uppercase tracking-wider">
+                  <span className="h-px flex-1 bg-ink-200" />
                   or type it in
-                  <span className="h-px flex-1 bg-gray-200" />
+                  <span className="h-px flex-1 bg-ink-200" />
                 </div>
 
                 <input
@@ -142,12 +142,12 @@ const handleSaveLocation = (loc: string) => {
                   value={manualInput}
                   onChange={(e) => setManualInput(e.target.value)}
                   placeholder="Enter your exact Destination"
-                  className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
 
                 <button
                   onClick={() => handleSaveLocation(manualInput)}
-                  className="flex items-center justify-center gap-2 bg-gray-900 text-white py-3 rounded-full font-semibold hover:bg-gray-800 transition"
+                  className="flex items-center justify-center gap-2 bg-ink-900 text-white py-3 rounded-full font-semibold hover:bg-ink-800 transition"
                 >
                   <Check size={16} />
                   Save Location
