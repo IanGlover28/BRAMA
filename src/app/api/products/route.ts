@@ -59,6 +59,6 @@ export async function GET(req: NextRequest) {
     return response;
   } catch (err) {
     console.error("[api/products] failed:", err);
-    return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't load products right now. Please refresh the page." }, { status: 500 });
   }
 }

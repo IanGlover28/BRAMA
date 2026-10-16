@@ -11,14 +11,13 @@ const isProtectedPage = createRouteMatcher([
 ]);
 
 // API routes that require an authenticated session. The Paystack webhook is
-// deliberately excluded - it authenticates via its own HMAC signature.
+// deliberately excluded - it authenticates via its own HMAC signature - and so
+// are initialize/verify, which also serve guest checkout and check access themselves.
 const isProtectedAPI = createRouteMatcher([
   "/api/orders(.*)",
   "/api/inbox(.*)",
   "/api/reviews(.*)",
   "/api/wishlist(.*)",
-  "/api/paystack/initialize(.*)",
-  "/api/paystack/verify(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

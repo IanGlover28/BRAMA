@@ -2,28 +2,29 @@
 
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, Clock } from "lucide-react";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from "@/lib/site";
 
 const CONTACT_METHODS = [
   {
     icon: Mail,
     title: "Email Support",
-    value: "no-reply@brama.com",
+    value: CONTACT_EMAIL,
     detail: "We reply within 24 hours.",
-    href: "mailto:no-reply@brama.com",
+    href: `mailto:${CONTACT_EMAIL}`,
   },
   {
     icon: Phone,
     title: "Call Us",
-    value: "+233 20 000 0000",
+    value: CONTACT_PHONE_DISPLAY,
     detail: "Mon–Sat, 9am–6pm GMT.",
-    href: "tel:+233200000000",
+    href: `tel:${CONTACT_PHONE_TEL}`,
   },
   {
     icon: MapPin,
     title: "Visit Us",
     value: "Accra, Ghana",
     detail: "By appointment only.",
-    href: "mailto:no-reply@brama.com",
+    href: `mailto:${CONTACT_EMAIL}`,
   },
 ];
 
@@ -35,7 +36,7 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const link = `mailto:no-reply@brama.com?subject=${encodeURIComponent(
+    const link = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
       subject || `Message from ${name}`
     )}&body=${encodeURIComponent(`${message}\n\n— ${name} (${email})`)}`;
     window.location.href = link;

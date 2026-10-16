@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const user = await currentUser();
   const email = user?.primaryEmailAddress?.emailAddress;
   if (!user || !email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Please sign in to continue." }, { status: 401 });
   }
 
   try {

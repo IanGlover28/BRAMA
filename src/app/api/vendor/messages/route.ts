@@ -5,7 +5,7 @@ import { getVendorSession } from "@/lib/vendor";
 export async function POST(req: Request) {
   const session = await getVendorSession();
   if (!session) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json({ error: "Only the BRAMA vendor account can do that." }, { status: 403 });
   }
 
   try {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { XCircle, Mail } from "lucide-react";
 import BackToAccount from "@/components/back-to-account";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 export default function CloseAccountPage() {
   const [confirming, setConfirming] = useState(false);
@@ -65,8 +66,8 @@ export default function CloseAccountPage() {
         <section className="mt-6 bg-pink-50 rounded-3xl border border-pink-100 p-6 text-sm text-gray-600 flex items-start gap-3">
           <Mail size={18} className="text-pink-600 shrink-0 mt-0.5" />
           Need help instead? Contact our support team at{" "}
-          <a href="mailto:no-reply@brama.com" className="text-pink-600 font-semibold hover:underline">
-            no-reply@brama.com
+          <a href={`mailto:${CONTACT_EMAIL}`} className="text-pink-600 font-semibold hover:underline">
+            {CONTACT_EMAIL}
           </a>
         </section>
       </div>

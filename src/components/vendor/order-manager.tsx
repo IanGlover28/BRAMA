@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast";
 import { CheckCircle, PackageCheck, XCircle } from "lucide-react";
 import StatusBadge from "@/components/status-badge";
 import StarRating from "@/components/star-rating";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 interface OrderItem {
   id: string;
@@ -68,13 +69,12 @@ export default function OrderManager({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to update order.");
+      await parseResponse(res, "Failed to update order.");
 
       toast.success(`Order ${status.toLowerCase()}.`);
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setUpdatingId(null);
     }

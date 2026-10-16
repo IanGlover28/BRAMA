@@ -1,21 +1,31 @@
 import { Resend } from "resend";
 import { VENDOR_EMAILS } from "@/lib/vendor";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, SITE_URL } from "@/lib/site";
+import { calcSubtotal, DELIVERY_FEE } from "@/lib/pricing";
 
-const SHOP_URL = "https://brama.com";
-const BRAND_PINK = "#DB2777";
-
-// Resend only sends from a domain verified in your Resend account. Once
-// brama.com is purchased, add it at https://resend.com/domains, add the DNS
-// records and verify — then the default no-reply@brama.com works. Override
-// with RESEND_FROM_EMAIL if needed.
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "Brama <no-reply@brama.com>";
+// Resend only sends from a verified domain - bramacosmetics.com is verified in Resend.
+// Replies go to the shop inbox, since the sending address has no mailbox.
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "BRAMA Cosmetics <orders@bramacosmetics.com>";
+const REPLY_TO = process.env.RESEND_REPLY_TO || "bramacosmetics@gmail.com";
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
-function logEmailError(scope: string, err: unknown) {
-  const msg = err instanceof Error ? err.message : "unknown error";
-  console.warn(`[email] ${scope} failed to send: ${msg}`);
-}
+// Brand palette - mirrors the site's terracotta rose on warm neutrals.
+const C = {
+  brand: "#A34A48",
+  brandDark: "#8A3E3D",
+  brandSoft: "#FDF6F5",
+  brandTint: "#FAE0DF",
+  ink: "#1F1A19",
+  inkSoft: "#4A413E",
+  muted: "#7D716C",
+  line: "#E7E0DD",
+  canvas: "#F6F1EF",
+  white: "#FFFFFF",
+};
+const SERIF = "'Playfair Display',Georgia,'Times New Roman',serif";
+const SANS = "Montserrat,'Helvetica Neue',Helvetica,Arial,sans-serif";
+const LOGO_URL = `${SITE_URL}/brama-logo.png`;
 
 export interface EmailOrderItem {
   name: string;
@@ -42,242 +52,251 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-export async function sendConfirmationEmail(to: string, name: string) {
+const cedis = (n: number) => `GH₵${n.toFixed(2)}`;
+
+/**
+ * Sends through Resend and logs failures. The SDK reports API errors (bad
+ * sender, unverified domain, rate limits) in `error` rather than throwing,
+ * so both paths have to be checked or failed emails vanish silently.
+ */
+async function send(scope: string, message: { to: string; subject: string; html: string; text: string }) {
   try {
-    await resend.emails.send({
-      from: FROM_EMAIL,
-      to,
-      subject: "Welcome to BRAMA — you're glowing already",
-      html: `
-        <div style="margin:0;padding:40px 16px;background-color:#F9FAFB;font-family:Helvetica,Arial,sans-serif;line-height:1.6;color:#111827;">
-          <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="max-width:560px;margin:0 auto;width:100%;">
-            <!-- Header -->
-            <tr>
-              <td style="background:linear-gradient(135deg,#DB2777 0%,#BE185D 100%);border-radius:18px 18px 0 0;padding:36px 40px 30px;text-align:center;">
-                <div style="display:inline-block;width:56px;height:56px;border-radius:50%;background:#fff;color:#DB2777;font-size:28px;font-weight:800;line-height:56px;text-align:center;">B</div>
-                <h1 style="color:#fff;font-size:26px;margin:16px 0 4px;letter-spacing:-0.5px;">Welcome to <span style="font-style:italic;color:#FBCFE8;">BRAMA</span></h1>
-                <p style="color:#FCE7F3;font-size:14px;margin:0;">Beauty, made for every story.</p>
-              </td>
-            </tr>
-
-            <!-- Body -->
-            <tr>
-              <td style="background:#ffffff;border-radius:0 0 18px 18px;padding:34px 40px;">
-                <p style="margin:0 0 14px;font-size:15px;">Hi ${escapeHtml(name)},</p>
-                <p style="margin:0 0 18px;font-size:15px;color:#4B5563;">
-                  Thank you for joining <strong style="color:#111827;">BRAMA</strong>. We create skincare,
-                  makeup and body care for every skin tone and every day — real, honest, glow-from-within beauty.
-                </p>
-
-                <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 24px;">
-                  <tr>
-                    <td style="background:#FFF1F5;border-radius:12px;padding:12px 16px;font-size:14px;color:#4B5563;">
-                      <strong style="color:#DB2777;">Shop skincare</strong> — cleansers, serums &amp; moisturizers for everyday rituals
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding:0 0 8px;">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td style="background:#FFF1F5;border-radius:12px;padding:12px 16px;font-size:14px;color:#4B5563;">
-                      <strong style="color:#DB2777;">Unlock makeup</strong> — inclusive shades, from natural every day to full glam
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding:0 0 8px;">&nbsp;</td>
-                  </tr>
-                  <tr>
-                    <td style="background:#FFF1F5;border-radius:12px;padding:12px 16px;font-size:14px;color:#4B5563;">
-                      <strong style="color:#DB2777;">Learn on our blog</strong> — free tutorials and tips at brama.com/learn
-                    </td>
-                  </tr>
-                </table>
-
-                <p style="margin:0 0 24px;font-size:15px;color:#4B5563;">
-                  Explore the collection, and don&rsquo;t forget — your first order ships fast, tracked, right here under the sun.
-                </p>
-
-                <table align="center" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 28px;">
-                  <tr>
-                    <td style="border-radius:999px;background:#DB2777;padding:0;">
-                      <a href="${SHOP_URL}" style="display:inline-block;padding:14px 36px;border-radius:999px;background:#DB2777;color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 6px 16px rgba(219,39,119,0.35);">
-                        Start Shopping
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-
-                <p style="margin:0;font-size:13px;color:#9CA3AF;text-align:center;">
-                  Questions? Just reply to this email — a real human is here to help.
-                </p>
-              </td>
-            </tr>
-
-            <!-- Footer -->
-            <tr>
-              <td style="padding:26px 16px 10px;text-align:center;color:#9CA3AF;font-size:12px;">
-                <p style="margin:0 0 4px;">
-                  <strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; no-reply@brama.com
-                </p>
-                <p style="margin:0;">You&rsquo;re receiving this because you created a BRAMA account.</p>
-              </td>
-            </tr>
-          </table>
-        </div>
-      `,
-    });
-  } catch {
-    // Silently fail - email is non-critical
+    const { error } = await resend.emails.send({ from: FROM_EMAIL, replyTo: REPLY_TO, ...message });
+    if (error) console.error(`[email] ${scope} rejected by Resend: ${error.name} - ${error.message}`);
+  } catch (err) {
+    console.error(`[email] ${scope} failed to send:`, err instanceof Error ? err.message : err);
   }
 }
 
-function orderItemsHtml(items: EmailOrderItem[]): string {
-  return items
-    .map(
-      (item) => `
-        <tr>
-          <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;font-size:14px;color:#1F2937;">${escapeHtml(item.name)}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;font-size:14px;color:#4B5563;text-align:center;">${item.quantity}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #F3F4F6;font-size:14px;color:#111827;text-align:right;font-weight:600;">₵${item.price.toFixed(2)}</td>
-        </tr>`
-    )
-    .join("");
-}
+// ---------------------------------------------------------------- layout ---
 
-function emailShell(inner: string): string {
+function button(href: string, label: string): string {
   return `
-    <div style="margin:0;padding:40px 16px;background-color:#F9FAFB;font-family:Helvetica,Arial,sans-serif;line-height:1.6;color:#111827;">
-      <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="max-width:560px;margin:0 auto;width:100%;">
-        <tr>
-          <td style="background:linear-gradient(135deg,#DB2777 0%,#BE185D 100%);border-radius:18px 18px 0 0;padding:30px 40px;text-align:center;">
-            <div style="display:inline-block;width:48px;height:48px;border-radius:50%;background:#fff;color:#DB2777;font-size:24px;font-weight:800;line-height:48px;text-align:center;">B</div>
-            <h1 style="color:#fff;font-size:22px;margin:12px 0 0;letter-spacing:-0.5px;">BRAMA</h1>
-            <p style="color:#FCE7F3;font-size:13px;margin:4px 0 0;">Beauty, made for every story.</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="background:#ffffff;border-radius:0 0 18px 18px;padding:32px 40px;">
-            ${inner}
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:24px 16px 8px;text-align:center;color:#9CA3AF;font-size:12px;">
-            <p style="margin:0;"><strong style="color:#DB2777;">BRAMA</strong> &bull; ${SHOP_URL} &bull; no-reply@brama.com</p>
-          </td>
-        </tr>
-      </table>
-    </div>
-  `;
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+      <tr>
+        <td style="border-radius:999px;background:${C.brand};">
+          <a href="${href}" style="display:inline-block;padding:14px 34px;border-radius:999px;background:${C.brand};color:${C.white};font-family:${SANS};font-size:14px;font-weight:700;letter-spacing:0.04em;text-decoration:none;">${label}</a>
+        </td>
+      </tr>
+    </table>`;
 }
 
-export async function sendOrderConfirmationEmail(
-  to: string,
-  name: string | null,
-  order: EmailOrder
-) {
-  try {
-    const itemsHtml = orderItemsHtml(order.items);
-    await resend.emails.send({
-      from: FROM_EMAIL,
-      to,
-      subject: `Your BRAMA order is confirmed — Ref ${order.reference ?? "BRAMA"}`.trim(),
-      html: emailShell(`
-        <p style="margin:0 0 14px;font-size:15px;">Hi ${escapeHtml(name || "there")},</p>
-        <p style="margin:0 0 20px;font-size:15px;color:#4B5563;">
-          Thank you! Your order has been received and is being prepared for delivery. Here&rsquo;s what you ordered:
-        </p>
-
-        <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 6px;border:1px solid #F3F4F6;border-radius:12px;overflow:hidden;">
-          <tr style="background:#FFF1F5;">
-            <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;">Item</td>
-            <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;text-align:center;">Qty</td>
-            <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;text-align:right;">Price</td>
-          </tr>
-          ${itemsHtml}
+function shell({ preheader, body, footnote }: { preheader: string; body: string; footnote: string }): string {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <title>BRAMA Cosmetics</title>
+</head>
+<body style="margin:0;padding:0;background:${C.canvas};">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:${C.canvas};">${escapeHtml(preheader)}&#8203;</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.canvas};">
+    <tr>
+      <td align="center" style="padding:32px 12px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
+          <!-- Brand header -->
           <tr>
-            <td colspan="2" style="padding:12px;border-top:1px solid #F3F4F6;font-size:15px;font-weight:700;color:#111827;">Total</td>
-            <td style="padding:12px;border-top:1px solid #F3F4F6;font-size:15px;font-weight:800;color:#DB2777;text-align:right;">₵${order.total.toFixed(2)}</td>
-          </tr>
-        </table>
-
-        ${order.shippingAddress ? `
-          <p style="margin:14px 0 4px;font-size:13px;font-weight:700;color:#374151;">Deliver to</p>
-          <p style="margin:0 0 20px;font-size:14px;color:#4B5563;">${escapeHtml(order.shippingAddress)}</p>` : ""}
-
-        ${order.note ? `
-          <p style="margin:0 0 20px;font-size:14px;color:#4B5563;"><strong style="color:#374151;">Your note:</strong> ${escapeHtml(order.note)}</p>` : ""}
-
-        <p style="margin:0 0 24px;font-size:14px;color:#4B5563;">
-          We&rsquo;ll keep you updated as your order moves through fulfillment. Questions? Just reply to this email.
-        </p>
-
-        <table align="center" cellpadding="0" cellspacing="0" role="presentation" style="margin:0;">
-          <tr>
-            <td style="border-radius:999px;background:${BRAND_PINK};padding:0;">
-              <a href="${SHOP_URL}/orders" style="display:inline-block;padding:14px 36px;border-radius:999px;background:${BRAND_PINK};color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 6px 16px rgba(219,39,119,0.35);">
-                View Your Orders
+            <td align="center" style="padding:0 0 22px;">
+              <a href="${SITE_URL}" style="text-decoration:none;">
+                <!-- The logo is pale pink on transparent, so it sits on a brand-colour disc. -->
+                <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 10px;">
+                  <tr>
+                    <td style="width:64px;height:64px;border-radius:50%;background:${C.brand};text-align:center;vertical-align:middle;">
+                      <img src="${LOGO_URL}" width="56" height="56" alt="BRAMA" style="display:block;margin:4px auto;">
+                    </td>
+                  </tr>
+                </table>
+                <span style="font-family:${SERIF};font-size:22px;letter-spacing:0.3em;color:${C.ink};">BRAMA</span>
               </a>
+              <div style="font-family:${SANS};font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:${C.muted};margin-top:4px;">Cosmetics</div>
+            </td>
+          </tr>
+          <!-- Card -->
+          <tr>
+            <td style="background:${C.white};border:1px solid ${C.line};border-radius:18px;overflow:hidden;">
+              <div style="height:4px;background:${C.brand};line-height:4px;font-size:0;">&nbsp;</div>
+              <div style="padding:36px 36px 32px;font-family:${SANS};color:${C.ink};font-size:15px;line-height:1.65;">
+                ${body}
+              </div>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:24px 16px 8px;font-family:${SANS};font-size:12px;line-height:1.7;color:${C.muted};">
+              <p style="margin:0 0 6px;">Questions? Reply to this email or reach us at
+                <a href="mailto:${CONTACT_EMAIL}" style="color:${C.brand};text-decoration:none;">${CONTACT_EMAIL}</a>
+                &middot; ${CONTACT_PHONE_DISPLAY}</p>
+              <p style="margin:0 0 6px;"><a href="${SITE_URL}" style="color:${C.inkSoft};text-decoration:none;font-weight:600;">bramacosmetics.com</a> &middot; Accra, Ghana</p>
+              <p style="margin:0;">${footnote}</p>
             </td>
           </tr>
         </table>
-      `),
-    });
-  } catch (err) {
-    logEmailError("Order confirmation email", err);
-  }
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
+function itemsTable(order: EmailOrder): string {
+  const subtotal = calcSubtotal(order.items);
+  const discount = Math.max(0, parseFloat((subtotal + DELIVERY_FEE - order.total).toFixed(2)));
+  const rows = order.items
+    .map(
+      (item) => `
+        <tr>
+          <td style="padding:14px 0;border-bottom:1px solid ${C.line};font-size:14px;color:${C.ink};">
+            ${escapeHtml(item.name)}
+            <div style="font-size:12px;color:${C.muted};margin-top:2px;">Qty ${item.quantity} &times; ${cedis(item.price)}</div>
+          </td>
+          <td align="right" style="padding:14px 0;border-bottom:1px solid ${C.line};font-size:14px;font-weight:600;color:${C.ink};white-space:nowrap;">
+            ${cedis(item.price * item.quantity)}
+          </td>
+        </tr>`
+    )
+    .join("");
+  const line = (label: string, value: string, color = C.inkSoft) => `
+        <tr>
+          <td style="padding:4px 0;font-size:13px;color:${C.muted};">${label}</td>
+          <td align="right" style="padding:4px 0;font-size:13px;color:${color};">${value}</td>
+        </tr>`;
+  return `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 8px;">
+      ${rows}
+      <tr><td colspan="2" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      ${line("Subtotal", cedis(subtotal))}
+      ${line("Delivery", cedis(DELIVERY_FEE))}
+      ${discount > 0 ? line("Discount", `&minus;${cedis(discount)}`, C.brand) : ""}
+      <tr>
+        <td style="padding:12px 0 0;border-top:1px solid ${C.line};font-size:15px;font-weight:700;color:${C.ink};">Total paid</td>
+        <td align="right" style="padding:12px 0 0;border-top:1px solid ${C.line};font-family:${SERIF};font-size:22px;color:${C.brand};">${cedis(order.total)}</td>
+      </tr>
+    </table>`;
+}
+
+function detailBlock(label: string, value: string): string {
+  return `
+    <td valign="top" style="padding:16px 18px;background:${C.brandSoft};border-radius:12px;">
+      <div style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:${C.brand};font-weight:700;margin-bottom:6px;">${label}</div>
+      <div style="font-size:14px;color:${C.inkSoft};line-height:1.55;">${value}</div>
+    </td>`;
+}
+
+function itemsText(order: EmailOrder): string {
+  return order.items.map((i) => `- ${i.name} x${i.quantity}: ${cedis(i.price * i.quantity)}`).join("\n");
+}
+
+// ---------------------------------------------------------------- emails ---
+
+export async function sendConfirmationEmail(to: string, name: string) {
+  const html = shell({
+    preheader: "Your BRAMA account is ready - here's where to start.",
+    footnote: "You're receiving this because you created an account at bramacosmetics.com.",
+    body: `
+      <h1 style="margin:0 0 6px;font-family:${SERIF};font-size:28px;font-weight:400;color:${C.ink};">Welcome, ${escapeHtml(name)}</h1>
+      <p style="margin:0 0 22px;color:${C.inkSoft};">Thank you for joining BRAMA - skincare, makeup and body care for every skin tone and every day.</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;">
+        <tr>${detailBlock("Shop", "Cleansers, serums, moisturisers and inclusive makeup shades.")}</tr>
+        <tr><td style="height:10px;font-size:0;">&nbsp;</td></tr>
+        <tr>${detailBlock("Learn", `Free routines and tutorials at <a href="${SITE_URL}/learn" style="color:${C.brand};">bramacosmetics.com/learn</a>.`)}</tr>
+      </table>
+      ${button(`${SITE_URL}/products`, "Start shopping")}`,
+  });
+  const text = `Welcome to BRAMA, ${name}!\n\nThank you for joining BRAMA. Start shopping: ${SITE_URL}/products\nFree tutorials: ${SITE_URL}/learn\n\nQuestions? Reply to this email or contact ${CONTACT_EMAIL} / ${CONTACT_PHONE_DISPLAY}.`;
+  await send("Welcome email", { to, subject: "Welcome to BRAMA", html, text });
+}
+
+export async function sendOrderConfirmationEmail(to: string, name: string | null, order: EmailOrder) {
+  const ref = order.reference ?? "";
+  const firstName = (name || "").split(" ")[0] || "there";
+  const html = shell({
+    preheader: `Order confirmed - ${cedis(order.total)}. We're getting it ready for delivery.`,
+    footnote: "You're receiving this because you placed an order at bramacosmetics.com.",
+    body: `
+      <div style="display:inline-block;padding:5px 12px;border-radius:999px;background:${C.brandTint};color:${C.brandDark};font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 16px;">Order confirmed</div>
+      <h1 style="margin:0 0 8px;font-family:${SERIF};font-size:28px;font-weight:400;color:${C.ink};">Thank you, ${escapeHtml(firstName)}</h1>
+      <p style="margin:0 0 24px;color:${C.inkSoft};">We've received your payment and we're preparing your order for delivery.${ref ? ` Your reference is <strong style="color:${C.ink};">${escapeHtml(ref)}</strong>.` : ""}</p>
+
+      ${itemsTable(order)}
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 0;">
+        <tr>${order.shippingAddress ? detailBlock("Delivering to", escapeHtml(order.shippingAddress)) : ""}</tr>
+        ${order.note ? `<tr><td style="height:10px;font-size:0;">&nbsp;</td></tr><tr>${detailBlock("Your note", escapeHtml(order.note))}</tr>` : ""}
+      </table>
+
+      <h2 style="margin:28px 0 10px;font-family:${SERIF};font-size:18px;font-weight:400;color:${C.ink};">What happens next</h2>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;font-size:14px;color:${C.inkSoft};">
+        <tr><td width="28" valign="top" style="color:${C.brand};font-weight:700;">1</td><td style="padding-bottom:6px;">We pack your order with care.</td></tr>
+        <tr><td width="28" valign="top" style="color:${C.brand};font-weight:700;">2</td><td style="padding-bottom:6px;">Our rider calls you before delivery.</td></tr>
+        <tr><td width="28" valign="top" style="color:${C.brand};font-weight:700;">3</td><td>You glow. Tell us how you like it!</td></tr>
+      </table>
+
+      ${button(`${SITE_URL}/orders`, "Track your order")}
+      <p style="margin:14px 0 0;text-align:center;font-size:12px;color:${C.muted};">Checked out as a guest? Create an account with ${escapeHtml(to)} to see this order.</p>`,
+  });
+  const text = [
+    `Thank you, ${firstName} - your BRAMA order is confirmed.`,
+    ref ? `Reference: ${ref}` : "",
+    "",
+    itemsText(order),
+    `Delivery: ${cedis(DELIVERY_FEE)}`,
+    `Total paid: ${cedis(order.total)}`,
+    "",
+    order.shippingAddress ? `Delivering to: ${order.shippingAddress}` : "",
+    order.note ? `Your note: ${order.note}` : "",
+    "",
+    `Track your order: ${SITE_URL}/orders`,
+    `Questions? Reply to this email or contact ${CONTACT_EMAIL} / ${CONTACT_PHONE_DISPLAY}.`,
+  ]
+    .filter((l, i, all) => l !== "" || all[i - 1] !== "")
+    .join("\n");
+  await send("Order confirmation email", {
+    to,
+    subject: `Your BRAMA order is confirmed${ref ? ` (${ref})` : ""}`,
+    html,
+    text,
+  });
 }
 
 export async function sendNewOrderVendorEmail(order: EmailOrder) {
+  const customer = order.customerName || order.customerEmail;
+  const html = shell({
+    preheader: `New order from ${customer} - ${cedis(order.total)}.`,
+    footnote: "Sent to the BRAMA vendor account for every paid order.",
+    body: `
+      <div style="display:inline-block;padding:5px 12px;border-radius:999px;background:${C.brandTint};color:${C.brandDark};font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 16px;">New paid order</div>
+      <h1 style="margin:0 0 4px;font-family:${SERIF};font-size:26px;font-weight:400;color:${C.ink};">${cedis(order.total)} from ${escapeHtml(customer)}</h1>
+      <p style="margin:0 0 22px;color:${C.muted};font-size:13px;">${escapeHtml(order.customerEmail)}${order.reference ? ` &middot; Ref ${escapeHtml(order.reference)}` : ""}</p>
+
+      ${itemsTable(order)}
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 28px;">
+        <tr>${detailBlock("Deliver to", escapeHtml(order.shippingAddress || "No address given - contact the customer"))}</tr>
+        ${order.note ? `<tr><td style="height:10px;font-size:0;">&nbsp;</td></tr><tr>${detailBlock("Customer note", escapeHtml(order.note))}</tr>` : ""}
+      </table>
+
+      ${button(`${SITE_URL}/vendor/orders`, "Open vendor orders")}`,
+  });
+  const text = [
+    `New paid order: ${cedis(order.total)} from ${customer} (${order.customerEmail})`,
+    order.reference ? `Reference: ${order.reference}` : "",
+    "",
+    itemsText(order),
+    "",
+    `Deliver to: ${order.shippingAddress || "No address given"}`,
+    order.note ? `Customer note: ${order.note}` : "",
+    "",
+    `Vendor orders: ${SITE_URL}/vendor/orders`,
+  ].join("\n");
+
   for (const vendorEmail of VENDOR_EMAILS) {
-    try {
-      const itemsHtml = orderItemsHtml(order.items);
-      await resend.emails.send({
-      from: FROM_EMAIL,
+    await send("New order vendor email", {
       to: vendorEmail,
-      subject: `New order ${order.reference ? `#${order.reference} ` : ""}— ${order.customerName || order.customerEmail}`,
-        html: emailShell(`
-          <p style="margin:0 0 14px;font-size:15px;">A new order has been placed.</p>
-          <p style="margin:0 0 20px;font-size:14px;color:#4B5563;">
-            <strong style="color:#111827;">Customer:</strong> ${escapeHtml(order.customerName || order.customerEmail)}
-            ${order.customerName ? `<br><span style="color:#6B7280;">${escapeHtml(order.customerEmail)}</span>` : ""}
-          </p>
-
-          <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 0 6px;border:1px solid #F3F4F6;border-radius:12px;overflow:hidden;">
-            <tr style="background:#FFF1F5;">
-              <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;">Item</td>
-              <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;text-align:center;">Qty</td>
-              <td style="padding:10px 12px;font-size:11px;font-weight:700;color:#DB2777;text-transform:uppercase;text-align:right;">Price</td>
-            </tr>
-            ${itemsHtml}
-            <tr>
-              <td colspan="2" style="padding:12px;border-top:1px solid #F3F4F6;font-size:15px;font-weight:700;color:#111827;">Total</td>
-              <td style="padding:12px;border-top:1px solid #F3F4F6;font-size:15px;font-weight:800;color:#DB2777;text-align:right;">₵${order.total.toFixed(2)}</td>
-            </tr>
-          </table>
-
-          ${order.shippingAddress ? `
-            <p style="margin:14px 0 4px;font-size:13px;font-weight:700;color:#374151;">Ship to</p>
-            <p style="margin:0 0 20px;font-size:14px;color:#4B5563;">${escapeHtml(order.shippingAddress)}</p>` : ""}
-
-          ${order.note ? `
-            <p style="margin:0 0 20px;font-size:14px;color:#4B5563;"><strong style="color:#374151;">Order note:</strong> ${escapeHtml(order.note)}</p>` : ""}
-
-          ${order.reference ? `
-            <p style="margin:0 0 20px;font-size:14px;color:#4B5563;"><strong style="color:#374151;">Reference:</strong> ${escapeHtml(order.reference)}</p>` : ""}
-
-          <table align="center" cellpadding="0" cellspacing="0" role="presentation" style="margin:0;">
-            <tr>
-              <td style="border-radius:999px;background:${BRAND_PINK};padding:0;">
-                <a href="${SHOP_URL}/vendor/orders" style="display:inline-block;padding:14px 36px;border-radius:999px;background:${BRAND_PINK};color:#fff;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 6px 16px rgba(219,39,119,0.35);">
-                  Open Vendor Orders
-                </a>
-              </td>
-            </tr>
-          </table>
-`),
+      subject: `New order${order.reference ? ` ${order.reference}` : ""} - ${customer} - ${cedis(order.total)}`,
+      html,
+      text,
     });
-    } catch (err) {
-      logEmailError("New order vendor email", err);
-    }
   }
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import StarRating from "./star-rating";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 export default function ReviewForm({
   productId,
@@ -31,8 +32,7 @@ export default function ReviewForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId, rating, title: title.trim() || null, body: body.trim() || null, name: userName || null }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to submit review.");
+      await parseResponse(res, "Failed to submit review.");
 
       toast.success("Review submitted. Thank you!");
       setRating(0);
@@ -40,7 +40,7 @@ export default function ReviewForm({
       setBody("");
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setSaving(false);
     }

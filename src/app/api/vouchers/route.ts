@@ -20,6 +20,6 @@ export async function GET() {
     response.headers.set("Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
     return response;
   } catch {
-    return NextResponse.json({ error: "Failed to fetch vouchers" }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't load vouchers right now. Please try again." }, { status: 500 });
   }
 }

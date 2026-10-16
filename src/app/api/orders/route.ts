@@ -7,7 +7,7 @@ export async function GET() {
   const email = user?.primaryEmailAddress?.emailAddress;
 
   if (!email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Please sign in to continue." }, { status: 401 });
   }
 
   try {
@@ -17,6 +17,6 @@ export async function GET() {
     });
     return NextResponse.json(orders);
   } catch {
-    return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't load your orders right now. Please refresh the page." }, { status: 500 });
   }
 }

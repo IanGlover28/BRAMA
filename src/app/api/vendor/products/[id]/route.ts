@@ -7,7 +7,7 @@ type Params = { params: Promise<{ id: string }> };
 export async function PATCH(req: Request, { params }: Params) {
   const session = await getVendorSession();
   if (!session) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json({ error: "Only the BRAMA vendor account can do that." }, { status: 403 });
   }
 
   try {
@@ -79,7 +79,7 @@ export async function PATCH(req: Request, { params }: Params) {
 export async function DELETE(_req: Request, { params }: Params) {
   const session = await getVendorSession();
   if (!session) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return NextResponse.json({ error: "Only the BRAMA vendor account can do that." }, { status: 403 });
   }
 
   try {
