@@ -1,4 +1,5 @@
 import { FileText, ShieldCheck, RefreshCcw, Truck, CreditCard, UserRound, Scale } from "lucide-react";
+import { CONTACT_EMAIL } from "@/lib/site";
 
 const SECTIONS = [
   {
@@ -130,7 +131,7 @@ export default function TermsPage() {
             Our team is happy to help. Reach us any time and we&apos;ll get back to you.
           </p>
           <a
-            href="mailto:no-reply@brama.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="inline-flex items-center gap-2 bg-surface text-brand-700 px-6 py-3 rounded-full text-sm font-semibold hover:bg-brand-50 transition shadow-lg"
           >
             <UserRound size={16} /> Contact BRAMA Support

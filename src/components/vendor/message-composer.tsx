@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Send } from "lucide-react";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 interface Customer {
   email: string;
@@ -30,15 +31,14 @@ export default function MessageComposer({ customers }: { customers: Customer[] }
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, subject, body }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send message.");
+      await parseResponse(res, "Failed to send message.");
 
       toast.success("Message sent.");
       setSubject("");
       setBody("");
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setSending(false);
     }

@@ -8,6 +8,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { ChatMessage, Product } from "@/lib/types";
+import { readJson } from "@/lib/http";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -90,11 +91,16 @@ export default function SkinAnalysisChat() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: nextMessages }),
       });
-      const data = await res.json();
+      const data = await readJson<{
+        code?: string;
+        error?: string;
+        assistantReply?: string;
+        recommendedProducts?: typeof products;
+      }>(res);
 
       if (!res.ok) {
         const reply =
-          data?.code === "AUTH_REQUIRED"
+          data?.code === "AUTH_REQUIRED" || res.status === 401
             ? "You'll need to be logged in to use the skin advisor. Please sign in and try again!"
             : data?.error
               ? `Sorry - ${data.error}`

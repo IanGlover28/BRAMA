@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { trackAddToCart, trackRemoveFromCart } from "@/lib/analytics";
 
 export interface CartItem {
   id: string;
@@ -7,6 +8,8 @@ export interface CartItem {
   price: number;
   quantity: number;
   image: string;
+  brand?: string | null;
+  category?: string | null;
 }
 
 interface CartStore {
@@ -15,6 +18,7 @@ interface CartStore {
   addToCart: (item: Omit<CartItem, "quantity"> & { image?: string; quantity?: number }) => void;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
+  /** Empties the cart without analytics (e.g. after a purchase). */
   clearCart: () => void;
   toggleCart: () => void;
   cartTotal: () => number;
@@ -41,23 +45,40 @@ export const useCartStore = create<CartStore>()(
           return {
             items: [
               ...state.items,
-              { id: item.id, name: item.name, price: item.price, image: item.image || "", quantity: qty },
+              {
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                image: item.image || "",
+                brand: item.brand,
+                category: item.category,
+                quantity: qty,
+              },
             ],
           };
         });
+        trackAddToCart(item, qty);
       },
 
-      removeFromCart: (id) =>
-        set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+      removeFromCart: (id) => {
+        const existing = get().items.find((i) => i.id === id);
+        set((state) => ({ items: state.items.filter((i) => i.id !== id) }));
+        if (existing) trackRemoveFromCart(existing, existing.quantity);
+      },
 
       updateQuantity: (id, quantity) => {
+        const existing = get().items.find((i) => i.id === id);
+        if (!existing) return;
         if (quantity <= 0) {
-          set((state) => ({ items: state.items.filter((i) => i.id !== id) }));
+          get().removeFromCart(id);
           return;
         }
         set((state) => ({
           items: state.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
         }));
+        const delta = quantity - existing.quantity;
+        if (delta > 0) trackAddToCart(existing, delta);
+        else if (delta < 0) trackRemoveFromCart(existing, -delta);
       },
 
       clearCart: () => set({ items: [] }),

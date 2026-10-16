@@ -13,7 +13,7 @@ import FloatingCartModal from "@/components/floating-cart-modal";
 import ErrorBoundary from "@/components/error-boundary";
 import GoogleAnalytics from "@/components/google-analytics";
 import JsonLd from "@/components/json-ld";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { CONTACT_EMAIL, CONTACT_PHONE_TEL, SITE_NAME, SITE_URL } from "@/lib/site";
 import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
 const sans = Montserrat({
@@ -99,6 +99,8 @@ export default function RootLayout({
             description,
             currenciesAccepted: "GHS",
             areaServed: "GH",
+            email: CONTACT_EMAIL,
+            telephone: CONTACT_PHONE_TEL,
           }}
         />
         <GoogleAnalytics />

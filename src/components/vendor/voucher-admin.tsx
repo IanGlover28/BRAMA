@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Plus, Power } from "lucide-react";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 interface VendorVoucher {
   id: string;
@@ -46,15 +47,14 @@ export default function VoucherAdmin({ initialVouchers }: { initialVouchers: Ven
           expiresAt: form.expiresAt || null,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create voucher.");
+      await parseResponse(res, "Failed to create voucher.");
 
       toast.success("Voucher created.");
       setShowForm(false);
       setForm(EMPTY_FORM);
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setSaving(false);
     }
@@ -68,13 +68,12 @@ export default function VoucherAdmin({ initialVouchers }: { initialVouchers: Ven
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ active: !voucher.active }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to update voucher.");
+      await parseResponse(res, "Failed to update voucher.");
 
       toast.success(voucher.active ? "Voucher deactivated." : "Voucher activated.");
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setTogglingId(null);
     }

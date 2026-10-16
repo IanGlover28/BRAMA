@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { Pencil, Plus, Trash2, X } from "lucide-react";
 import type { Product } from "@/types/product";
 import { categorySlugs as CATEGORIES } from "@/lib/categories";
+import { friendlyError, parseResponse } from "@/lib/http";
 
 interface FormData {
   name: string;
@@ -92,14 +93,13 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
         }
       );
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to save product.");
+      await parseResponse(res, "Failed to save product.");
 
       toast.success(editingId ? "Product updated." : "Product created.");
       setShowForm(false);
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setSaving(false);
     }
@@ -111,13 +111,12 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
     setDeletingId(product.id);
     try {
       const res = await fetch(`/api/vendor/products/${product.id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to delete product.");
+      await parseResponse(res, "Failed to delete product.");
 
       toast.success("Product deleted.");
       router.refresh();
     } catch (err) {
-      toast.error((err as Error).message);
+      toast.error(friendlyError(err, "Something went wrong. Please try again."));
     } finally {
       setDeletingId(null);
     }

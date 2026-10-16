@@ -11,6 +11,7 @@ import ReviewSection from "@/components/review-section";
 import StarRating from "@/components/star-rating";
 import WishlistButton from "@/components/wishlist-button";
 import JsonLd from "@/components/json-ld";
+import TrackViewItem from "@/components/track-view-item";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Shared by generateMetadata and the page so the product is fetched once per request.
@@ -122,6 +123,15 @@ export default async function ProductDetailsPage(props: { params: Promise<{ id: 
   return (
     <div className="min-h-screen bg-ink-50 pt-24 pb-16 px-4">
       <JsonLd data={productJsonLd} />
+      <TrackViewItem
+        product={{
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          brand: product.brand,
+          category: product.category,
+        }}
+      />
       <div className="max-w-6xl mx-auto bg-surface rounded-3xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           {/* Product Image */}

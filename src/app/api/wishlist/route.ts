@@ -10,7 +10,7 @@ export async function GET() {
   const clerkUser = await currentUser();
   const email = userIdFrom(clerkUser);
   if (!email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Please sign in to continue." }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({ where: { email } });

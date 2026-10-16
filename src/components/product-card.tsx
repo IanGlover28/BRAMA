@@ -88,6 +88,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                 name: product.name,
                 price: product.price,
                 image: product.image,
+                brand: product.brand,
+                category: product.category,
               });
               toast.success(`${product.name} added to your bag`, { duration: 1800 });
             }}
