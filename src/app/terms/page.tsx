@@ -73,30 +73,30 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-gray-50 pb-20">
+    <main className="min-h-screen bg-ink-50 pb-20">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-pink-600 via-pink-700 to-pink-900 text-white pt-[200px] md:pt-[150px] pb-24 text-center">
+      <section className="theme-fixed relative overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 text-white pt-[200px] md:pt-[150px] pb-24 text-center">
         <div className="absolute inset-0 opacity-15">
-          <div className="absolute top-16 left-1/4 w-80 h-80 bg-white rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-16 left-1/4 w-80 h-80 bg-surface rounded-full blur-3xl animate-pulse" />
         </div>
         <div className="max-w-3xl mx-auto px-6 relative z-10">
           <span className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/25 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
-            <FileText size={15} className="text-pink-200" />
+            <FileText size={15} className="text-brand-200" />
             Legal
           </span>
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-5">
             Terms & Privacy
           </h1>
-          <p className="text-lg text-pink-50 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg text-brand-50 max-w-2xl mx-auto leading-relaxed">
             The fine print, in plain words — how shopping with{" "}
-            <span className="text-pink-200 font-semibold">BRAMA</span> works.
+            <span className="text-brand-200 font-semibold">BRAMA</span> works.
           </p>
         </div>
       </section>
 
       {/* Updated chip */}
       <div className="max-w-3xl mx-auto px-6 -mt-7 relative z-10">
-        <p className="bg-white rounded-full border border-gray-100 shadow-sm text-center text-xs font-semibold text-gray-500 py-2">
+        <p className="bg-surface rounded-full border border-ink-100 shadow-sm text-center text-xs font-semibold text-ink-500 py-2">
           Last updated: {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
         </p>
       </div>
@@ -105,16 +105,16 @@ export default function TermsPage() {
         {SECTIONS.map(({ icon: Icon, title, body }) => (
           <article
             key={title}
-            className="bg-white rounded-3xl border border-gray-100 shadow-sm p-7 flex gap-4"
+            className="bg-surface rounded-3xl border border-ink-100 shadow-sm p-7 flex gap-4"
           >
-            <span className="hidden sm:flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-pink-50 text-pink-600">
+            <span className="hidden sm:flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-brand-50 text-brand-600">
               <Icon size={20} />
             </span>
             <div>
-              <h2 className="font-bold text-lg text-gray-900 mb-2 sm:mt-1">{title}</h2>
+              <h2 className="font-bold text-lg text-ink-900 mb-2 sm:mt-1">{title}</h2>
               <div className="space-y-3">
                 {body.map((paragraph, i) => (
-                  <p key={i} className="text-sm text-gray-600 leading-relaxed">
+                  <p key={i} className="text-sm text-ink-600 leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
@@ -124,14 +124,14 @@ export default function TermsPage() {
         ))}
 
         {/* Contact card */}
-        <article className="bg-gradient-to-br from-pink-600 to-pink-800 text-white rounded-3xl p-7 text-center">
+        <article className="theme-fixed bg-gradient-to-br from-brand-600 to-brand-800 text-white rounded-3xl p-7 text-center">
           <h2 className="font-bold text-xl mb-2">Questions about these Terms?</h2>
-          <p className="text-pink-100 text-sm mb-5">
+          <p className="text-brand-100 text-sm mb-5">
             Our team is happy to help. Reach us any time and we&apos;ll get back to you.
           </p>
           <a
             href="mailto:no-reply@brama.com"
-            className="inline-flex items-center gap-2 bg-white text-pink-700 px-6 py-3 rounded-full text-sm font-semibold hover:bg-pink-50 transition shadow-lg"
+            className="inline-flex items-center gap-2 bg-surface text-brand-700 px-6 py-3 rounded-full text-sm font-semibold hover:bg-brand-50 transition shadow-lg"
           >
             <UserRound size={16} /> Contact BRAMA Support
           </a>

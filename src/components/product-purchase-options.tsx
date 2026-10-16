@@ -31,7 +31,7 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
     <div className="space-y-4 border-t pt-6">
       {/* Quantity */}
       <div>
-        <label className="block text-sm font-semibold text-gray-700 mb-1">Quantity</label>
+        <label className="block text-sm font-semibold text-ink-700 mb-1">Quantity</label>
         <div className="flex items-center gap-4">
           <button
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -55,13 +55,13 @@ export default function ProductPurchaseOptions({ product }: { product: Product }
       {/* Total and Buy */}
       <div className="pt-6">
         <p className="text-xl font-bold mb-3">
-          Total: <span className="text-pink-600">₵{totalPrice.toFixed(2)}</span>
+          Total: <span className="text-brand-600">₵{totalPrice.toFixed(2)}</span>
         </p>
 
         <button
           onClick={handleBuyNow}
           disabled={loading || outOfStock}
-          className="w-full bg-pink-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-pink-700 transition disabled:opacity-70"
+          className="w-full bg-brand-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-brand-700 transition disabled:opacity-70"
         >
           {outOfStock ? 'Out of Stock' : loading ? 'Adding...' : 'Buy Now'}
         </button>

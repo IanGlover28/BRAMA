@@ -61,36 +61,36 @@ export default async function VendorDashboardPage() {
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="shrink-0 snap-start basis-2/5 sm:basis-1/4 min-w-[170px] bg-white rounded-2xl shadow-sm border p-5"
+            className="shrink-0 snap-start basis-2/5 sm:basis-1/4 min-w-[170px] bg-surface rounded-2xl shadow-sm border p-5"
           >
-            <p className="text-sm text-gray-500">{stat.label}</p>
-            <p className="text-2xl font-extrabold text-pink-600 mt-1">{stat.value}</p>
-            <p className="text-xs text-gray-400 mt-1">{stat.sub}</p>
+            <p className="text-sm text-ink-500">{stat.label}</p>
+            <p className="text-2xl font-extrabold text-brand-600 mt-1">{stat.value}</p>
+            <p className="text-xs text-ink-400 mt-1">{stat.sub}</p>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent orders */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border p-5">
+        <div className="lg:col-span-2 bg-surface rounded-xl shadow-sm border p-5">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-bold text-gray-900">Recent Orders</h2>
-            <Link href="/vendor/orders" className="text-sm text-pink-600 hover:underline">
+            <h2 className="font-bold text-ink-900">Recent Orders</h2>
+            <Link href="/vendor/orders" className="text-sm text-brand-600 hover:underline">
               View all →
             </Link>
           </div>
           {recentOrders.length === 0 ? (
-            <p className="text-sm text-gray-500">No orders yet.</p>
+            <p className="text-sm text-ink-500">No orders yet.</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-ink-100">
               {recentOrders.map((order) => (
                 <li key={order.id} className="py-3 flex justify-between items-center gap-4">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-ink-900 truncate">
                       {order.user?.name ?? order.user?.email ?? "Customer"} — ₵
                       {order.total.toFixed(2)}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-ink-400">
                       {new Date(order.createdAt).toLocaleString()} · Ref {order.reference ?? "—"}
                     </p>
                   </div>
@@ -102,20 +102,20 @@ export default async function VendorDashboardPage() {
         </div>
 
         {/* Low stock */}
-        <div className="bg-white rounded-xl shadow-sm border p-5">
+        <div className="bg-surface rounded-xl shadow-sm border p-5">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="font-bold text-gray-900">Low Stock</h2>
-            <Link href="/vendor/products" className="text-sm text-pink-600 hover:underline">
+            <h2 className="font-bold text-ink-900">Low Stock</h2>
+            <Link href="/vendor/products" className="text-sm text-brand-600 hover:underline">
               Restock →
             </Link>
           </div>
           {lowStock.length === 0 ? (
-            <p className="text-sm text-gray-500">All products are well stocked.</p>
+            <p className="text-sm text-ink-500">All products are well stocked.</p>
           ) : (
             <ul className="space-y-2">
               {lowStock.map((product) => (
                 <li key={product.id} className="flex justify-between items-center text-sm">
-                  <span className="truncate text-gray-700">{product.name}</span>
+                  <span className="truncate text-ink-700">{product.name}</span>
                   <span
                     className={`ml-2 font-semibold ${
                       product.stock === 0 ? "text-red-600" : "text-yellow-600"

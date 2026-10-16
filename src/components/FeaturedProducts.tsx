@@ -11,7 +11,7 @@ export default function FeaturedProducts() {
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-pink-50">
+      <section className="py-20 bg-brand-50">
         <div className="max-w-7xl mx-auto px-6">
           <Loader count={4} />
         </div>
@@ -22,7 +22,7 @@ export default function FeaturedProducts() {
   if (isError || products.length === 0) return null;
 
   return (
-    <section className="py-20 bg-pink-50">
+    <section className="py-20 bg-brand-50">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex space-x-6 pb-6 overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {products.map((product) => (
@@ -35,7 +35,7 @@ export default function FeaturedProducts() {
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="inline-flex items-center justify-center bg-pink-400 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-900 transition duration-300 shadow-md"
+            className="inline-flex items-center justify-center bg-brand-400 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-ink-900 transition duration-300 shadow-md"
           >
             View All Products →
           </Link>

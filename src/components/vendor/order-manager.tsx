@@ -90,8 +90,8 @@ export default function OrderManager({
             onClick={() => setFilter(f)}
             className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition ${
               filter === f
-                ? "bg-pink-600 text-white"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-pink-300"
+                ? "bg-brand-600 text-white"
+                : "bg-surface border border-ink-200 text-ink-600 hover:border-brand-300"
             }`}
           >
             {f === "ALL" ? "All" : f}
@@ -103,7 +103,7 @@ export default function OrderManager({
       </div>
 
       {filtered.length === 0 ? (
-        <p className="bg-white rounded-xl shadow-sm border p-6 text-sm text-gray-500">
+        <p className="bg-surface rounded-xl shadow-sm border p-6 text-sm text-ink-500">
           No orders here.
         </p>
       ) : (
@@ -116,16 +116,16 @@ export default function OrderManager({
             const busy = updatingId === order.id;
 
             return (
-              <li key={order.id} className="bg-white rounded-xl shadow-sm border p-5">
+              <li key={order.id} className="bg-surface rounded-xl shadow-sm border p-5">
                 <div className="flex flex-wrap justify-between gap-3 items-start">
                   <div className="min-w-0">
-                    <p className="font-semibold text-gray-900">
+                    <p className="font-semibold text-ink-900">
                       {order.user?.name ?? order.user?.email ?? "Customer"}
-                      <span className="text-xs font-normal text-gray-400 ml-2">
+                      <span className="text-xs font-normal text-ink-400 ml-2">
                         {order.user?.email}
                       </span>
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-ink-400 mt-0.5">
                       Ref {order.reference ?? "—"} · Placed{" "}
                       {new Date(order.createdAt).toLocaleString()}
                       {order.paidAt &&
@@ -134,7 +134,7 @@ export default function OrderManager({
                   </div>
                   <div className="text-right shrink-0">
                     <StatusBadge status={order.status} />
-                    <p className="font-extrabold text-lg text-pink-600 mt-1">
+                    <p className="font-extrabold text-lg text-brand-600 mt-1">
                       ₵{order.total.toFixed(2)}
                     </p>
                   </div>
@@ -142,13 +142,13 @@ export default function OrderManager({
 
                 {/* Items */}
                 {items.length > 0 && (
-                  <ul className="mt-3 divide-y divide-gray-100 border border-gray-100 rounded-lg">
+                  <ul className="mt-3 divide-y divide-ink-100 border border-ink-100 rounded-lg">
                     {items.map((item, idx) => (
                       <li key={`${item.id}-${idx}`} className="px-3 py-2">
                         <div className="flex justify-between text-sm">
                           <span>
                             {item.name}{" "}
-                            <span className="text-gray-400">×{item.quantity}</span>
+                            <span className="text-ink-400">×{item.quantity}</span>
                           </span>
                           <span>₵{(item.price * item.quantity).toFixed(2)}</span>
                         </div>
@@ -159,15 +159,15 @@ export default function OrderManager({
                           >
                             <div className="flex items-center gap-2">
                               <StarRating value={review.rating} size={14} />
-                              <span className="text-xs font-semibold text-gray-700">
+                              <span className="text-xs font-semibold text-ink-700">
                                 {review.name || review.email.split("@")[0] || "Customer"}
                               </span>
-                              <span className="text-xs text-gray-400">
+                              <span className="text-xs text-ink-400">
                                 reviewed {item.name}
                               </span>
                             </div>
                             {(review.title || review.body) && (
-                              <p className="text-xs text-gray-600 mt-1">
+                              <p className="text-xs text-ink-600 mt-1">
                                 {[review.title, review.body].filter(Boolean).join(" — ")}
                               </p>
                             )}
@@ -182,13 +182,13 @@ export default function OrderManager({
                 {(order.shippingAddress || order.note) && (
                   <div className="mt-3 text-sm space-y-1">
                     {order.shippingAddress && (
-                      <p className="text-gray-700">
+                      <p className="text-ink-700">
                         <span className="font-medium">Ship to: </span>
                         {order.shippingAddress}
                       </p>
                     )}
                     {order.note && (
-                      <p className="text-gray-600">
+                      <p className="text-ink-600">
                         <span className="font-medium">Note: </span>
                         {order.note}
                       </p>

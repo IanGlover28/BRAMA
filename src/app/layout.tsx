@@ -1,7 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 import Navbar from "@/components/site-navbar";
@@ -14,8 +14,18 @@ import ErrorBoundary from "@/components/error-boundary";
 import GoogleAnalytics from "@/components/google-analytics";
 import JsonLd from "@/components/json-ld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
 
-const inter = Inter({ subsets: ["latin"] });
+const sans = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+const serif = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 const title = "BRAMA COSMETICS - Quality products for every Classy Lady.";
 const description =
@@ -69,7 +79,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html
+      lang="en"
+      className={`${sans.variable} ${serif.variable}`}
+      // The theme script sets data-theme before React hydrates.
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+      </head>
       <body>
         <JsonLd
           data={{
@@ -84,7 +102,25 @@ export default function RootLayout({
           }}
         />
         <GoogleAnalytics />
-        <ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            // CSS variables so Clerk's screens follow the light/dark theme.
+            variables: {
+              colorPrimary: "rgb(var(--brand-600))",
+              colorPrimaryForeground: "#ffffff",
+              colorBackground: "rgb(var(--surface))",
+              colorForeground: "rgb(var(--ink-900))",
+              colorMutedForeground: "rgb(var(--ink-600))",
+              colorMuted: "rgb(var(--ink-100))",
+              colorInput: "rgb(var(--surface))",
+              colorInputForeground: "rgb(var(--ink-900))",
+              colorBorder: "rgb(var(--ink-200))",
+              colorNeutral: "rgb(var(--ink-950))",
+              fontFamily: "var(--font-sans)",
+              borderRadius: "0.75rem",
+            },
+          }}
+        >
           <ErrorBoundary>
             <QueryProvider>
               <LocationProvider>

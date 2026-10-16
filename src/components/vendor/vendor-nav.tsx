@@ -15,7 +15,7 @@ export default function VendorNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex gap-2 mb-8 border-b border-gray-200 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <nav className="flex gap-2 mb-8 border-b border-ink-200 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {TABS.map((tab) => {
         const active =
           tab.href === "/vendor"
@@ -28,8 +28,8 @@ export default function VendorNav() {
             aria-current={active ? "page" : undefined}
             className={`shrink-0 px-4 py-2 text-sm font-medium border-b-2 transition ${
               active
-                ? "text-pink-600 border-pink-600 font-semibold"
-                : "text-gray-600 border-transparent hover:text-pink-600 hover:border-pink-300"
+                ? "text-brand-600 border-brand-600 font-semibold"
+                : "text-ink-600 border-transparent hover:text-brand-600 hover:border-brand-300"
             }`}
           >
             {tab.label}

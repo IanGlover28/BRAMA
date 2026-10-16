@@ -23,7 +23,7 @@ export default function CartPage() {
             <div key={item.id} className="flex justify-between items-center border-b py-3">
               <div>
                 <p className="font-medium">{item.name}</p>
-                <p className="text-sm text-gray-500">₵{item.price.toFixed(2)} each</p>
+                <p className="text-sm text-ink-500">₵{item.price.toFixed(2)} each</p>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function CartPage() {
           </button>
           <button
             onClick={() => router.push("/products")}
-            className="bg-pink-600 text-white w-full mt-4 py-2 rounded hover:bg-pink-700 transition"
+            className="bg-brand-600 text-white w-full mt-4 py-2 rounded hover:bg-brand-700 transition"
           >
             Continue Shopping
           </button>

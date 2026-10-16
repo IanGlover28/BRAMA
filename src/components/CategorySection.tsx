@@ -27,9 +27,9 @@ const categories = [
 
 export default function CategorySection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-surface">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center mb-12 text-pink-400">
+        <h2 className="text-4xl font-bold text-center mb-12 text-brand-400">
        .BRAMA
         </h2>
 
@@ -38,7 +38,7 @@ export default function CategorySection() {
 <Link
             key={cat.title}
             href={`/products?category=${cat.slug}`}
-            className="block bg-gray-50 rounded-2xl overflow-hidden shadow hover:shadow-lg transition"
+            className="block bg-ink-50 rounded-2xl overflow-hidden shadow hover:shadow-lg transition"
           >
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -54,8 +54,8 @@ export default function CategorySection() {
                 className="w-full h-56 object-contain"
               />
               <div className="p-6">
-                <h3 className="text-2xl text-pink-400 font-serif font-bold mb-2">{cat.title}</h3>
-                <p className="text-gray-600">{cat.description}</p>
+                <h3 className="text-2xl text-brand-400 font-serif font-bold mb-2">{cat.title}</h3>
+                <p className="text-ink-600">{cat.description}</p>
               </div>
             </motion.div>
           </Link>

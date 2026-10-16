@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { ChevronDown, Menu, X, Sparkles, Package, User } from 'lucide-react'; 
 import { UserButton, useClerk, useUser } from '@clerk/nextjs';
 import CartToggleButton from './cart-toggle-button'; 
+import ThemeToggle from './theme-toggle';
 import { CATEGORIES } from '@/lib/categories';
 import { useCurrentUser } from '@/hooks/use-current-user';
 import LocationPicker from './LocationPicker'; 
@@ -45,13 +46,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] md:w-[calc(100%-3rem)] max-w-6xl z-50 bg-pink-400/90 backdrop-blur-md shadow-lg rounded-full border border-white/20">
+      <nav className="theme-fixed fixed top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] md:w-[calc(100%-3rem)] max-w-6xl z-50 bg-brand-700/90 backdrop-blur-md shadow-lg rounded-full border border-white/20">
         <div className="px-4 md:px-6 py-2 flex justify-between items-center">
          <Link href="/">
            <Image src="/brama-logo.png" alt="BRAMA Logo" width={120} height={50} />
          </Link>
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-8 items-center text-white font-extrabold">
+          <div className="hidden md:flex gap-8 items-center text-white font-medium tracking-wide">
             
             {/* Featured Dropdown */}
             <div className="relative">
@@ -60,20 +61,20 @@ export default function Navbar() {
                   e.stopPropagation();
                   setActiveDropdown(activeDropdown === 'featured' ? null : 'featured');
                 }}
-                className="text-sm font-medium hover:text-pink-600 transition-colors flex items-center gap-1"
+                className="text-sm font-medium hover:text-brand-200 transition-colors flex items-center gap-1"
               >
                 Featured
                 <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === 'featured' ? 'rotate-180' : ''}`} />
               </button>
 
               {activeDropdown === 'featured' && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2 animate-fadeIn">
+                <div className="theme-auto absolute top-full left-0 mt-2 w-48 bg-surface rounded-lg shadow-xl border border-ink-100 py-2 animate-fadeIn">
                   {featured.map((item) => (
                     <Link
                       key={item.name}
                       href={item.path} 
                       onClick={() => setActiveDropdown(null)}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-pink-50 hover:text-pink-600 transition-colors block"
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-brand-50 hover:text-brand-600 transition-colors block"
                     >
                       {item.name}
                     </Link>
@@ -89,24 +90,24 @@ export default function Navbar() {
                   e.stopPropagation();
                   setActiveDropdown(activeDropdown === 'shop' ? null : 'shop');
                 }}
-                className="text-sm font-medium hover:text-pink-600 transition-colors flex items-center gap-1"
+                className="text-sm font-medium hover:text-brand-200 transition-colors flex items-center gap-1"
               >
                 Shop
                 <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === 'shop' ? 'rotate-180' : ''}`} />
               </button>
 
               {activeDropdown === 'shop' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-4xl bg-white rounded-xl shadow-2xl border border-gray-100 p-6 animate-fadeIn">
+                <div className="theme-auto absolute top-full left-1/2 -translate-x-1/2 mt-2 w-max max-w-4xl bg-surface rounded-xl shadow-2xl border border-ink-100 p-6 animate-fadeIn">
                   <div className="grid grid-cols-3 gap-8">
                     {shopSections.map((section) => (
                       <div key={section.title}>
-                        <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">
+                        <h3 className="font-bold text-ink-900 mb-3 text-sm uppercase tracking-wide">
                           {section.title}
                         </h3>
                         <Link
                           href={section.path}
                           onClick={() => setActiveDropdown(null)}
-                          className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700"
+                          className="block w-full text-left text-sm font-semibold text-brand-600 hover:text-brand-700"
                         >
                           Shop All {section.title} →
                         </Link>
@@ -121,20 +122,20 @@ export default function Navbar() {
             {isVendor && (
               <Link
                 href="/vendor"
-                className="text-sm font-medium hover:text-pink-600 transition-colors"
+                className="text-sm font-medium hover:text-brand-200 transition-colors"
               >
                 Vendor
               </Link>
             )}
             <Link
               href="/about"
-              className="text-sm font-medium hover:text-pink-600 transition-colors"
+              className="text-sm font-medium hover:text-brand-200 transition-colors"
             >
               About
             </Link>
             <Link
               href="/learn"
-              className="text-sm font-medium hover:text-pink-600 transition-colors"
+              className="text-sm font-medium hover:text-brand-200 transition-colors"
             >
               Learn
             </Link>
@@ -142,6 +143,7 @@ export default function Navbar() {
 
           {/* Desktop My Account Button & Mobile Icons */}
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <CartToggleButton />
             
             {/* Desktop: Auth Controls */}
@@ -159,13 +161,13 @@ export default function Navbar() {
               <div className="hidden md:flex items-center gap-3">
                 <Link
                   href="/sign-in"
-                  className="text-sm font-semibold text-white hover:text-pink-100 transition-colors"
+                  className="text-sm font-semibold text-white hover:text-brand-100 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/sign-up"
-                  className="bg-pink-600 text-white px-5 py-2.5 rounded-full hover:bg-pink-700 transition text-sm font-semibold"
+                  className="bg-brand-100 text-brand-800 px-5 py-2.5 rounded-full hover:bg-surface transition text-sm font-semibold"
                 >
                   Sign Up
                 </Link>
@@ -177,7 +179,7 @@ export default function Navbar() {
               <button
                 onClick={() => router.push('/account')}
                 aria-label="My Account"
-                className="md:hidden text-gray-900 hover:text-pink-600 transition-colors"
+                className="md:hidden text-white hover:text-brand-200 transition-colors"
               >
                 <User size={24} />
               </button>
@@ -187,7 +189,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-              className="md:hidden flex items-center justify-center h-10 w-10 rounded-full bg-white text-pink-600 shadow-sm hover:bg-pink-50 transition-colors"
+              className="md:hidden flex items-center justify-center h-10 w-10 rounded-full bg-surface text-brand-600 shadow-sm hover:bg-brand-50 transition-colors"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -211,7 +213,7 @@ export default function Navbar() {
 
         {/* Sidebar */}
         <div
-          className={`absolute top-0 right-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ${
+          className={`absolute top-0 right-0 h-full w-80 bg-surface shadow-2xl transform transition-transform duration-300 ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           } overflow-y-auto`}
         >
@@ -220,7 +222,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
-              className="absolute top-4 right-4 flex items-center justify-center h-10 w-10 rounded-full bg-pink-600 text-white shadow-md hover:bg-pink-700 transition-colors"
+              className="absolute top-4 right-4 flex items-center justify-center h-10 w-10 rounded-full bg-brand-600 text-white shadow-md hover:bg-brand-700 transition-colors"
             >
               <X size={20} />
             </button>
@@ -228,8 +230,8 @@ export default function Navbar() {
             <div className="mt-12 space-y-6">
               {/* Featured Section */}
               <div>
-                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <Package size={18} className="text-pink-600" />
+                <h3 className="font-bold text-ink-900 mb-3 flex items-center gap-2">
+                  <Package size={18} className="text-brand-600" />
                   Featured
                 </h3>
                 <div className="space-y-2 pl-6">
@@ -238,7 +240,7 @@ export default function Navbar() {
                       key={item.name}
                       href={item.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full text-left text-sm text-gray-600 hover:text-pink-600 py-1"
+                      className="block w-full text-left text-sm text-ink-600 hover:text-brand-600 py-1"
                     >
                       {item.name}
                     </Link>
@@ -249,15 +251,15 @@ export default function Navbar() {
               {/* Shop Categories */}
               {shopSections.map((section) => (
                 <div key={section.title}>
-                  <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <Sparkles size={18} className="text-pink-600" />
+                  <h3 className="font-bold text-ink-900 mb-3 flex items-center gap-2">
+                    <Sparkles size={18} className="text-brand-600" />
                     {section.title}
                   </h3>
                   <div className="space-y-2 pl-6">
                     <Link
                       href={section.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block w-full text-left text-sm font-semibold text-pink-600 hover:text-pink-700"
+                      className="block w-full text-left text-sm font-semibold text-brand-600 hover:text-brand-700"
                     >
                       Shop All {section.title} →
                     </Link>
@@ -266,12 +268,12 @@ export default function Navbar() {
               ))}
 
               {/* Other Links */}
-              <div className="pt-4 border-t border-gray-200 space-y-3">
+              <div className="pt-4 border-t border-ink-200 space-y-3">
                 {isVendor && (
                   <Link
                     href="/vendor"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-left font-medium text-gray-900 hover:text-pink-600 py-2"
+                    className="block w-full text-left font-medium text-ink-900 hover:text-brand-600 py-2"
                   >
                     Vendor Portal
                   </Link>
@@ -279,14 +281,14 @@ export default function Navbar() {
                 <Link
                   href="/about"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-left font-medium text-gray-900 hover:text-pink-600 py-2"
+                  className="block w-full text-left font-medium text-ink-900 hover:text-brand-600 py-2"
                 >
                   About
                 </Link>
                 <Link
                   href="/learn"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-left font-medium text-gray-900 hover:text-pink-600 py-2"
+                  className="block w-full text-left font-medium text-ink-900 hover:text-brand-600 py-2"
                 >
                   Learn More
                 </Link>

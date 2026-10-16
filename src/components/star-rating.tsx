@@ -21,7 +21,7 @@ export default function StarRating({ value, onChange, size = 18 }: StarRatingPro
               aria-label={`Rate ${star} star${star === 1 ? "" : "s"}`}
               className="transition hover:scale-110"
             >
-              <Star size={size} className={filled ? "fill-amber-400 text-amber-400" : "text-gray-300"} />
+              <Star size={size} className={filled ? "fill-amber-400 text-amber-400" : "text-ink-300"} />
             </button>
           );
         }
@@ -29,7 +29,7 @@ export default function StarRating({ value, onChange, size = 18 }: StarRatingPro
           <Star
             key={star}
             size={size}
-            className={filled ? "fill-amber-400 text-amber-400" : "text-gray-300"}
+            className={filled ? "fill-amber-400 text-amber-400" : "text-ink-300"}
           />
         );
       })}

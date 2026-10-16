@@ -131,11 +131,11 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search products..."
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-pink-300"
+          className="border border-ink-300 rounded-lg px-3 py-2 text-sm w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-brand-300"
         />
         <button
           onClick={openCreate}
-          className="flex items-center justify-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-pink-700 transition"
+          className="flex items-center justify-center gap-2 bg-brand-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-700 transition"
         >
           <Plus size={16} /> Add Product
         </button>
@@ -145,16 +145,16 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
       {showForm && (
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-sm border p-5 space-y-4"
+          className="bg-surface rounded-xl shadow-sm border p-5 space-y-4"
         >
           <div className="flex justify-between items-center">
-            <h2 className="font-bold text-gray-900">
+            <h2 className="font-bold text-ink-900">
               {editingId ? "Edit Product" : "New Product"}
             </h2>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-ink-400 hover:text-ink-600"
               aria-label="Close form"
             >
               <X size={18} />
@@ -162,16 +162,16 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block">
               Name
               <input
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block">
               Category
               {newCategoryMode ? (
                 <>
@@ -180,7 +180,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                     placeholder="e.g. face-serums"
                     value={form.category}
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                    className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
                   />
                   <button
                     type="button"
@@ -188,7 +188,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                       setNewCategoryMode(false);
                       setForm({ ...form, category: CATEGORIES[0] });
                     }}
-                    className="text-xs text-pink-600 hover:underline"
+                    className="text-xs text-brand-600 hover:underline"
                   >
                     Pick an existing category instead
                   </button>
@@ -204,7 +204,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                       setForm({ ...form, category: e.target.value });
                     }
                   }}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-pink-300"
+                  className="w-full border border-ink-300 rounded-lg px-3 py-2 bg-surface focus:outline-none focus:ring-2 focus:ring-brand-300"
                 >
                   {!CATEGORIES.includes(form.category) && (
                     <option value={form.category}>{form.category}</option>
@@ -218,27 +218,27 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                 </select>
               )}
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block">
               Brand
               <input
                 maxLength={100}
                 value={form.brand}
                 onChange={(e) => setForm({ ...form, brand: e.target.value })}
                 placeholder="e.g. TWG, SADOER, CENTELLA..."
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block sm:col-span-2">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block sm:col-span-2">
               Description
               <textarea
                 required
                 rows={2}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block">
               Price (₵)
               <input
                 required
@@ -247,10 +247,10 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                 step="0.01"
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block">
               Stock
               <input
                 required
@@ -259,17 +259,17 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                 step="1"
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
-            <label className="text-sm font-medium text-gray-700 space-y-1 block sm:col-span-2">
+            <label className="text-sm font-medium text-ink-700 space-y-1 block sm:col-span-2">
               Image path or URL
               <input
                 required
                 placeholder="/products/my-product.jpg or https://..."
                 value={form.image}
                 onChange={(e) => setForm({ ...form, image: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full border border-ink-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-300"
               />
             </label>
           </div>
@@ -278,14 +278,14 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+              className="px-4 py-2 text-sm text-ink-600 hover:text-ink-800"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="bg-pink-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-pink-700 transition disabled:bg-pink-400"
+              className="bg-brand-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-brand-700 transition disabled:bg-brand-400"
             >
               {saving ? "Saving..." : editingId ? "Save Changes" : "Create Product"}
             </button>
@@ -294,14 +294,14 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
       )}
 
       {/* Product list */}
-      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+      <div className="bg-surface rounded-xl shadow-sm border overflow-hidden">
         {filtered.length === 0 ? (
-          <p className="p-6 text-sm text-gray-500">No products found.</p>
+          <p className="p-6 text-sm text-ink-500">No products found.</p>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-ink-100">
             {filtered.map((product) => (
               <li key={product.id} className="flex items-center gap-4 p-4">
-                <div className="relative w-14 h-14 shrink-0 rounded-lg bg-pink-50 overflow-hidden">
+                <div className="relative w-14 h-14 shrink-0 rounded-lg bg-brand-50 overflow-hidden">
                   <Image
                     src={product.image || "/placeholder.png"}
                     alt={product.name}
@@ -312,8 +312,8 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">{product.name}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="font-semibold text-ink-900 truncate">{product.name}</p>
+                  <p className="text-xs text-ink-500">
                     {product.brand ? `${product.brand} · ` : ""}₵{product.price.toFixed(2)} ·{" "}
                     {product.category} ·{" "}
                     <span className={product.stock === 0 ? "text-red-600 font-semibold" : ""}>
@@ -324,7 +324,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => openEdit(product)}
-                    className="p-2 rounded-lg text-gray-500 hover:bg-pink-50 hover:text-pink-600 transition"
+                    className="p-2 rounded-lg text-ink-500 hover:bg-brand-50 hover:text-brand-600 transition"
                     aria-label={`Edit ${product.name}`}
                   >
                     <Pencil size={16} />
@@ -332,7 +332,7 @@ export default function ProductManager({ initialProducts }: { initialProducts: P
                   <button
                     onClick={() => handleDelete(product)}
                     disabled={deletingId === product.id}
-                    className="p-2 rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-600 transition disabled:opacity-40"
+                    className="p-2 rounded-lg text-ink-500 hover:bg-red-50 hover:text-red-600 transition disabled:opacity-40"
                     aria-label={`Delete ${product.name}`}
                   >
                     <Trash2 size={16} />

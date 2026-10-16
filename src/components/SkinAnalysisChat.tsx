@@ -129,13 +129,13 @@ export default function SkinAnalysisChat() {
             exit={{ opacity: 0, scale: 0.9, y: 16 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ transformOrigin: "bottom right" }}
-            className="mb-4 flex h-[540px] w-[92vw] max-w-[380px] flex-col overflow-hidden rounded-3xl border border-pink-100 bg-white shadow-2xl"
+            className="mb-4 flex h-[540px] w-[92vw] max-w-[380px] flex-col overflow-hidden rounded-3xl border border-brand-100 bg-surface shadow-2xl"
           >
             {/* Header */}
-            <div className="relative flex items-center justify-between bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600 px-5 py-4">
+            <div className="relative flex items-center justify-between bg-gradient-to-br from-brand-400 via-brand-500 to-brand-600 px-5 py-4">
               <div>
                 <p className="text-sm font-semibold tracking-wide text-white">BRAMA Skin Advisor</p>
-                <p className="text-xs text-pink-100">Personalized picks, just for your skin</p>
+                <p className="text-xs text-brand-100">Personalized picks, just for your skin</p>
               </div>
               <button
                 onClick={handleToggle}
@@ -149,14 +149,14 @@ export default function SkinAnalysisChat() {
             </div>
 
             {/* Messages */}
-            <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-pink-50/40 px-4 py-4">
+            <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-brand-50/40 px-4 py-4">
               {messages.map((m, i) => (
                 <div
                   key={i}
                   className={
                     m.role === "user"
-                      ? "ml-auto max-w-[80%] rounded-2xl rounded-br-sm bg-gradient-to-br from-pink-400 to-pink-500 px-3.5 py-2.5 text-white"
-                      : "mr-auto max-w-[80%] rounded-2xl rounded-bl-sm bg-white px-3.5 py-2.5 text-neutral-700 shadow-sm"
+                      ? "ml-auto max-w-[80%] rounded-2xl rounded-br-sm bg-gradient-to-br from-brand-400 to-brand-500 px-3.5 py-2.5 text-white"
+                      : "mr-auto max-w-[80%] rounded-2xl rounded-bl-sm bg-surface px-3.5 py-2.5 text-ink-700 shadow-sm"
                   }
                 >
                   {m.imageBase64 && (
@@ -171,11 +171,11 @@ export default function SkinAnalysisChat() {
               ))}
 
               {loading && (
-                <div className="mr-auto flex max-w-[60%] items-center gap-1 rounded-2xl rounded-bl-sm bg-white px-4 py-3 shadow-sm">
+                <div className="mr-auto flex max-w-[60%] items-center gap-1 rounded-2xl rounded-bl-sm bg-surface px-4 py-3 shadow-sm">
                   {[0, 1, 2].map((d) => (
                     <motion.span
                       key={d}
-                      className="h-1.5 w-1.5 rounded-full bg-pink-400"
+                      className="h-1.5 w-1.5 rounded-full bg-brand-400"
                       animate={{ opacity: [0.3, 1, 0.3] }}
                       transition={{ duration: 1, repeat: Infinity, delay: d * 0.15 }}
                     />
@@ -186,9 +186,9 @@ export default function SkinAnalysisChat() {
               {products.length > 0 && (
                 <div className="grid grid-cols-2 gap-2 pt-1">
                   {products.map((p) => (
-                    <div key={p.id} className="rounded-xl border border-pink-100 bg-white p-2.5 shadow-sm">
-                      <p className="truncate text-xs font-medium text-neutral-800">{p.name}</p>
-                      <p className="text-xs text-pink-500">₵{p.price}</p>
+                    <div key={p.id} className="rounded-xl border border-brand-100 bg-surface p-2.5 shadow-sm">
+                      <p className="truncate text-xs font-medium text-ink-800">{p.name}</p>
+                      <p className="text-xs text-brand-500">₵{p.price}</p>
                     </div>
                   ))}
                 </div>
@@ -196,12 +196,12 @@ export default function SkinAnalysisChat() {
             </div>
 
             {/* Composer */}
-            <div className="border-t border-pink-100 bg-white px-3 py-3">
+            <div className="border-t border-brand-100 bg-surface px-3 py-3">
               {attachmentError && (
                 <p className="mb-2 px-1 text-xs text-red-500">{attachmentError}</p>
               )}
               {pendingImage && (
-                <p className="mb-2 px-1 text-xs text-pink-500">📎 Photo attached — ready to send</p>
+                <p className="mb-2 px-1 text-xs text-brand-500">📎 Photo attached — ready to send</p>
               )}
               <div className="flex items-center gap-2">
                 <input
@@ -214,7 +214,7 @@ export default function SkinAnalysisChat() {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   aria-label="Attach a photo"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-50 text-lg transition hover:bg-pink-100"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-50 text-lg transition hover:bg-brand-100"
                 >
                   📷
                 </button>
@@ -223,13 +223,13 @@ export default function SkinAnalysisChat() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Ask about your skin..."
-                  className="flex-1 rounded-full border border-pink-100 bg-pink-50/60 px-4 py-2 text-sm outline-none placeholder:text-neutral-400 focus:border-pink-300"
+                  className="flex-1 rounded-full border border-brand-100 bg-brand-50/60 px-4 py-2 text-sm outline-none placeholder:text-ink-400 focus:border-brand-300"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={loading}
                   aria-label="Send message"
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-pink-500 text-white transition disabled:opacity-50"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 to-brand-500 text-white transition disabled:opacity-50"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                     <path d="M4 12h16M13 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -252,11 +252,11 @@ export default function SkinAnalysisChat() {
               exit={{ opacity: 0, x: 10 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
               onClick={handleToggle}
-              className="max-w-[210px] rounded-2xl rounded-br-sm border border-pink-100 bg-white/95 px-4 py-2.5 text-left shadow-lg shadow-pink-200/40 backdrop-blur-sm"
+              className="max-w-[210px] rounded-2xl rounded-br-sm border border-brand-100 bg-surface/95 px-4 py-2.5 text-left shadow-lg shadow-brand-200/40 backdrop-blur-sm"
             >
-              <p className="text-[11px] font-bold uppercase tracking-wider text-pink-500">BRAMA AI</p>
-              <p className="text-sm font-medium leading-snug text-neutral-800">
-                Hi babes, talk to me about your skin, hair &amp; more
+              <p className="text-[11px] font-bold uppercase tracking-wider text-brand-500">BRAMA AI</p>
+              <p className="text-sm font-medium leading-snug text-ink-800">
+                Hi Babes, talk to me about your skin, hair &amp; more
               </p>
             </motion.button>
           )}
@@ -266,11 +266,11 @@ export default function SkinAnalysisChat() {
           onClick={handleToggle}
           aria-label={isOpen ? "Close skin advisor chat" : "Open skin advisor chat"}
           whileTap={{ scale: 0.92 }}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600 text-white shadow-lg shadow-pink-300/50"
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-brand-400 via-brand-500 to-brand-600 text-white shadow-lg shadow-brand-300/50"
         >
           {!hasOpenedOnce && (
             <motion.span
-              className="absolute inset-0 rounded-full bg-pink-400"
+              className="absolute inset-0 rounded-full bg-brand-400"
               animate={{ scale: [1, 1.6], opacity: [0.5, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
             />

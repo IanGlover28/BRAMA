@@ -36,7 +36,7 @@ export default function CopyLinkButton({
     <button
       onClick={handleCopy}
       aria-label="Copy link"
-      className={`inline-flex items-center gap-1.5 bg-white/90 backdrop-blur text-gray-700 border border-white/40 shadow-md hover:text-pink-600 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${className}`}
+      className={`inline-flex items-center gap-1.5 bg-surface/90 backdrop-blur text-ink-700 border border-white/40 shadow-md hover:text-brand-600 rounded-full px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${className}`}
     >
       {copied ? <Check size={14} /> : <Link2 size={14} />}
       {copied ? "Copied!" : label}

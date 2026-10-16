@@ -14,7 +14,7 @@ export interface InboxMessage {
 }
 
 const SENDER_META: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  vendor: { label: "BRAMA Vendor", icon: MessageSquareText, color: "text-pink-600 bg-pink-100" },
+  vendor: { label: "BRAMA Vendor", icon: MessageSquareText, color: "text-brand-600 bg-brand-100" },
   system: { label: "Notification", icon: Bell, color: "text-blue-600 bg-blue-100" },
 };
 
@@ -44,9 +44,9 @@ export default function InboxList({ initialMessages }: { initialMessages: InboxM
 
   if (initialMessages.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border p-10 text-center">
-        <MailOpen size={32} className="mx-auto mb-3 text-pink-300" />
-        <p className="text-sm text-gray-500">No messages yet.</p>
+      <div className="bg-surface rounded-xl shadow-sm border p-10 text-center">
+        <MailOpen size={32} className="mx-auto mb-3 text-brand-300" />
+        <p className="text-sm text-ink-500">No messages yet.</p>
       </div>
     );
   }
@@ -60,31 +60,31 @@ export default function InboxList({ initialMessages }: { initialMessages: InboxM
         const open = openId === message.id;
 
         return (
-          <li key={message.id} className="bg-white rounded-xl shadow-sm border overflow-hidden">
+          <li key={message.id} className="bg-surface rounded-xl shadow-sm border overflow-hidden">
             <button
               onClick={() => handleToggle(message)}
               aria-expanded={open}
-              className="w-full text-left flex items-center gap-3 p-4 hover:bg-pink-50/50 transition"
+              className="w-full text-left flex items-center gap-3 p-4 hover:bg-brand-50/50 transition"
             >
               <span className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${meta.color}`}>
                 <Icon size={18} />
               </span>
               <span className="flex-1 min-w-0">
-                <span className={`flex items-center gap-2 text-sm ${unread ? "font-bold text-gray-900" : "font-medium text-gray-600"}`}>
+                <span className={`flex items-center gap-2 text-sm ${unread ? "font-bold text-ink-900" : "font-medium text-ink-600"}`}>
                   {meta.label}
-                  {unread && <span className="w-2 h-2 rounded-full bg-pink-500 shrink-0" aria-label="Unread" />}
-                  <span className="ml-auto text-xs font-normal text-gray-400 shrink-0">
+                  {unread && <span className="w-2 h-2 rounded-full bg-brand-500 shrink-0" aria-label="Unread" />}
+                  <span className="ml-auto text-xs font-normal text-ink-400 shrink-0">
                     {new Date(message.createdAt).toLocaleString()}
                   </span>
                 </span>
-                <span className={`block truncate text-sm ${unread ? "text-gray-800" : "text-gray-500"}`}>
+                <span className={`block truncate text-sm ${unread ? "text-ink-800" : "text-ink-500"}`}>
                   {message.subject}
                 </span>
               </span>
             </button>
             {open && (
               <div className="px-4 pb-4 pl-[3.25rem]">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{message.body}</p>
+                <p className="text-sm text-ink-700 whitespace-pre-wrap">{message.body}</p>
               </div>
             )}
           </li>

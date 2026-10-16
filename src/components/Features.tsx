@@ -5,19 +5,19 @@ import { ShieldCheck, Truck, ShoppingBag } from "lucide-react";
 
 const features = [
   {
-    icon: <ShoppingBag className="w-10 h-10 text-pink-600" />,
+    icon: <ShoppingBag className="w-10 h-10 text-brand-600" />,
     title: "Premium Quality",
     description:
       "All our Products and accessories are curated for your safety and satisfaction.",
   },
   {
-    icon: <Truck className="w-10 h-10 text-pink-600" />,
+    icon: <Truck className="w-10 h-10 text-brand-600" />,
     title: "Fast and Secure Delivery",
     description:
       "Get your order delivered discreetly and quickly to your doorstep.",
   },
   {
-    icon: <ShieldCheck className="w-10 h-10 text-pink-600" />,
+    icon: <ShieldCheck className="w-10 h-10 text-brand-600" />,
     title: "Secure Checkout",
     description: "Your privacy and payments are always protected.",
   },
@@ -25,7 +25,7 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-surface">
       <div className="max-w-7xl mx-auto px-6 text-center">
         <h2 className="text-4xl font-bold mb-12 ">
           Why Choose .Brama?
@@ -38,13 +38,13 @@ export default function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="flex flex-col items-center text-center p-6 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition"
+              className="flex flex-col items-center text-center p-6 bg-ink-50 rounded-2xl shadow hover:shadow-lg transition"
             >
               {feature.icon}
-              <h3 className="text-xl text-pink-400 font-semibold mt-4 mb-2">
+              <h3 className="text-xl text-brand-400 font-semibold mt-4 mb-2">
                 {feature.title}
               </h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <p className="text-ink-600">{feature.description}</p>
             </motion.div>
           ))}
         </div>
