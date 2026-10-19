@@ -7,6 +7,21 @@ export interface Tutorial {
   content: string;
 }
 
+/** YouTube video id from an embed URL like https://www.youtube.com/embed/<id>. */
+export function videoId(url: string) {
+  return url.split("/").pop() ?? "";
+}
+
+/** Small thumbnail for the tutorial grid. */
+export function thumbnail(url: string) {
+  return `https://img.youtube.com/vi/${videoId(url)}/hqdefault.jpg`;
+}
+
+/** 1280x720 thumbnail used as the link-preview image when a tutorial is shared. */
+export function shareImage(url: string) {
+  return `https://i.ytimg.com/vi/${videoId(url)}/maxresdefault.jpg`;
+}
+
 export const tutorials: Tutorial[] = [
   {
     title: "How to Build a Natural Skincare Routine",

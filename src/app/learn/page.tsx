@@ -4,15 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Play, Sparkles } from "lucide-react";
 import CopyLinkButton from "@/components/copy-link-button";
-import { tutorials } from "./data";
-
-function videoId(url: string) {
-  return url.split("/").pop() ?? "";
-}
-
-function thumbnail(url: string) {
-  return `https://img.youtube.com/vi/${videoId(url)}/hqdefault.jpg`;
-}
+import { thumbnail, tutorials } from "./data";
 
 export default function LearnPage() {
   const categories = Array.from(new Set(tutorials.map((t) => t.category)));
