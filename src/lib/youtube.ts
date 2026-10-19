@@ -2,19 +2,22 @@ import { unstable_cache } from "next/cache";
 import type { Reel } from "@/app/learn/data";
 
 /**
- * Pulls Learn reels from YouTube playlists (or channels) with the YouTube Data API.
+ * Pulls Learn reels from YouTube playlists (or channels).
  *
  * Env:
- *   YOUTUBE_API_KEY    - a YouTube Data API v3 key
  *   YOUTUBE_PLAYLISTS  - one or more playlist or channel links, separated by
  *                        commas or new lines. Each playlist's title becomes the
  *                        reels' category; prefix "Label=" to override it, e.g.
  *                        "Skincare Basics=https://www.youtube.com/playlist?list=PL..."
+ *   YOUTUBE_API_KEY    - optional YouTube Data API v3 key. Without it, YouTube's
+ *                        public feeds are used, which list the 15 newest videos
+ *                        of each playlist; with it, up to 50.
  *
  * Results are cached for an hour, so new playlist videos appear without a deploy.
  */
 
 const API = "https://www.googleapis.com/youtube/v3";
+const FEEDS = "https://www.youtube.com/feeds/videos.xml";
 const REVALIDATE_SECONDS = 3600;
 const MAX_PER_PLAYLIST = 50;
 
@@ -23,6 +26,14 @@ interface Source {
   playlistId?: string;
   channelId?: string;
   handle?: string;
+}
+
+/** A playlist video, from either the API or the public feed. */
+interface Video {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
 interface PlaylistItem {
@@ -120,18 +131,33 @@ function linkedProductIds(description: string) {
   return Array.from(description.matchAll(/\/products\/([a-z0-9]{20,32})/gi), (m) => m[1]);
 }
 
+/** Description lines that are links, credits or plugs rather than a summary. */
+const BOILERPLATE =
+  /^[#@]|inquir|enquir|\S+@\S+\.\w+|subscribe|affiliate|sponsor|discount|promo code|use code|business|contact|follow (me|us)|instagram|tiktok|snapchat|twitter|facebook|pinterest|threads|music by|disclaimer|shop (everything|my|the)|products? mentioned|p r o d u c t/i;
+
+/** The first descriptive line of a video's description, without links or plugs. */
 function summarize(description: string) {
-  const firstParagraph = description
-    .split(/\n\s*\n/)[0]
-    .replace(/https?:\/\/\S+/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-  return firstParagraph.length > 160
-    ? `${firstParagraph.slice(0, 157).trimEnd()}...`
-    : firstParagraph;
+  const line =
+    description
+      .split("\n")
+      .map((l) =>
+        l
+          .replace(/https?:\/\/\S+/g, "")
+          .replace(/\s+/g, " ")
+          .trim(),
+      )
+      // A sentence, not a "Label: value" credit line or a link list heading.
+      .find(
+        (l) =>
+          l.split(" ").length >= 5 &&
+          !l.endsWith(":") &&
+          !/^[^:]{1,40}:\s*\S*$/.test(l) &&
+          !BOILERPLATE.test(l),
+      ) ?? "";
+  return line.length > 160 ? `${line.slice(0, 157).trimEnd()}...` : line;
 }
 
-async function fetchPlaylistReels(source: Source, key: string): Promise<Reel[]> {
+async function apiPlaylist(source: Source, key: string) {
   const { playlistId, title } = await resolvePlaylist(source, key);
   const data = await api<{ items: PlaylistItem[] }>(
     "playlistItems",
@@ -144,27 +170,88 @@ async function fetchPlaylistReels(source: Source, key: string): Promise<Reel[]> 
   );
 
   // Private and deleted videos stay in playlists but have no thumbnails.
-  const items = data.items.filter((item) => item.snippet.thumbnails?.default);
-  const shorts = await Promise.all(items.map((item) => isShort(item.contentDetails.videoId)));
+  const videos: Video[] = data.items
+    .filter((item) => item.snippet.thumbnails?.default)
+    .map((item) => {
+      const thumbs = item.snippet.thumbnails!;
+      return {
+        id: item.contentDetails.videoId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        image: (thumbs.maxres ?? thumbs.standard ?? thumbs.high ?? thumbs.default).url,
+      };
+    });
+  return { title, videos };
+}
 
-  return items.map((item, i) => {
-    const id = item.contentDetails.videoId;
-    const thumbs = item.snippet.thumbnails!;
-    return {
-      slug: id,
-      title: item.snippet.title,
-      category: source.label || title || "Videos",
-      summary: summarize(item.snippet.description),
-      video: `https://www.youtube.com/embed/${id}`,
-      image: (thumbs.maxres ?? thumbs.standard ?? thumbs.high ?? thumbs.default).url,
-      vertical: shorts[i],
-      productIds: linkedProductIds(item.snippet.description),
-    };
+function decodeXml(text: string) {
+  return text
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+
+function xmlTag(xml: string, tag: string) {
+  const match = xml.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
+  return match ? decodeXml(match[1].trim()) : "";
+}
+
+/** A channel handle's id, read from its page (the public feeds need the id). */
+async function channelIdForHandle(handle: string) {
+  const res = await fetch(`https://www.youtube.com/${handle}`, {
+    headers: { "User-Agent": "Mozilla/5.0" },
   });
+  const id = (await res.text()).match(
+    /<link rel="canonical" href="https:\/\/www\.youtube\.com\/channel\/(UC[\w-]{22})"/,
+  )?.[1];
+  if (!id) throw new Error(`YouTube channel not found: ${handle}`);
+  return id;
+}
+
+/** Keyless: YouTube's public Atom feed, which lists a playlist's 15 newest videos. */
+async function feedPlaylist(source: Source) {
+  const param: Record<string, string> = source.playlistId
+    ? { playlist_id: source.playlistId }
+    : { channel_id: source.channelId ?? (await channelIdForHandle(source.handle!)) };
+  const res = await fetch(`${FEEDS}?${new URLSearchParams(param)}`);
+  if (!res.ok) throw new Error(`YouTube feed ${JSON.stringify(param)} ${res.status}`);
+  const xml = await res.text();
+
+  const [head, ...entries] = xml.split("<entry>");
+  const videos: Video[] = entries.map((entry) => ({
+    id: xmlTag(entry, "yt:videoId"),
+    title: xmlTag(entry, "title"),
+    description: xmlTag(entry, "media:description"),
+    image: decodeXml(entry.match(/<media:thumbnail url="([^"]+)"/)?.[1] ?? ""),
+  }));
+  return {
+    title: xmlTag(head, "title").replace(/^Uploads from /, ""),
+    videos: videos.filter((v) => v.id),
+  };
+}
+
+async function fetchPlaylistReels(source: Source, key?: string): Promise<Reel[]> {
+  const { title, videos } = key ? await apiPlaylist(source, key) : await feedPlaylist(source);
+  const shorts = await Promise.all(videos.map((v) => isShort(v.id)));
+
+  return videos.map((v, i) => ({
+    slug: v.id,
+    title: v.title,
+    category: source.label || title || "Videos",
+    summary: summarize(v.description),
+    video: `https://www.youtube.com/embed/${v.id}`,
+    image: v.image || undefined,
+    vertical: shorts[i],
+    productIds: linkedProductIds(v.description),
+  }));
 }
 
 const getCachedReels = unstable_cache(
-  async (sources: string, key: string): Promise<Reel[]> => {
+  async (sources: string, key?: string): Promise<Reel[]> => {
     const entries = sources
       .split(/[\n,]+/)
       .map((s) => s.trim())
@@ -196,11 +283,11 @@ const getCachedReels = unstable_cache(
   { revalidate: REVALIDATE_SECONDS },
 );
 
-/** Reels from the configured playlists, or [] when YouTube isn't configured or fails. */
+/** Reels from the configured playlists, or [] when none are set or YouTube fails. */
 export async function getYouTubeReels(): Promise<Reel[]> {
-  const key = process.env.YOUTUBE_API_KEY;
+  const key = process.env.YOUTUBE_API_KEY || undefined;
   const sources = process.env.YOUTUBE_PLAYLISTS;
-  if (!key || !sources) return [];
+  if (!sources) return [];
   try {
     return await getCachedReels(sources, key);
   } catch (err) {

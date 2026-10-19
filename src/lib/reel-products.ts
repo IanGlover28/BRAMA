@@ -103,6 +103,12 @@ const GENERIC = new Set([
   "my",
   "routine",
   "tutorial",
+  "shop",
+  "store",
+  "video",
+  "new",
+  "everything",
+  "here",
 ]);
 
 function words(text: string) {
