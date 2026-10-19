@@ -3,7 +3,8 @@ import LearnReels from "@/components/learn-reels";
 import { prisma } from "@/lib/prisma";
 import { getYouTubeReels } from "@/lib/youtube";
 import { attachProducts, productImageSrc } from "@/lib/reel-products";
-import { tutorialReels } from "./data";
+import { tutorialReels, videoId } from "./data";
+import { curatedReels } from "./videos";
 import { tutorialMetadata } from "./metadata";
 
 interface LearnPageProps {
@@ -32,16 +33,18 @@ async function inStockProducts() {
 }
 
 /**
- * Videos from the configured YouTube playlists first, then the written
- * tutorials, each with the products it advertises.
+ * Hand-picked videos first, then YouTube playlist videos, then the written
+ * tutorials (each video once), with the products each reel advertises.
  */
 async function getReels() {
   const [youtube, products] = await Promise.all([getYouTubeReels(), inStockProducts()]);
-  const ids = new Set(youtube.map((r) => r.slug));
-  const reels = [
-    ...youtube,
-    ...tutorialReels.filter((t) => !ids.has(t.video.split("/").pop() ?? "")),
-  ];
+  const seen = new Set<string>();
+  const reels = [...curatedReels, ...youtube, ...tutorialReels].filter((reel) => {
+    const id = videoId(reel.video);
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
   return attachProducts(reels, products);
 }
 

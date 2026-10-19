@@ -20,6 +20,8 @@ export interface Reel {
   image?: string;
   /** Portrait video (a YouTube Short). */
   vertical?: boolean;
+  /** Channel that made the video, credited on the reel. */
+  creator?: string;
   /** Has a written guide at /learn/<slug>. */
   guide?: boolean;
   /** Product ids linked in the video's description. */

@@ -272,6 +272,11 @@ export default function LearnReels({
                   <h2 className="text-lg sm:text-2xl font-extrabold leading-snug mb-1.5">
                     {tutorial.title}
                   </h2>
+                  {tutorial.creator && (
+                    <p className="text-xs font-semibold text-white/70 mb-1">
+                      by {tutorial.creator}
+                    </p>
+                  )}
                   {tutorial.summary && (
                     <p className="text-sm text-white/80 leading-relaxed mb-3 line-clamp-1 sm:line-clamp-2">
                       {tutorial.summary}

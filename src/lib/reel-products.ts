@@ -5,7 +5,8 @@ import type { Reel, ReelProduct } from "@/app/learn/data";
  *   1. products linked in the video's description (bramacosmetics.com/products/<id>)
  *   2. products whose name or brand shares specific words with the video
  *      (serum, cleanser, niacinamide, lip balm...), boosted by matching category
- *   3. in-stock products from the category the video is about, else skincare
+ *   3. in-stock products from the category the video is about, else skincare,
+ *      rotated from reel to reel
  */
 
 const MAX_PRODUCTS = 3;
@@ -109,6 +110,9 @@ const GENERIC = new Set([
   "new",
   "everything",
   "here",
+  // "dark spots" shouldn't match Dark and Lovely haircare.
+  "dark",
+  "lovely",
 ]);
 
 function words(text: string) {
@@ -135,7 +139,7 @@ export function attachProducts(reels: Reel[], products: ReelProduct[]): Reel[] {
   // Stock is the best popularity signal available.
   const byStock = [...products].sort((a, b) => b.stock - a.stock);
 
-  return reels.map((reel) => {
+  return reels.map((reel, index) => {
     const linked = (reel.productIds ?? [])
       .map((id) => byId.get(id))
       .filter(Boolean) as ReelProduct[];
@@ -157,10 +161,14 @@ export function attachProducts(reels: Reel[], products: ReelProduct[]): Reel[] {
       .sort((a, b) => b.score - a.score);
 
     const picked = scored.map((s) => s.p);
+    // Rotate the fill through the category so consecutive reels advertise
+    // different products.
     const fill = topicCategories.size ? topicCategories : new Set(FALLBACK_CATEGORIES);
-    for (const p of byStock) {
+    const pool = byStock.filter((p) => fill.has(p.category));
+    const start = pool.length ? (index * MAX_PRODUCTS) % pool.length : 0;
+    for (const p of [...pool.slice(start), ...pool.slice(0, start)]) {
       if (picked.length >= MAX_PRODUCTS) break;
-      if (fill.has(p.category) && !picked.includes(p)) picked.push(p);
+      if (!picked.includes(p)) picked.push(p);
     }
 
     return { ...reel, products: picked.slice(0, MAX_PRODUCTS) };

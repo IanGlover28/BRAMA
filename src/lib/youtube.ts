@@ -34,6 +34,7 @@ interface Video {
   title: string;
   description: string;
   image: string;
+  creator?: string;
 }
 
 interface PlaylistItem {
@@ -41,6 +42,7 @@ interface PlaylistItem {
     title: string;
     description: string;
     thumbnails?: Record<string, { url: string; width?: number; height?: number }>;
+    videoOwnerChannelTitle?: string;
   };
   contentDetails: { videoId: string };
 }
@@ -178,6 +180,7 @@ async function apiPlaylist(source: Source, key: string) {
         id: item.contentDetails.videoId,
         title: item.snippet.title,
         description: item.snippet.description,
+        creator: item.snippet.videoOwnerChannelTitle,
         image: (thumbs.maxres ?? thumbs.standard ?? thumbs.high ?? thumbs.default).url,
       };
     });
@@ -226,6 +229,7 @@ async function feedPlaylist(source: Source) {
     id: xmlTag(entry, "yt:videoId"),
     title: xmlTag(entry, "title"),
     description: xmlTag(entry, "media:description"),
+    creator: xmlTag(entry, "name") || undefined,
     image: decodeXml(entry.match(/<media:thumbnail url="([^"]+)"/)?.[1] ?? ""),
   }));
   return {
@@ -247,6 +251,7 @@ async function fetchPlaylistReels(source: Source, key?: string): Promise<Reel[]>
     image: v.image || undefined,
     vertical: shorts[i],
     productIds: linkedProductIds(v.description),
+    creator: v.creator,
   }));
 }
 
