@@ -5,6 +5,8 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import {
   BookOpen,
+  Plus,
+  ShoppingBag,
   ChevronDown,
   ChevronUp,
   Play,
@@ -12,11 +14,12 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
-import { thumbnail, tutorials, videoId, type Tutorial } from "@/app/learn/data";
+import { thumbnail, videoId, type Reel, type ReelProduct } from "@/app/learn/data";
+import { useCartStore } from "@/hooks/use-cart-store";
 
 const YT_ORIGIN = "https://www.youtube.com";
 
-function embedUrl(tutorial: Tutorial) {
+function embedUrl(tutorial: Reel) {
   const params = new URLSearchParams({
     autoplay: "1",
     // Browsers only allow muted autoplay; the sound button unmutes via the iframe API.
@@ -31,14 +34,21 @@ function embedUrl(tutorial: Tutorial) {
 }
 
 function sendPlayerCommand(iframe: HTMLIFrameElement | null, func: "mute" | "unMute") {
-  iframe?.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args: [] }), YT_ORIGIN);
+  iframe?.contentWindow?.postMessage(
+    JSON.stringify({ event: "command", func, args: [] }),
+    YT_ORIGIN,
+  );
 }
 
-async function shareTutorial(tutorial: Tutorial) {
+async function shareTutorial(tutorial: Reel) {
   const url = `${window.location.origin}/learn?v=${tutorial.slug}`;
   if (navigator.share) {
     try {
-      await navigator.share({ title: tutorial.title, text: tutorial.summary, url });
+      await navigator.share({
+        title: tutorial.title,
+        text: tutorial.summary,
+        url,
+      });
       return;
     } catch (err) {
       if ((err as Error).name === "AbortError") return;
@@ -53,16 +63,25 @@ async function shareTutorial(tutorial: Tutorial) {
 }
 
 /**
- * Full-screen vertical feed of the Learn tutorials, one video per screen.
+ * Full-screen vertical feed of Learn videos, one per screen.
  * Only the reel in view mounts its YouTube player; the rest show thumbnails.
  */
-export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
-  const categories = Array.from(new Set(tutorials.map((t) => t.category)));
+export default function LearnReels({
+  reels: allReels,
+  initialSlug,
+}: {
+  reels: Reel[];
+  initialSlug?: string;
+}) {
+  const categories = Array.from(new Set(allReels.map((t) => t.category)));
   const [category, setCategory] = useState("");
-  const reels = category ? tutorials.filter((t) => t.category === category) : tutorials;
+  const reels = category ? allReels.filter((t) => t.category === category) : allReels;
 
   const [active, setActive] = useState(() =>
-    Math.max(0, tutorials.findIndex((t) => t.slug === initialSlug))
+    Math.max(
+      0,
+      allReels.findIndex((t) => t.slug === initialSlug),
+    ),
   );
   const [soundOn, setSoundOn] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -89,9 +108,11 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
   // Open on the shared reel.
   useEffect(() => {
     if (!initialSlug) return;
-    const index = tutorials.findIndex((t) => t.slug === initialSlug);
-    slideRefs.current[index]?.scrollIntoView({ behavior: "instant" as ScrollBehavior });
-  }, [initialSlug]);
+    const index = allReels.findIndex((t) => t.slug === initialSlug);
+    slideRefs.current[index]?.scrollIntoView({
+      behavior: "instant" as ScrollBehavior,
+    });
+  }, [allReels, initialSlug]);
 
   // The reel that fills most of the screen is the active one.
   useEffect(() => {
@@ -101,7 +122,7 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
           if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.index));
         }
       },
-      { root: feedRef.current, threshold: 0.6 }
+      { root: feedRef.current, threshold: 0.6 },
     );
     slideRefs.current.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
@@ -149,7 +170,7 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
   const onPlayerLoad = () => {
     if (!soundOn) return;
     [300, 1200].forEach((ms) =>
-      setTimeout(() => sendPlayerCommand(playerRef.current, "unMute"), ms)
+      setTimeout(() => sendPlayerCommand(playerRef.current, "unMute"), ms),
     );
   };
 
@@ -202,7 +223,15 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
                 className="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-50"
               />
 
-              <div className="relative w-full max-w-3xl md:max-w-[min(48rem,calc((100dvh-22rem)*16/9))] aspect-video bg-black shadow-2xl md:rounded-2xl overflow-hidden">
+              <div
+                className={
+                  tutorial.vertical
+                    ? "absolute left-1/2 -translate-x-1/2 bottom-0 max-w-full aspect-[9/16] bg-black shadow-2xl md:rounded-t-2xl overflow-hidden"
+                    : "relative w-full max-w-3xl md:max-w-[min(48rem,calc((100dvh-22rem)*16/9))] aspect-video bg-black shadow-2xl md:rounded-2xl overflow-hidden"
+                }
+                // Shorts fill the height below the navbar and category pills.
+                style={tutorial.vertical ? { top: navBottom + 56 } : undefined}
+              >
                 {isActive && mounted ? (
                   <iframe
                     ref={playerRef}
@@ -235,7 +264,7 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
               </div>
 
               {/* Caption */}
-              <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-24 pb-[max(1.5rem,env(safe-area-inset-bottom))] px-4">
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-24 pb-[max(1.5rem,env(safe-area-inset-bottom))] px-4">
                 <div className="max-w-3xl mx-auto pr-16 md:pr-0">
                   <span className="inline-flex bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
                     {tutorial.category}
@@ -243,16 +272,23 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
                   <h2 className="text-lg sm:text-2xl font-extrabold leading-snug mb-1.5">
                     {tutorial.title}
                   </h2>
-                  <p className="text-sm text-white/80 leading-relaxed mb-4 line-clamp-2">
-                    {tutorial.summary}
-                  </p>
-                  <Link
-                    href={`/learn/${tutorial.slug}`}
-                    className="inline-flex items-center gap-1.5 bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-brand-50 transition"
-                  >
-                    <BookOpen size={15} />
-                    Read the guide
-                  </Link>
+                  {tutorial.summary && (
+                    <p className="text-sm text-white/80 leading-relaxed mb-3 line-clamp-1 sm:line-clamp-2">
+                      {tutorial.summary}
+                    </p>
+                  )}
+                  {tutorial.products && tutorial.products.length > 0 && (
+                    <ShopStrip products={tutorial.products} />
+                  )}
+                  {tutorial.guide && (
+                    <Link
+                      href={`/learn/${tutorial.slug}`}
+                      className="pointer-events-auto inline-flex items-center gap-1.5 bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-brand-50 transition"
+                    >
+                      <BookOpen size={15} />
+                      Read the guide
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -293,6 +329,70 @@ export default function LearnReels({ initialSlug }: { initialSlug?: string }) {
             </section>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+/** "Shop this" row: the products a reel advertises, addable to the bag in place. */
+function ShopStrip({ products }: { products: ReelProduct[] }) {
+  const addToCart = useCartStore((s) => s.addToCart);
+
+  return (
+    <div className="pointer-events-auto mb-3">
+      <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-white/70 mb-2">
+        <ShoppingBag size={13} /> Shop this
+      </p>
+      <div className="flex gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="shrink-0 w-60 flex items-center gap-2.5 bg-white/95 text-black rounded-2xl p-2 pr-2.5 shadow-lg"
+          >
+            <Link
+              href={`/products/${product.id}`}
+              className="flex items-center gap-2.5 min-w-0 flex-1"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={product.image}
+                alt=""
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/placeholder.png";
+                }}
+                className="h-11 w-11 shrink-0 rounded-xl object-cover bg-ink-100"
+              />
+              <span className="min-w-0">
+                <span className="block text-xs font-semibold leading-tight line-clamp-2">
+                  {product.name}
+                </span>
+                <span className="block text-sm font-extrabold text-brand-600">
+                  ₵{product.price.toFixed(2)}
+                </span>
+              </span>
+            </Link>
+            <button
+              onClick={() => {
+                addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  brand: product.brand,
+                  category: product.category,
+                });
+                toast.success(`${product.name} added to your bag`, {
+                  duration: 1800,
+                });
+              }}
+              aria-label={`Add ${product.name} to bag`}
+              className="shrink-0 flex items-center justify-center h-9 w-9 rounded-full bg-brand-600 text-white hover:bg-brand-700 transition active:scale-95"
+            >
+              <Plus size={18} />
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -7,6 +7,37 @@ export interface Tutorial {
   content: string;
 }
 
+/** One video in the Learn reels feed: a written tutorial or a video pulled from YouTube. */
+export interface Reel {
+  /** The ?v= value in share links; tutorial slug or YouTube video id. */
+  slug: string;
+  title: string;
+  category: string;
+  summary: string;
+  /** YouTube embed URL. */
+  video: string;
+  /** Link-preview image; defaults to the video's HD thumbnail. */
+  image?: string;
+  /** Portrait video (a YouTube Short). */
+  vertical?: boolean;
+  /** Has a written guide at /learn/<slug>. */
+  guide?: boolean;
+  /** Product ids linked in the video's description. */
+  productIds?: string[];
+  /** Products advertised under the reel (see lib/reel-products). */
+  products?: ReelProduct[];
+}
+
+export interface ReelProduct {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  brand: string | null;
+  category: string;
+  stock: number;
+}
+
 /** YouTube video id from an embed URL like https://www.youtube.com/embed/<id>. */
 export function videoId(url: string) {
   return url.split("/").pop() ?? "";
@@ -134,3 +165,11 @@ export const tutorials: Tutorial[] = [
     `,
   },
 ];
+export const tutorialReels: Reel[] = tutorials.map(({ title, slug, category, summary, video }) => ({
+  title,
+  slug,
+  category,
+  summary,
+  video,
+  guide: true,
+}));

@@ -14,7 +14,7 @@ export async function generateMetadata({
   const tutorial = tutorials.find((t) => t.slug === slug);
   if (!tutorial) return { title: "Tutorial not found", robots: { index: false } };
 
-  return tutorialMetadata(tutorial, `/learn/${tutorial.slug}`);
+  return tutorialMetadata({ ...tutorial, guide: true }, `/learn/${tutorial.slug}`);
 }
 
 function sanitizeHtml(html: string): string {
